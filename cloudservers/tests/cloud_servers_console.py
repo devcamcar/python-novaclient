@@ -1,0 +1,338 @@
+"""
+
+ cloud_servers_console
+
+ A very simple text menu based application for showing the status of
+everything in your Cloud Servers account.
+
+ I developed this to make it simple to test the functionality of the library
+as I went along and found it to be so handy I just left it in.
+
+ Also, it shows real-world examples of the API in actual use which is always
+my favorite type of documentation.
+
+ It is purposely written in the most simple, straight-forward way without the
+ types of optimizations or error handling that could be done in a production
+ app in order to clearly show the simplest use of the API calls.
+
+ NOTE: In order to actually run the console, you must create the file
+account.py, in the tests directory, with the settings for your Cloud Servers
+account.
+
+ NOTE: Any servers created by this program are actual, live, working, billable
+servers in the RackSpace Cloud.
+
+ Always make sure to clean up what you're not using. If it's running, you're
+paying for it!
+"""
+
+from sys import stdin, exit
+from time import sleep
+from functools import partial
+from pprint import pprint
+
+# NOTE: this file must be created, see testing README.txt for info
+from account import RS_UN, RS_KEY
+
+# The __init__ for cloudservers.tests creates a a CloudServersServices instance
+# (named `css`) as well as one of each type of manager.  A *lot* has to go
+# right for this to get past this import at all.
+from cloudservers.tests import css, serverManager, flavorManager, \
+                               imageManager, sharedIpGroupManager
+
+from cloudservers.sharedipgroup import SharedIpGroup
+from cloudservers.servermanager import rebootType
+from cloudservers.server import Server
+from cloudservers.backupschedule import BackupSchedule
+from cloudservers.errors import CloudServersFault
+
+# All utility functions for getting input and such
+from cloudservers.tests.console_util import *
+
+#----------------------------------------
+# Backup Schedule
+#----------------------------------------
+def showBackupSchedule():
+    """
+    Show server's backup schedule.
+    """
+    id = getServerId()
+
+    # Find is guaranteed not to throw a not-found exception
+    server = serverManager.find(id)
+
+    if server:
+        schedule = serverManager.getSchedule(server)
+        print "Backup schedule of server: ", id
+        print schedule
+    else:
+        print "Server not found"
+
+def setBackupSchedule():
+    """
+    Set server's backup schedule
+    """
+    id = getServerId()
+
+    # Find is guaranteed not to throw a not-found exception
+    server = serverManager.find(id)
+
+    if server:
+        backupSchedule = serverManager.getSchedule(server)
+        print "Backup schedule of server: ", id
+        print backupSchedule
+        newbs = BackupSchedule(True, daily="H_0000_0200", weekly="SUNDAY")
+        serverManager.setSchedule(server, newbs)
+        backupSchedule = serverManager.getSchedule(server)
+        print "Backup schedule of server: ", id
+        print backupSchedule
+    else:
+        print "Server not found"
+
+#----------------------------------------
+# Servers
+#----------------------------------------
+def showStatus():
+    """
+    Get user input of server ID just show raw status object for that id
+
+    Shows:
+        Using find() to check an ID since it will just return None and not
+        raise an exception.
+    """
+    id = getServerId()
+
+    # Find is guaranteed not to throw a not-found exception
+    server = serverManager.find(id)
+
+    if server:
+        status = serverManager.status(id)
+        print "Status of server: ", id
+        pprint(status)
+    else:
+        print "Server not found"
+
+def showDetails():
+    """
+    Get user input of server ID just show raw status object for that id
+
+    Shows:
+        Catching the 404 error by hand instead of using find()
+    """
+    id = getServerId()
+    try:
+        status = serverManager.serverDetails(id)
+    except CloudServersFault, cf:
+        if cf.code == 404:
+            print "Server not found"
+            return
+
+    print "Status of server: ", id
+    pprint(status)
+
+def deleteServer():
+    """
+    Get user input of server ID and delete it
+    """
+    id = getServerId()
+    serverToDelete = serverManager.find(id)
+
+    if not serverToDelete:  # find() returns None on failure to find server
+        print "Server not found %s" % id
+    else:
+        pprint(serverToDelete)
+        status = serverManager.remove(serverToDelete)
+        pprint(status)
+
+def rebootServer():
+    """
+    Reboot a server, prompting for `id`
+    """
+    id = getServerId()
+    serverToReboot = serverManager.find(id)
+    if not serverToReboot:  # find() returns None on failure to find server
+        print "Server not found %s" % id
+        return
+
+    print "Hard or Soft (h/S): "
+    hard_soft = stdin.readline().strip()
+    if hard_soft in "Hh":
+        rType  = rebootType.hard
+    else:
+        rType = rebootType.soft
+
+    sleepTime = getSleepTime()  # Get sleep time to avoid overlimit fault
+    serverManager.reboot(serverToReboot, rType)
+    status = serverToReboot.status
+    while status != u"ACTIVE":
+        status = serverToReboot.status
+        print "Status   : ", serverToReboot.status
+        print "Progress : ", serverToReboot.progress
+        print "Sleeping : ", sleepTime
+        sleep(sleepTime)        # pacing to avoid overlimit fault
+
+    print "Rebooted!"
+
+def createServer():
+    """
+    Creates a server with entered name, then shows how to poll for it
+    to be created.
+    """
+    print "Server Name to Create: "
+    name = stdin.readline().strip()
+    s = Server(name=name, imageId=2, flavorId=1)
+    # Create doesn't return anything, but fills in the server with info
+    # (including) admin p/w
+    serverManager.create(s)
+    pprint(s)
+    print "Server is now: ", s # just to show the server with all values filled in
+
+    sleepTime = getSleepTime()
+    status = s.status
+    while status == "BUILD":
+        status = s.status
+        print "Status   : ", s.status
+        print "Progress : ", s.progress
+        print "Sleeping : ", sleepTime
+        sleep(sleepTime)
+
+    print "Built!"
+
+def resizeServer():
+    notimp()
+
+#----------------------------------------
+# Shared IP Groups
+#----------------------------------------
+def createSharedIpGroup():
+    """
+    Creates a shared IP group with entered name and single server id.
+
+    Shows:
+        how to poll while waiting for a server to be created.
+    """
+    print "Shared IP Group Name to Create: "
+    name = stdin.readline().strip()
+
+    print "Id of first server in group: "
+    server = None
+    found = False
+    id = 0
+    while not found and id != -1:
+        id = getServerId()
+        server = serverManager.find(id)
+        found = (server != None)
+
+    if found:
+        ipg = SharedIpGroup(name, server.id )
+        # Create doesn't return anything, but fills in the ipgroup with info
+        sharedIpGroupManager.create(ipg)
+        print "IP group is now:"
+        pprint(ipg)
+
+def deleteSharedIpGroup(self):
+    """
+    Delete a shared ip group by id
+    """
+    print "Shared IP Group id to delete: "
+    name = stdin.readline().strip()
+    ipg = sharedIpGroupManager.find(id)
+    if not ipg:
+        print "IP Group not found"
+    else:
+        sharedIpGroupManager.delete(ipg)
+
+def addServerToIpGroup():
+    """
+    Add server to IP Group by id
+    """
+    pass
+
+
+choices = dict()                    # just so it's there for beatIt decl
+
+#
+# Ok, I could probably reduce this further with generators, fibrilators, etc.
+# but this'll do the job and is easy enough to understand.
+#
+ls   = partial(lister, manager=serverManager, tag="Server")
+lf   = partial(lister, manager=flavorManager, tag="Flavor")
+li   = partial(lister, manager=imageManager, tag="Image")
+lsip = partial(lister, manager=sharedIpGroupManager, tag="SharedIP")
+
+# TBD:
+# Store this as array, do lookup with dict
+
+shortLineLen = 40
+longLineLen = 60
+sepLine = '-' * shortLineLen
+
+def groupHeader(groupName):
+    groupLen = len(groupName)
+    numDashes = (longLineLen - groupLen)  / 2
+    return '\n' + '-' * numDashes + ' ' + groupName + ' ' + '-' * numDashes
+
+choicesList = (
+    (groupHeader("Servers"),),
+    ("ls"       , ChoiceItem("List Servers",                            lambda: ls(False))  ),
+    ("lsd"      , ChoiceItem("List Servers Detail",                     lambda: ls(True))   ),
+    (sepLine,),
+    ("ss"       , ChoiceItem("Show Server's Status by id",              showStatus)         ),
+    ("sd"       , ChoiceItem("Show Server's Details by id",             showDetails)        ),
+    (sepLine,),
+    ("sc"       , ChoiceItem("Create Server",                           createServer)       ),
+    ("sdel"     , ChoiceItem("Delete Server by id",                     deleteServer)       ),
+    ("sr"       , ChoiceItem("Reboot Server by id",                     rebootServer)       ),
+    ("sresize"  , ChoiceItem("Resize Server by id",                     resizeServer)       ),
+    (sepLine,),
+    ("sbs"      , ChoiceItem("Show Server's Backup Schedule by id",     showBackupSchedule) ),
+    ("sbsup"    , ChoiceItem("Update Server's Backup Schedule by id",   setBackupSchedule)  ),
+
+    (groupHeader("Flavors, Images"),),
+    ("lf"       , ChoiceItem("List Flavors",                            lambda: lf(False))  ),
+    ("lfd"      , ChoiceItem("List Flavors (detail)",                   lambda: lf(True))   ),
+    (sepLine,),
+    ("li"       , ChoiceItem("List Images",                             lambda: li(False))  ),
+    ("lid"      , ChoiceItem("List Images (detail)",                    lambda: li(True))   ),
+
+    (groupHeader("Shared IP Groups"),),
+    ("lip"      , ChoiceItem("List Shared IP Groups",                   lambda: lsip(False))),
+    ("lipd"     , ChoiceItem("List Shared IP Groups (detail)",          lambda: lsip(True)) ),
+    ("sipc"     , ChoiceItem("Create Shared IP Group",                  createSharedIpGroup)),
+    ("sipdel"   , ChoiceItem("Delete Shared IP Group",                  deleteSharedIpGroup)),
+    ("sipadd"   , ChoiceItem("Add Server to Shared IP Group by id",     addServerToIpGroup) ),
+
+    (groupHeader("Misc Account Functions"),),
+    ("ll"       , ChoiceItem("List Account Limits",                     showLimits)         ),
+
+    (groupHeader("Quit"),),
+    ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),
+    (sepLine,),
+)
+
+#
+# Create dictionary for lookups
+#
+lookupDict = dict()
+for choice in choicesList:
+    if not '-' in choice[0]:        # skip our separators
+        lookupDict[choice[0]] = choice[1]
+
+#
+# Get input from user, execute selected function
+#   until interrupted by 'q' or Ctrl-C
+#
+slcu = "Servers Listing Console Utility"
+
+choice = ""
+while 1:
+    if choice in lookupDict:
+        lookupDict[choice].func()
+    else:
+        printChoices(choicesList)
+
+    choice = raw_input("Command (enter to show menu...)")
+
+    if choice == "q":
+        print "Bye!"
+        exit(0)
