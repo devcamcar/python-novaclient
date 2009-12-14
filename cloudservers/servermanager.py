@@ -210,12 +210,9 @@ class ServerManager(EntityManager):
         """
         while server.status == 'BUILD':
             try:
-                print "refreshing"
                 self.refresh(server)
-                print "progress: ", server.progress
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
-                print "overlimit"
                 sleep(olf.retryAfter)
             except CloudServersFault:
                 pass
