@@ -152,7 +152,7 @@ class EntityManager(object):
 
         http://www.informit.com/articles/article.aspx?p=26148&seqNum=4
 
-        This will actually fetch one page of results so, for efficience, the
+        This will actually fetch one page of results so, for efficiency, the
         iterator will have to be clever enough not to re-fetch on the first
         access.
         """
