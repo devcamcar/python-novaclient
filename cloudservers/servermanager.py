@@ -196,6 +196,19 @@ class ServerManager(EntityManager):
     #
     ## Polling operations
     #
+	def __wait (self, server):
+		"""
+		Wait implementation
+		"""
+        while server.status == 'BUILD':
+            try:
+                self.refresh(server)
+            except OverLimitFault as olf:
+                # sleep until retry_after to avoid more OverLimitFaults
+                sleep(olf.retryAfter)
+            except CloudServersFault:
+                pass
+
     def wait (self, server, timeout=None):
         """
         For Servers, an end condition is determined by an end state such as 
@@ -206,21 +219,28 @@ class ServerManager(EntityManager):
         
         Note that VERIFY_RESIZE can also serve as a start state, 
         implementations are responsible for keeping track of whether this state should be 
-        treated as a start or end condition.        
+        treated as a start or end condition.  
+
+      	timeout is in milliseconds
         """
-        while server.status == 'BUILD':
-            try:
-                self.refresh(server)
-            except OverLimitFault as olf:
-                # sleep until retry_after to avoid more OverLimitFaults
-                sleep(olf.retryAfter)
-            except CloudServersFault:
-                pass
+		if timeout:
+			result = timeout(__wait, (server,), timeout_duration=timeout)
+		else:
+			__wait(server)
 
     def waitT (self, server, timeout):
         """
         For Servers, an end condition is determined by an end state such as 
         ACTIVE or ERROR and may also be determined by a progress setting of 100.
+        
+        The following are considered end states by the wait call: ACTIVE, SUSPENDED, VERIFY_RESIZE, 
+        DELETED, ERROR, and UNKNOWN. 
+        
+        Note that VERIFY_RESIZE can also serve as a start state, 
+        implementations are responsible for keeping track of whether this state should be 
+        treated as a start or end condition.  
+
+      	timeout is in milliseconds
         """
         raise NotImplementedException
 
