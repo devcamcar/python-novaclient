@@ -198,6 +198,23 @@ def createServer():
 
     print "Built!"
 
+def createServerAndWait():
+    """
+    Creates a server with entered name, then uses the wait() method to poll for it
+    to be created.
+    """
+    print "Server Name to Create: "
+    name = stdin.readline().strip()
+    s = Server(name=name, imageId=2, flavorId=1)
+    # Create doesn't return anything, but fills in the server with info
+    # (including) admin p/w
+    serverManager.create(s)
+    pprint(s)
+    print "Server is now: ", s # just to show the server with all values filled in
+    serverManager.wait(s)
+
+    print "Built!"
+
 def resizeServer():
     notimp()
 
@@ -281,6 +298,7 @@ choicesList = (
     ("sd"       , ChoiceItem("Show Server's Details by id",             showDetails)        ),
     (sepLine,),
     ("sc"       , ChoiceItem("Create Server",                           createServer)       ),
+    ("scw"      , ChoiceItem("Create Server and wait",                  createServerAndWait)),
     ("sdel"     , ChoiceItem("Delete Server by id",                     deleteServer)       ),
     ("sr"       , ChoiceItem("Reboot Server by id",                     rebootServer)       ),
     ("sresize"  , ChoiceItem("Resize Server by id",                     resizeServer)       ),
