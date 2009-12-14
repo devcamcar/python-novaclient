@@ -194,6 +194,40 @@ class ServerManager(EntityManager):
         return backupSchedule
 
     #
+    ## Polling operations
+    #
+    def wait (self, server, timeout=None):
+        """
+        For Servers, an end condition is determined by an end state such as 
+        ACTIVE or ERROR and may also be determined by a progress setting of 100.
+        
+        The following are considered end states by the wait call: ACTIVE, SUSPENDED, VERIFY_RESIZE, 
+        DELETED, ERROR, and UNKNOWN. 
+        
+        Note that VERIFY_RESIZE can also serve as a start state, 
+        implementations are responsible for keeping track of whether this state should be 
+        treated as a start or end condition.        
+        """
+        while server.status == 'BUILD':
+            try:
+                print "refreshing"
+                self.refresh(server)
+                print "progress: ", server.progress
+            except OverLimitFault as olf:
+                # sleep until retry_after to avoid more OverLimitFaults
+                print "overlimit"
+                sleep(olf.retryAfter)
+            except CloudServersFault:
+                pass
+
+    def waitT (self, server, timeout):
+        """
+        For Servers, an end condition is determined by an end state such as 
+        ACTIVE or ERROR and may also be determined by a progress setting of 100.
+        """
+        raise NotImplementedException
+
+    #
     ## Support methods
     #
     def createEntityListFromResponse(self, response, detail=False):
