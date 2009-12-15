@@ -35,6 +35,7 @@ class ServerManager(EntityManager):
     """
     def __init__(self, parent):
         super(ServerManager, self).__init__(parent, "servers")
+        self._resizedServerIds = []
 
     #
     # Inherited
@@ -196,13 +197,36 @@ class ServerManager(EntityManager):
     #
     ## Polling operations
     #
+    def _serverInWaitState(self, server):
+        
+        # For Servers, the following are considered end states by the wait call: 
+        end_states = ['ACTIVE', 'SUSPENDED', 'VERIFY_RESIZE', 'DELETED', 'ERROR', 'UNKNOWN']
+        
+        # Note that VERIFY_RESIZE can also serve as a start state, 
+        # implementations are responsible for keeping track of whether this state should be 
+        # treated as a start or end condition.        
+        # if self._resizing(server):
+        #     end_states.remove('VERIFY_RESIZE')
+
+        # an end state may also be determined by a progress setting of 100
+        if server.progress == 100:
+            inWaitState = False
+        else:
+            try:
+                end_states.index(server.status)
+                inWaitState = False # if we made it this far, it's not in a wait state
+            except ValueError:
+                inWaitState = True
+        return inWaitState
+    
     def _wait(self, server):
         """
         Wait implementation
         """
-        while server.status == 'BUILD':
+        while self._serverInWaitState(server):
             try:
                 self.refresh(server)
+                print "Status: ", server.status, " Progress: ", server.progress
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
                 sleep(olf.retryAfter)
@@ -213,13 +237,6 @@ class ServerManager(EntityManager):
         """
         For Servers, an end condition is determined by an end state such as 
         ACTIVE or ERROR and may also be determined by a progress setting of 100.
-        
-        The following are considered end states by the wait call: ACTIVE, SUSPENDED, VERIFY_RESIZE, 
-        DELETED, ERROR, and UNKNOWN. 
-        
-        Note that VERIFY_RESIZE can also serve as a start state, 
-        implementations are responsible for keeping track of whether this state should be 
-        treated as a start or end condition.  
 
       	timeout is in milliseconds
         """
@@ -228,22 +245,6 @@ class ServerManager(EntityManager):
         else:
             print "start counting"
             result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
-
-    def waitT (self, server, timeout):
-        """
-        For Servers, an end condition is determined by an end state such as 
-        ACTIVE or ERROR and may also be determined by a progress setting of 100.
-        
-        The following are considered end states by the wait call: ACTIVE, SUSPENDED, VERIFY_RESIZE, 
-        DELETED, ERROR, and UNKNOWN. 
-        
-        Note that VERIFY_RESIZE can also serve as a start state, 
-        implementations are responsible for keeping track of whether this state should be 
-        treated as a start or end condition.  
-
-      	timeout is in milliseconds
-        """
-        raise NotImplementedException
 
     #
     ## Support methods
