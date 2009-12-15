@@ -227,7 +227,7 @@ class ServerManager(EntityManager):
             self._wait(server)
         else:
             print "start counting"
-            result = self._timeout(self._wait, (server,), timeout_duration=timeout)
+            result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
 
     def waitT (self, server, timeout):
         """
