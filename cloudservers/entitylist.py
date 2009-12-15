@@ -95,3 +95,6 @@ class EntityList(list):
 
     def delta(self):
         return self.manager.createDeltaList(self.detail, self.lastModified)
+
+	def reset(self):
+		return self.manager.createList(self.detail)
