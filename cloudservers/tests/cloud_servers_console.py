@@ -265,6 +265,34 @@ def addServerToIpGroup():
     """
     pass
 
+def testEntityListIter():
+    """
+    Test EntityList iterator methods
+    """
+    serverList = serverManager.createList(detail=False)
+    expected_length = len(serverList)
+
+    # test python iterator
+    actual_length = 0
+    for server in serverList:
+        actual_length += 1
+    print "testing 'for server in serverList': ", 'PASS' if actual_length == expected_length else ''
+
+    # test hasNext() and next()
+    actual_length = 0
+    serverList = serverManager.createList(detail=False)
+    while serverList.hasNext():
+        serverList.next()
+        actual_length += 1
+    print "testing hasNext() and next():       ", 'PASS' if actual_length == expected_length else 'FAIL'
+
+    # test reset()
+    actual_length = 0
+    serverList.reset()
+    for server in serverList:
+        actual_length += 1
+    print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
+    
 
 choices = dict()                    # just so it's there for beatIt decl
 
@@ -322,6 +350,9 @@ choicesList = (
 
     (groupHeader("Misc Account Functions"),),
     ("ll"       , ChoiceItem("List Account Limits",                     showLimits)         ),
+
+    (groupHeader("Misc Functions"),),
+    ("iter"     , ChoiceItem("Test EntityList iterator",                testEntityListIter) ),
 
     (groupHeader("Quit"),),
     ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),
