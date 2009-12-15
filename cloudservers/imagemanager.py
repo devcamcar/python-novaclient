@@ -46,11 +46,7 @@ class ImageManager(EntityManager):
     #
     # Polling Operations
     #
-    def wait (self, entity):
-        "Not implemented by this class, by design."
-        raise _bmf
-
-    def waitT (self, entity, timeout):
+    def wait (self, entity, timeout=None):
         "Not implemented by this class, by design."
         raise _bmf
 
