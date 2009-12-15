@@ -37,10 +37,7 @@ class FlavorManager(EntityManager):
     #
     # Polling Operations
     #
-    def wait (self, entity):
-        raise _bmf
-
-    def waitT (self, entity, timeout):
+    def wait (self, entity, timeout=None):
         raise _bmf
 
     def notify (self, entity, changeListener):
