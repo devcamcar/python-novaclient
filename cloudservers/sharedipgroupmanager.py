@@ -83,10 +83,7 @@ class SharedIpGroupManager(EntityManager):
     #
     # Polling Operations
     #
-    def wait (self, ipgroup):
-        raise NotImplementedException
-
-    def waitT (self, ipgroup, timeout):
+    def wait (self, ipgroup, timeout=None):
         raise NotImplementedException
 
     def notify (self, ipgroup, changeListener):
