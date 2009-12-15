@@ -41,17 +41,14 @@ class EntityList(list):
         self._lastModified = datetime.now()
         self._detail = detail
         self._manager = manager
+        self._entityIndex = 0
+        self._pageIndex = 0
 
     def setExtendedBehaviour(self, data):
         """
         Sets up internal variables so that future operations behave as
         expected.
         """
-
-
-
-
-
 
     @property
     def lastModified(self):
@@ -96,5 +93,28 @@ class EntityList(list):
     def delta(self):
         return self.manager.createDeltaList(self.detail, self.lastModified)
 
-	def reset(self):
-		return self.manager.createList(self.detail)
+    def hasNext(self):
+        if self._entityIndex < (len(self) + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+            return True
+        else:
+            self = self.manager.createListP(self.detail, self._entityIndex, DEFAULT_PAGE_SIZE)
+            if len(self) > 0:
+                self._pageIndex += 1
+                return True
+            else:
+                return False
+        
+    def next(self):
+        if self._entityIndex < (len(self) + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+            self._entityIndex += 1
+            return self[self._entityIndex - 1]
+        else:
+            self = self.manager.createListP(self.detail, self._entityIndex, DEFAULT_PAGE_SIZE)
+            if len(self) > 0:
+                self._pageIndex += 1
+                return self[self._entityIndex - 1]
+            else:
+                return False
+
+    def reset(self):
+        self = self.manager.createList(self.detail)
