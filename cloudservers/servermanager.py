@@ -196,10 +196,10 @@ class ServerManager(EntityManager):
     #
     ## Polling operations
     #
-	def __wait (self, server):
-		"""
-		Wait implementation
-		"""
+    def _wait(self, server):
+        """
+        Wait implementation
+        """
         while server.status == 'BUILD':
             try:
                 self.refresh(server)
@@ -223,10 +223,11 @@ class ServerManager(EntityManager):
 
       	timeout is in milliseconds
         """
-		if timeout:
-			result = timeout(__wait, (server,), timeout_duration=timeout)
-		else:
-			__wait(server)
+        if timeout==None:
+            self._wait(server)
+        else:
+            print "start counting"
+            result = self._timeout(self._wait, (server,), timeout_duration=timeout)
 
     def waitT (self, server, timeout):
         """
