@@ -148,12 +148,8 @@ class EntityManager(object):
     #     "wait, implemented by child classes."
     #     #raise _bmf
         
-    def wait (self, entity):
+    def wait (self, entity, timeout=None):
         "wait, implemented by child classes."
-        raise _bmf
-
-    def waitT (self, entity, timeout):
-        "wait with timeout, implemented by child classes."
         raise _bmf
 
     def notify (self, entity, changeListener):
