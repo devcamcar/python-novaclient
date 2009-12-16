@@ -110,6 +110,7 @@ class ServerManager(EntityManager):
 
     def _post_action(self, id, data):
         url_parts = (id, "action")
+        print "url_parts: ", url_parts
         self._POST(data, url_parts)
 
     def _put_action(self, id, action):
@@ -141,9 +142,9 @@ class ServerManager(EntityManager):
         """
         if not imageId:
             imageId = server.imageId
-        data = {"rebuild": {"imageId":imageId}}
+        data = json.dumps({"rebuild": {"imageId":imageId}})
         id = server.id
-        self._post_action(id, "rebuild", imageId)
+        self._post_action(id, data)
 
     def resize(self, server, flavorId):
         """
@@ -153,30 +154,31 @@ class ServerManager(EntityManager):
         """
         if not flavorId:
             flavorId = server.flavorId
-        data = {"resize": {"flavorId":flavorId}}
+        data = json.dumps({"resize": {"flavorId":flavorId}})
         id = server.id
-        self._post_action(id, "resize", data=data)
+        print "data: ", data
+        self._post_action(id, data)
 
     def confirmResize(self, server):
         """
         Confirm resized server, i.e. confirm that resize worked and it's OK to
         delete all backups made when resize was performed.
-
-        if there's no 'action', this means to delete the server but 'action'
-        can also be 'resize' which means to cancel the resize action and
-        rollback
-
         """
+        data = json.dumps({"confirmResize": None})
         id = server.id
-        self._delete_action(id)
+        print "data: ", data
+        self._post_action(id, data)
+
 
     def revertResize(self, server):
         """
         Revert a resize operation, restoring the server from the backup made
         when the resize was performed.
         """
+        data = json.dumps({"revertResize": None})
         id = server.id
-        self._PUT(id, "resize", data)
+        print "data: ", data
+        self._post_action(id, data)
 
     def shareIp (server, ipAddr, sharedIpGroupId, configureServer):
         raise NotImplementedException
@@ -208,15 +210,11 @@ class ServerManager(EntityManager):
         # if self._resizing(server):
         #     end_states.remove('VERIFY_RESIZE')
 
-        # an end state may also be determined by a progress setting of 100
-        if server.progress == 100:
-            inWaitState = False
-        else:
-            try:
-                end_states.index(server.status)
-                inWaitState = False # if we made it this far, it's not in a wait state
-            except ValueError:
-                inWaitState = True
+        try:
+            end_states.index(server.status)
+            inWaitState = False # if we made it this far, it's not in a wait state
+        except ValueError:
+            inWaitState = True
         return inWaitState
     
     def _wait(self, server):
