@@ -113,6 +113,46 @@ class ServerNameIsImmutable(CloudServersAPIFault):
         super(ServerNameIsImmutable, self).__init__(message, "Server can't be renamed when managed by ServerManager")
 
 #-----------------------------------------------------------------------------
+# Faults from the Cloud Servers Developer Guide
+#-----------------------------------------------------------------------------
+
+class ServiceUnavailableFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(ServiceUnavailableFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class UnauthorizedFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(UnauthorizedFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class BadRequestFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(BadRequestFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class BadMediaTypeFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(BadMediaTypeFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class ItemNotFoundFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(ItemNotFoundFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class BuildInProgressFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(BuildInProgressFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class ServerCapacityUnavailableFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(ServerCapacityUnavailableFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class BackupOrResizeInProgressFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(BackupOrResizeInProgressFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+class ResizeNotAllowedFault(CloudServersAPIFault):
+    def __init(self, message):
+        super(ResizeNotAllowedFault, self).__init__(message, "", ec.E_UNKNOWN)
+
+#-----------------------------------------------------------------------------
 # Extra exceptions, internal use, not in formal spec
 #-----------------------------------------------------------------------------
 
