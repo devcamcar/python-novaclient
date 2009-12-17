@@ -180,7 +180,7 @@ def createServer():
     """
     print "Server Name to Create: "
     name = stdin.readline().strip()
-    s = Server(name=name, imageId=2, flavorId=1)
+    s = Server(name=name, imageId=3, flavorId=1)
     # Create doesn't return anything, but fills in the server with info
     # (including) admin p/w
     serverManager.create(s)
@@ -205,7 +205,7 @@ def createServerAndWait():
     """
     print "Server Name to Create: "
     name = stdin.readline().strip()
-    s = Server(name=name, imageId=2, flavorId=1)
+    s = Server(name=name, imageId=3, flavorId=1)
     # Create doesn't return anything, but fills in the server with info
     # (including) admin p/w
     serverManager.create(s)
@@ -216,7 +216,39 @@ def createServerAndWait():
     print "Built!"
 
 def resizeServer():
-    notimp()
+    """
+    Resizes a server and asks you to confirm the resize.
+    """
+    #id = getServerId()
+    id = 127862 # sample on mike's account for faster testing
+
+    # Find is guaranteed not to throw a not-found exception
+    server = serverManager.find(id)
+    if server:
+        print "Server: ", server
+    else:
+        print "Server not found"
+        
+    flavorId = 2    
+    if server.flavorId == 2:
+        flavorId = 1
+    
+    print "Resizing to Flavor ID ", flavorId
+    serverManager.resize(server, flavorId)
+    serverManager.wait(server)
+    
+    print "Done!  Ready to confirm or revert?  Type confirm or revert or press enter to do nothing:"
+    action = stdin.readline().strip()
+    
+    if action == 'confirm':
+        serverManager.confirmResize(server)
+        serverManager.wait(server)
+    elif action == 'revert':
+        serverManager.revertResize(server)
+        serverManager.wait(server)
+        
+    print "Done!"
+    print "Server: ", server
 
 #----------------------------------------
 # Shared IP Groups
