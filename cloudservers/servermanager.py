@@ -7,6 +7,8 @@ ServerManager class.  Cloud Servers Entity Manager for Servers.
 Provides interface for all Server operations as a component part of a Cloud Servers Service object.
 """
 
+from datetime import datetime
+
 from cloudservers.entitymanager import EntityManager
 from cloudservers.entitylist import EntityList
 
@@ -96,7 +98,7 @@ class ServerManager(EntityManager):
         be found, returns None
         """
         retDict = None
-        ret = self._GET(id)
+        ret = self._GET(id, { "now": str(datetime.now()) })
         try:
             retDict = ret["server"]
         except KeyError, e:
@@ -181,10 +183,14 @@ class ServerManager(EntityManager):
         self._post_action(id, data)
 
     def shareIp (server, ipAddr, sharedIpGroupId, configureServer):
-        raise NotImplementedException
+        url_parts = (id, "ips", "public", ipAddr)
+        print "url_parts: ", url_parts
+        data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId,"configureServer": configureServer}})
+        print "data: ", data
+        self._PUT(data, url_parts)
 
-    def unshareIp (server, ipAddr):
-        raise NotImplementedException
+    def unshareIp (server, ipAddr):        
+        self._DELETE(id, "ips", "public", ipAddr)
 
     def setSchedule(self, server, backupSchedule):
         url_parts = (server.id, "backup_schedule")
