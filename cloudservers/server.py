@@ -5,6 +5,8 @@
 Server Entity
 """
 
+import base64
+
 from cloudservers.jsonwrapper import json
 from cloudservers.entity import Entity
 
@@ -16,7 +18,7 @@ serverStatus = ("ACTIVE", "BUILD", "REBUILD", "SUSPENDED", "QUEUE_RESIZE",
                 "PREP_RESIZE", "VERIFY_RESIZE", "PASSWORD", "RESCUE", "UNKNOWN")
 
 class Server(Entity):
-    def __init__(self, name, imageId=None, flavorId=None, metadata=None):
+    def __init__(self, name, imageId=None, flavorId=None, metadata=None, personality=None):
         """
         Create new Server instance with specified name, imageId, flavorId and
         optional metadata.
@@ -27,16 +29,16 @@ class Server(Entity):
 
         super(Server, self).__init__(name)
 
-        self._imageId   = imageId
-        self._flavorId  = flavorId
-        self._metadata  = metadata  # NOTE: not spelled metaData as might be
-                                    #       expected, this is per spec
-        self._manager   = None      # Set when a ServerManager creates
-                                    # a server
-        self._id        = None      # this server's ID
-        self._hostId    = None
-        self._progress  = None
-        self._addresses = None
+        self._imageId       = imageId
+        self._flavorId      = flavorId
+        self._metadata      = metadata  
+        self._manager       = None      # Set when a ServerManager creates
+                                        # a server
+        self._id            = None      # this server's ID
+        self._hostId        = None
+        self._progress      = None
+        self._addresses     = None
+        self._personality   = None
 
     def __str__(self):
         return self.asJSON
@@ -69,14 +71,14 @@ class Server(Entity):
             self._flavorId  = dic['flavorId']
             self._addresses  = dic['addresses']
 
-        # For some reason this no longer comes back on create?
+        # progress isn't necessarily always available
         if 'progress' in dic:
             self._progress  = dic['progress']
 
         # We only get this on creation
         if 'adminPass' in dic:
             self._adminPass = dic['adminPass']
-
+            
     def get_name(self):
         """Server's name (immutable once created @ Rackspace)."""
         return self._name
@@ -102,6 +104,18 @@ class Server(Entity):
         else:
             raise ServerNameIsImmutable("Can't rename server")
     name = property(get_name, set_name)
+
+    def get_personality(self):
+        """Server's personality."""
+        if self._personality:
+            return self._personality
+        else:
+            return None
+
+    def set_personality(self, value):
+        """Server's personality."""
+        self._personality = base64.b64encode(value)
+    personality = property(get_personality, set_personality)
 
     @property
     def imageId(self):
