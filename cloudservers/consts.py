@@ -14,7 +14,7 @@ user_agent = "python-cloudservers/%s" % __version__
 default_authurl =  "https://auth.api.rackspacecloud.com/v1.0"
 
 json_hdrs = {
-   "Accept"         :   "application/json",
+   # "Accept"         :   "application/json",
    "Content-Type"   :   "application/json",
 }
 
