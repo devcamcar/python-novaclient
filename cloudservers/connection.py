@@ -86,6 +86,8 @@ class Connection(object):
         path = '/%s/%s' % \
             (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
 
+        print "URL: ", self.uri, path
+
         if isinstance(params, dict) and params:
             query_args = \
                 ['%s=%s' % (quote(x),quote(str(y))) for (x,y) in params.items()]
@@ -95,7 +97,11 @@ class Connection(object):
                     'User-Agent': user_agent,
                     'X-Auth-Token': self.token
                   }
-        headers.update(json_hdrs)
+                  
+        if len(data) > 0 and (method == 'POST' or method == 'PUT'):
+            # content type is required for requests with a body
+            headers.update(json_hdrs)
+            
         if isinstance(hdrs, dict):
             headers.update(hdrs)
 
@@ -112,6 +118,7 @@ class Connection(object):
             return self.connection.getresponse()
 
         try:
+            print "Headers: ", str(headers)
             self.connection.request(method, path, data, headers)
             response = self.connection.getresponse()
 
@@ -125,6 +132,9 @@ class Connection(object):
             retHeaders.extend(response.getheaders())
 
         raw = response.read()
+        print "raw response: ", raw
+        
+        print "connection: ", self.connection
 
         try:
             responseObj = json.loads(raw)
