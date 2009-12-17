@@ -86,7 +86,7 @@ class Connection(object):
         path = '/%s/%s' % \
             (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
 
-        print "URL: ", self.uri, path
+        # print "URL: ", self.uri, path
 
         if isinstance(params, dict) and params:
             query_args = \
@@ -118,7 +118,7 @@ class Connection(object):
             return self.connection.getresponse()
 
         try:
-            print "Headers: ", str(headers)
+            # print "Headers: ", str(headers)
             self.connection.request(method, path, data, headers)
             response = self.connection.getresponse()
 
@@ -132,9 +132,9 @@ class Connection(object):
             retHeaders.extend(response.getheaders())
 
         raw = response.read()
-        print "raw response: ", raw
+        # print "raw response: ", raw
         
-        print "connection: ", self.connection
+        # print "connection: ", self.connection
 
         try:
             responseObj = json.loads(raw)
