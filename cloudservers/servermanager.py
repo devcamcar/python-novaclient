@@ -250,6 +250,12 @@ class ServerManager(EntityManager):
             print "start counting"
             result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
 
+    def notify (self, server, changeListener):
+        raise NotImplementedException
+
+    def stopNotify (self, server, changeListener):
+        raise NotImplementedException
+
     #
     ## Support methods
     #
