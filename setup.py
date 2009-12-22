@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 from setuptools import setup
-from cloudservers import version
+from com.rackspace.cloud.servers.api.client import version
 
 VERSION=version.get_version()
 DESCRIPTION='Rackspace Cloud Servers Python API',
