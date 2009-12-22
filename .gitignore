@@ -1,1 +1,4 @@
 com/rackspace/cloud/servers/api/client/*.pyc
+com/rackspace/cloud/servers/api/client/shared/*.pyc
+com/rackspace/cloud/servers/api/client/tests/*.pyc
+com/rackspace/cloud/servers/api/client/tests/shared/*.pyc
