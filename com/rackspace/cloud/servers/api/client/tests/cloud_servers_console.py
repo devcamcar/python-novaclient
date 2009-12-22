@@ -45,6 +45,8 @@ from cloudservers.servermanager import rebootType
 from cloudservers.server import Server
 from cloudservers.backupschedule import BackupSchedule
 from cloudservers.errors import CloudServersFault
+from cloudservers.personality import Personality
+from cloudservers.file import File
 
 # All utility functions for getting input and such
 from cloudservers.tests.console_util import *
@@ -325,6 +327,23 @@ def testEntityListIter():
         actual_length += 1
     print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
     
+def testPersonality():
+    s = Server(name="test", imageId=3, flavorId=1)
+    p = Personality()
+    f1 = File('/usr/local/personality1', 'this is a test.  if it is legible, the test failed')
+    f2 = File('/usr/local/personality2', 'this is another test.  if it is legible, the test failed')
+    p.files = [f1, f2]
+    s.personality = p
+    print "personality: ", s.personality
+    print "files:"
+    for file in p.files:
+        print file.path, ' ', file.contents
+    print "personality in server object:"
+    print s.asJSON
+    print "no personality in server object:"
+    s.personality = None
+    print s.asJSON
+
 
 choices = dict()                    # just so it's there for beatIt decl
 
@@ -385,6 +404,7 @@ choicesList = (
 
     (groupHeader("Misc Functions"),),
     ("iter"     , ChoiceItem("Test EntityList iterator",                testEntityListIter) ),
+    ("pers"     , ChoiceItem("Server Personality get/set",              testPersonality)    ),
 
     (groupHeader("Quit"),),
     ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),

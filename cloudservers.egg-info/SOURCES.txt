@@ -1,3 +1,4 @@
+README
 setup.py
 cloudservers/__init__.py
 cloudservers/authentication.py
@@ -31,5 +32,15 @@ cloudservers/tests/__init__.py
 cloudservers/tests/account.py
 cloudservers/tests/cloud_servers_console.py
 cloudservers/tests/console_util.py
+cloudservers/tests/test_authentication.py
+cloudservers/tests/test_conditional_get.py
+cloudservers/tests/test_entitylist.py
+cloudservers/tests/test_entitymanager.py
+cloudservers/tests/test_flavor.py
+cloudservers/tests/test_flavormanager.py
+cloudservers/tests/test_image.py
+cloudservers/tests/test_imagemanager.py
+cloudservers/tests/test_limits.py
+cloudservers/tests/test_server_class.py
 cloudservers/tests/test_util.py
 cloudservers/tests/unittest_wrapper.py
