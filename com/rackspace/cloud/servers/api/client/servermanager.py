@@ -9,13 +9,13 @@ Provides interface for all Server operations as a component part of a Cloud Serv
 
 from datetime import datetime
 
-from cloudservers.entitymanager import EntityManager
-from cloudservers.entitylist import EntityList
+from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
+from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from cloudservers.errors import NotImplementedException, CloudServersAPIFault
-from cloudservers.server import Server
-from cloudservers.jsonwrapper import json
-from cloudservers.backupschedule import BackupSchedule
+from com.rackspace.cloud.servers.api.client.errors import NotImplementedException, CloudServersAPIFault
+from com.rackspace.cloud.servers.api.client.server import Server
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
 
 class RebootType(object):
     """

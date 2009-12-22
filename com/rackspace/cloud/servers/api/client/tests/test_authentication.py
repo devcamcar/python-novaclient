@@ -3,8 +3,8 @@ import unittest
 from nose import SkipTest
 from nose.tools import assert_raises
 
-from cloudservers.errors import AuthenticationFailed
-from cloudservers.authentication import Authentication
+from com.rackspace.cloud.servers.api.client.errors import AuthenticationFailed
+from com.rackspace.cloud.servers.api.client.authentication import Authentication
 
 class TestBaseAuthentication(unittest.TestCase):
     # NOTE: This class is never instantiated, no tests necessary

@@ -6,11 +6,11 @@
 ImageManager - EntityManager for managing image entities.
 """
 
-from cloudservers.entitymanager import EntityManager
-from cloudservers.entitylist import EntityList
+from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
+from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from cloudservers.errors import BadMethodFault
-from cloudservers.image import Image
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault
+from com.rackspace.cloud.servers.api.client.image import Image
 
 """
 BadMethodFault is raised whenever a method is called that is not allowed

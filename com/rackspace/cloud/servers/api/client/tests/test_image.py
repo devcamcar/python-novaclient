@@ -1,7 +1,7 @@
 import unittest
 from nose import SkipTest
 from nose.tools import assert_equal
-from cloudservers.image import Image
+from com.rackspace.cloud.servers.api.client.image import Image
 
 class TestImage(unittest.TestCase):
     def test___init__(self):

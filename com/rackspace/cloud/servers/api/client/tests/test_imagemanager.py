@@ -2,8 +2,8 @@ import unittest
 from nose import SkipTest
 from nose.tools import assert_equal
 
-import cloudservers.tests as cst
-from cloudservers.errors import BadMethodFault
+import com.rackspace.cloud.servers.api.client.tests as cst
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault
 
 class TestImageManager(unittest.TestCase):
     def test___init__(self):

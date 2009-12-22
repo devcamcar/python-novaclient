@@ -5,8 +5,8 @@
 Server Entity
 """
 
-from cloudservers.jsonwrapper import json
-from cloudservers.entity import Entity
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.entity import Entity
 
 #
 ## This is what is specified in the docs, not sure what we'll use it for but

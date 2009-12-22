@@ -8,8 +8,8 @@ createList and createDeltaList calls.
 """
 
 from datetime import datetime
-from cloudservers.errors import InvalidInitialization
-from cloudservers.consts import DEFAULT_PAGE_SIZE
+from com.rackspace.cloud.servers.api.client.errors import InvalidInitialization
+from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE
 
 class EntityList(list):
     """

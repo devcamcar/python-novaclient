@@ -37,19 +37,19 @@ from account import RS_UN, RS_KEY
 # The __init__ for cloudservers.tests creates a a CloudServersServices instance
 # (named `css`) as well as one of each type of manager.  A *lot* has to go
 # right for this to get past this import at all.
-from cloudservers.tests import css, serverManager, flavorManager, \
+from com.rackspace.cloud.servers.api.client.tests import css, serverManager, flavorManager, \
                                imageManager, sharedIpGroupManager
 
-from cloudservers.sharedipgroup import SharedIpGroup
-from cloudservers.servermanager import rebootType
-from cloudservers.server import Server
-from cloudservers.backupschedule import BackupSchedule
-from cloudservers.errors import CloudServersFault
-from cloudservers.personality import Personality
-from cloudservers.file import File
+from com.rackspace.cloud.servers.api.client.sharedipgroup import SharedIpGroup
+from com.rackspace.cloud.servers.api.client.servermanager import rebootType
+from com.rackspace.cloud.servers.api.client.server import Server
+from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
+from com.rackspace.cloud.servers.api.client.errors import CloudServersFault
+from com.rackspace.cloud.servers.api.client.personality import Personality
+from com.rackspace.cloud.servers.api.client.file import File
 
 # All utility functions for getting input and such
-from cloudservers.tests.console_util import *
+from com.rackspace.cloud.servers.api.client.tests.console_util import *
 
 #----------------------------------------
 # Backup Schedule

@@ -12,12 +12,12 @@ import urllib
 from httplib                    import  HTTPSConnection, \
                                         HTTPConnection, \
                                         HTTPException
-from cloudservers.shared.utils  import  parse_url
-from cloudservers.errors        import  ResponseError, \
+from com.rackspace.cloud.servers.api.client.shared.utils  import  parse_url
+from com.rackspace.cloud.servers.api.client.errors        import  ResponseError, \
                                         AuthenticationError, \
                                         AuthenticationFailed, \
                                         HTTPLibFault
-from cloudservers.consts        import  user_agent, default_authurl
+from com.rackspace.cloud.servers.api.client.consts        import  user_agent, default_authurl
 
 
 class BaseAuthentication(object):

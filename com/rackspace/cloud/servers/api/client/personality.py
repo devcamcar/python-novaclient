@@ -1,7 +1,7 @@
 # Copyright (c) 2009, Rackspace.
 # See COPYING for details.
 
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class Personality:
     def __init__(self):

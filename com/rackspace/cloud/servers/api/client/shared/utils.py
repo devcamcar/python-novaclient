@@ -5,7 +5,7 @@ import re
 import string
 from urlparse  import urlparse
 
-from cloudservers.errors    import InvalidUrl
+from com.rackspace.cloud.servers.api.client.errors    import InvalidUrl
 
 # initialize only once, when this is imported
 stripchars = string.whitespace + '/'

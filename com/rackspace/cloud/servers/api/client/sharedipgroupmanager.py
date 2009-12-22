@@ -10,10 +10,10 @@ Provides interface for all Shared IP Group operations as a component part of a
 Cloud Servers Service object.
 """
 
-from cloudservers.entitymanager import EntityManager
-from cloudservers.entitylist import EntityList
-from cloudservers.errors import BadMethodFault, NotImplementedException
-from cloudservers.sharedipgroup import SharedIpGroup
+from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
+from com.rackspace.cloud.servers.api.client.entitylist import EntityList
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, NotImplementedException
+from com.rackspace.cloud.servers.api.client.sharedipgroup import SharedIpGroup
 
 """
 _bmf is shortcut for BadMethodFault with our classname

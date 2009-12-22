@@ -4,7 +4,7 @@
 """
 BackupSchedule object
 """
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 """
 Weekly Backup Schedule / Daily Backup Schedule dictionaries.

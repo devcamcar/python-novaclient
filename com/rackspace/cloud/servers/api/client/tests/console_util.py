@@ -14,7 +14,7 @@ from functools import partial
 # The __init__ for cloudservers.tests creates a a CloudServersServices instance
 # (named `css`) as well as one of each type of manager.  A *lot* has to go
 # right for this to get past this import at all.
-from cloudservers.tests import css, serverManager, flavorManager, \
+from com.rackspace.cloud.servers.api.client.tests import css, serverManager, flavorManager, \
                                imageManager, sharedIpGroupManager
 
 #

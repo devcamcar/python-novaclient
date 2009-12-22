@@ -1,7 +1,7 @@
 import unittest
 from nose import SkipTest
-from cloudservers.errors import MustBeOverriddenByChildClass
-from cloudservers.entitymanager import EntityManager
+from com.rackspace.cloud.servers.api.client.errors import MustBeOverriddenByChildClass
+from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 
 class TestEntityManager(unittest.TestCase):
     def test___init__(self):

@@ -2,8 +2,8 @@ import unittest
 from nose import SkipTest
 from nose.tools import assert_equal, assert_true, assert_false
 
-from cloudservers.entitylist import EntityList
-from cloudservers.errors import InvalidInitialization
+from com.rackspace.cloud.servers.api.client.entitylist import EntityList
+from com.rackspace.cloud.servers.api.client.errors import InvalidInitialization
 
 def setupModule(module):
     pass

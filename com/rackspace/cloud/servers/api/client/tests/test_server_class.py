@@ -5,14 +5,14 @@
 Test Server object.  These tests just test the internals of the class itself, not the use thereof.
 """
 
-from cloudservers.server import Server
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.server import Server
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
-from cloudservers.tests.unittest_wrapper import unittest
+from com.rackspace.cloud.servers.api.client.tests.unittest_wrapper import unittest
 
-from cloudservers.tests.shared.printdoc import printdoc
+from com.rackspace.cloud.servers.api.client.tests.shared.printdoc import printdoc
 
-from cloudservers.tests import css, sm, im, fm, sipgm
+from com.rackspace.cloud.servers.api.client.tests import css, sm, im, fm, sipgm
 
 class ServerClassTestCase(unittest.TestCase):
     """

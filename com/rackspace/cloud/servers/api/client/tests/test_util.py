@@ -8,10 +8,10 @@ Tests for utility functions
 
 import unittest
 
-from cloudservers.shared.utils import build_url, parse_url, find_in_list
-from cloudservers.errors import InvalidUrl
-from cloudservers.consts import get_version, __version__
-from cloudservers.version import get_version as csv_get_version
+from com.rackspace.cloud.servers.api.client.shared.utils import build_url, parse_url, find_in_list
+from com.rackspace.cloud.servers.api.client.errors import InvalidUrl
+from com.rackspace.cloud.servers.api.client.consts import get_version, __version__
+from com.rackspace.cloud.servers.api.client.version import get_version as csv_get_version
 
 class TestConsts(unittest.TestCase):
     """

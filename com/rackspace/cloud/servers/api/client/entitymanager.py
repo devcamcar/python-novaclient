@@ -9,11 +9,11 @@ Shared IP Group.
 """
 import sys
 
-from cloudservers.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
-from cloudservers.entitylist import EntityList
-from cloudservers.errors import BadMethodFault
-from cloudservers.shared.utils import build_url, find_in_list
-from cloudservers.shared.cslogging import cslogger
+from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
+from com.rackspace.cloud.servers.api.client.entitylist import EntityList
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault
+from com.rackspace.cloud.servers.api.client.shared.utils import build_url, find_in_list
+from com.rackspace.cloud.servers.api.client.shared.cslogging import cslogger
 
 _bmf = BadMethodFault
 

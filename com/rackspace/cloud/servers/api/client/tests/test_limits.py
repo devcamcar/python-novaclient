@@ -2,7 +2,7 @@
 import unittest
 from nose import SkipTest
 
-from cloudservers.tests import css, flavorManager, imageManager
+from com.rackspace.cloud.servers.api.client.tests import css, flavorManager, imageManager
 
 fm = flavorManager
 im = imageManager

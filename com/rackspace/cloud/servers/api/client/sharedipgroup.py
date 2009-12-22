@@ -5,8 +5,8 @@
 SharedIpGroup object
 """
 
-from cloudservers.entity import Entity
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.entity import Entity
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 """
 SharedIpGroup objects provide a convenient encapsulation of information about

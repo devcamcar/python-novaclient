@@ -9,7 +9,7 @@ An image is a collection of files you use to create or rebuild a server.
 Rackspace provides pre-built OS images by default.
 """
 
-from cloudservers.entity import Entity
+from com.rackspace.cloud.servers.api.client.entity import Entity
 
 
 class Image(Entity):

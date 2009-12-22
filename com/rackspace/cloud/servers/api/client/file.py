@@ -2,7 +2,7 @@
 # See COPYING for details.
 
 import base64
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class File:
     def __init__(self, path=None, contents=None):

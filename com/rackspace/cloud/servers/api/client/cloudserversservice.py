@@ -8,17 +8,17 @@ Container for the various Entity Managers that manage Rackspace Cloud Servers
 entities such as Servers, Images, Shared IP Groups, and Flavors.
 """
 
-from cloudservers.errors import NotImplementedException
-from cloudservers.authentication import Authentication
-from cloudservers.connection import Connection
+from com.rackspace.cloud.servers.api.client.errors import NotImplementedException
+from com.rackspace.cloud.servers.api.client.authentication import Authentication
+from com.rackspace.cloud.servers.api.client.connection import Connection
 
-from cloudservers.flavormanager import FlavorManager
-from cloudservers.servermanager import ServerManager
-from cloudservers.imagemanager import ImageManager
-from cloudservers.sharedipgroupmanager import SharedIpGroupManager
+from com.rackspace.cloud.servers.api.client.flavormanager import FlavorManager
+from com.rackspace.cloud.servers.api.client.servermanager import ServerManager
+from com.rackspace.cloud.servers.api.client.imagemanager import ImageManager
+from com.rackspace.cloud.servers.api.client.sharedipgroupmanager import SharedIpGroupManager
 
-from cloudservers.consts import json_hdrs
-from cloudservers.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.consts import json_hdrs
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class Settings(dict):
     """

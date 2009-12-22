@@ -9,7 +9,7 @@ A flavor is an available hardware configuration fora server. Each flavor has a
 unique combination of disk space and memory capacity.
 """
 
-from cloudservers.entity import Entity
+from com.rackspace.cloud.servers.api.client.entity import Entity
 
 class Flavor(Entity):
     """

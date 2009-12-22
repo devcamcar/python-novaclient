@@ -34,7 +34,7 @@ def get_test_account_credentials():
     pass
     
 try:
-    from cloudservers.tests.account import RS_UN, RS_KEY
+    from com.rackspace.cloud.servers.api.client.tests.account import RS_UN, RS_KEY
 except ImportError:
     sys.stderr.write(open(os.path.join(os.path.dirname(__file__),"README.txt")).read())
     sys.exit(1)
@@ -50,7 +50,7 @@ import cloudservers.shared.cslogging
 # So many, many, many things have to go right at once for this to even get
 # started that's it's a pretty big test all by itself.
 #----------------------------------------------------------------------------
-from cloudservers.cloudserversservice import CloudServersService
+from com.rackspace.cloud.servers.api.client.cloudserversservice import CloudServersService
 css     = cloudServersService   = CloudServersService(RS_UN, RS_KEY)
 sm      = serverManager         = css.createServerManager()
 im      = imageManager          = css.createImageManager()
