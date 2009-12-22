@@ -5,8 +5,6 @@
 Server Entity
 """
 
-import base64
-
 from cloudservers.jsonwrapper import json
 from cloudservers.entity import Entity
 
@@ -114,7 +112,7 @@ class Server(Entity):
 
     def set_personality(self, value):
         """Server's personality."""
-        self._personality = base64.b64encode(value)
+        self._personality = value
     personality = property(get_personality, set_personality)
 
     @property
@@ -187,6 +185,8 @@ class Server(Entity):
                             "metadata"  : self.metadata
                         }
                      }
+        if self.personality:
+            serverAsDict['server']['personality'] = self.personality.asDict
         return serverAsDict
 
     @property
