@@ -2,7 +2,7 @@ import unittest
 from nose import SkipTest
 
 from com.rackspace.cloud.servers.api.client.flavormanager import FlavorManager
-import cloudservers.tests as cst
+import com.rackspace.cloud.servers.api.client.tests as cst
 from com.rackspace.cloud.servers.api.client.errors import BadMethodFault
 
 class TestFlavorManager(unittest.TestCase):

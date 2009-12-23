@@ -9,11 +9,11 @@ import  socket
 from    urllib    import quote
 from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
 
-from	cloudservers.shared.utils     import parse_url
-from    cloudservers.authentication import Authentication
-from    cloudservers.consts import default_authurl, user_agent, json_hdrs
-from    cloudservers.errors import CloudServersFault, InvalidArgumentsFault
-from    cloudservers.jsonwrapper import json
+from	com.rackspace.cloud.servers.api.client.shared.utils     import parse_url
+from    com.rackspace.cloud.servers.api.client.authentication import Authentication
+from    com.rackspace.cloud.servers.api.client.consts import default_authurl, user_agent, json_hdrs
+from    com.rackspace.cloud.servers.api.client.errors import CloudServersFault, InvalidArgumentsFault
+from    com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class Connection(object):
     """

@@ -1,4 +1,4 @@
-# -*- test-case-name: cloudservers.tests.test_sharedipgroupmanager -*-
+# -*- test-case-name: com.rackspace.cloud.servers.api.client.tests.test_sharedipgroupmanager -*-
 
 # Copyright (c) 2009, Rackspace.
 # See COPYING for details.

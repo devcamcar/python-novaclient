@@ -82,9 +82,9 @@ __all__ =(RS_UN, RS_KEY)
 
 Then, change to the cloudservers directory and type:
 
-    nosetests cloudservers.tests.user_tests
+    nosetests com.rackspace.cloud.servers.api.client.tests.user_tests
 
-do NOT omit the cloudservers.tests.user_tests parameter or you will be running
+do NOT omit the com.rackspace.cloud.servers.api.client.tests.user_tests parameter or you will be running
 the full test suite which creates, destroys, and resizes many servers in your
 live account.
 

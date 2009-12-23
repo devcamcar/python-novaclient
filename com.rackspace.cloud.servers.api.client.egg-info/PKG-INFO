@@ -1,0 +1,12 @@
+Metadata-Version: 1.0
+Name: com.rackspace.cloud.servers.api.client
+Version: 0.9a0
+Summary: ('Rackspace Cloud Servers Python API',)
+Home-page: http://www.rackspacecloud.com/
+Author: Steve Steiner and Mike Mayo
+Author-email: ssteinerX@gmail.com and mike.mayo@rackspace.com
+License: MIT License
+Description: 
+        
+Keywords: cloud cloudservers rackspace on-demand
+Platform: UNKNOWN

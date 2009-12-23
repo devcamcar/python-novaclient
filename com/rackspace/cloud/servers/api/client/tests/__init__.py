@@ -39,7 +39,7 @@ except ImportError:
     sys.stderr.write(open(os.path.join(os.path.dirname(__file__),"README.txt")).read())
     sys.exit(1)
 
-import cloudservers.shared.cslogging
+import com.rackspace.cloud.servers.api.client.shared.cslogging
 
 #----------------------------------------------------------------------------
 # Some convenience tags.  Also, coincidentally (!) tests creation of all these

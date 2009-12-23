@@ -11,7 +11,7 @@
 from sys import stdin, exit
 from functools import partial
 
-# The __init__ for cloudservers.tests creates a a CloudServersServices instance
+# The __init__ for com.rackspace.cloud.servers.api.client.tests creates a a CloudServersServices instance
 # (named `css`) as well as one of each type of manager.  A *lot* has to go
 # right for this to get past this import at all.
 from com.rackspace.cloud.servers.api.client.tests import css, serverManager, flavorManager, \
