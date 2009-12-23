@@ -1,1 +1,1 @@
-com/rackspace/cloud/servers/api/client
+cloudservers

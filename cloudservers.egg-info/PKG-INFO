@@ -3,8 +3,8 @@ Name: cloudservers
 Version: 0.9a0
 Summary: ('Rackspace Cloud Servers Python API',)
 Home-page: http://www.rackspacecloud.com/
-Author: Steve Steiner
-Author-email: ssteinerX@gmail.com
+Author: Steve Steiner and Mike Mayo
+Author-email: ssteinerX@gmail.com and mike.mayo@rackspace.com
 License: MIT License
 Description: 
         

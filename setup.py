@@ -39,7 +39,7 @@ find_package_modules_old = build_py.find_package_modules
 
 def find_package_modules(self, package, package_dir):
     excludes = [
-        ('cloudservers','tests','account.py'),
+        ('com.rackspace.cloud.servers.api.client','tests','account.py'),
     ]
 
     modules = find_package_modules_old(self, package, package_dir)
@@ -53,7 +53,7 @@ def find_package_modules(self, package, package_dir):
 build_py.find_package_modules = find_package_modules
 
 setup(
-    name='cloudservers',
+    name='com.rackspace.cloud.servers.api.client',
     version=VERSION,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
@@ -61,7 +61,7 @@ setup(
     author_email = "ssteinerX@gmail.com and mike.mayo@rackspace.com",
     url='http://www.rackspacecloud.com/',
     license="MIT License",
-    packages=['cloudservers', 'cloudservers.shared', 'cloudservers.tests'],
+    packages=['com.rackspace.cloud.servers.api.client', 'com.rackspace.cloud.servers.api.client.shared', 'com.rackspace.cloud.servers.api.client.tests'],
     test_suite = 'nose.collector',
     keywords="cloud cloudservers rackspace on-demand",
     zip_safe=False,
