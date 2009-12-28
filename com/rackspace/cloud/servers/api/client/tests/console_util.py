@@ -47,6 +47,22 @@ def getServerId():
         id = -1
     return id
 
+def getImageId():
+    """
+    Prompt for an image ID
+    """
+    print "Image Id: "
+    id = stdin.readline().strip()
+    if id == "":    # If they leave it blank, just bail returning -1
+        return -1
+
+    try:
+        id = int(id)
+    except ValueError, e:
+        print "ValueError : ", e
+        id = -1
+    return id
+
 def printChoices(choices):
     """
     Print all of the choices, one per line, nicely formatted
