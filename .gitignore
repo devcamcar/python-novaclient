@@ -1,3 +1,8 @@
+com/*.pyc
+com/rackspace/*.pyc
+com/rackspace/cloud/*.pyc
+com/rackspace/cloud/servers/*.pyc
+com/rackspace/cloud/servers/api/*.pyc
 com/rackspace/cloud/servers/api/client/*.pyc
 com/rackspace/cloud/servers/api/client/shared/*.pyc
 com/rackspace/cloud/servers/api/client/tests/*.pyc
