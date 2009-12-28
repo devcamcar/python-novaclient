@@ -97,9 +97,9 @@ class EntityManager(object):
         retVal = self._cloudServersService.DELETE(url)
         return retVal
 
-    def _GET(self, url, params=None):
+    def _GET(self, url, params=None, headers=None, retHeaders=None):
         url = build_url(self._requestPrefix, url)
-        retVal = self._cloudServersService.GET(url,params)
+        retVal = self._cloudServersService.GET(url, params, headers=headers, retHeaders=retHeaders)
         return retVal
 
     def _PUT(self, *url_parts):

@@ -37,11 +37,12 @@ class Server(Entity):
         self._progress      = None
         self._addresses     = None
         self._personality   = None
+        self._lastModified  = None
 
     def __str__(self):
         return self.asJSON
 
-    def initFromResultDict(self, dic):
+    def initFromResultDict(self, dic, headers=None):
         """
         Fills up a server object from the dict which is a result of a query
         (detailed or not) from the API
@@ -49,6 +50,13 @@ class Server(Entity):
         # This will happen when e.g. a find() fails.
         if dic == None:
             return
+            
+        if headers:
+            # they're tuples, so loop through and find the date
+            for header in headers:
+                if header[0] == 'date':
+                    self._lastModified = header[1]
+                    break
 
         #
         ## All status queries return at least this
@@ -156,6 +164,14 @@ class Server(Entity):
         Server's progress as of the most recent status or serverManager.ssupdate()
         """
         return self._progress
+
+    @property
+    def lastModified(self):
+        """
+        Server's last modified date as returned in Date header.  May not be the actual
+        last modified date
+        """
+        return self._lastModified
 
     @property
     def addresses(self):

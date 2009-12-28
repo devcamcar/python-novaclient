@@ -73,7 +73,8 @@ class ServerManager(EntityManager):
         data from the API or None if the `id` can't be found.
         """
         try:
-            detailsDict = self.serverDetails(id)
+            retHeaders = [(None, None)]
+            detailsDict = self.serverDetails(id, retHeaders=retHeaders)
         except CloudServersAPIFault, e:
             if e.code == 404:   # not found
                 return None     # just return None
@@ -81,7 +82,7 @@ class ServerManager(EntityManager):
                 raise
 
         retServer = Server("")
-        retServer.initFromResultDict(detailsDict)
+        retServer.initFromResultDict(detailsDict, retHeaders)
         retServer._manager = self
         return retServer
 
@@ -93,13 +94,17 @@ class ServerManager(EntityManager):
         statusDict = self.serverDetails(id)
         return(statusDict["status"])
 
-    def serverDetails(self, id):
+    def serverDetails(self, id, ifModifiedSince=None, retHeaders=None):
         """
         Gets details dictionary for server with `id`.  If the server can't
         be found, returns None
         """
         retDict = None
-        ret = self._GET(id, { "now": str(datetime.now()) })
+        headers = None
+        if ifModifiedSince:
+            headers = { 'If-Modified-Since': ifModifiedSince }
+        
+        ret = self._GET(id, { "now": str(datetime.now()) }, headers=headers, retHeaders=retHeaders)
         try:
             retDict = ret["server"]
         except KeyError, e:

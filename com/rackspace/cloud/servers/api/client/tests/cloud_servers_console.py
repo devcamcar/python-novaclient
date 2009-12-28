@@ -123,14 +123,15 @@ def showDetails():
     """
     id = getServerId()
     try:
-        status = serverManager.serverDetails(id)
+        server = serverManager.find(id)
     except CloudServersFault, cf:
         if cf.code == 404:
             print "Server not found"
             return
 
-    print "Status of server: ", id
-    pprint(status)
+    print "Server: ", server
+    pprint(server)
+    print "Last Modified: ", server.lastModified
 
 def showImageDetails():
     """

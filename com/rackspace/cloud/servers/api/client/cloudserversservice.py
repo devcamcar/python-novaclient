@@ -139,7 +139,7 @@ class CloudServersService(object):
         # NOTE: ret is NOT an http response object, it's a digested
         #       object from reading the response object
         #       see Connection for implementation
-        ret = self.make_request("GET", url, params=params, retHeaders=retHeaders)
+        ret = self.make_request("GET", url, params=params, headers=headers, retHeaders=retHeaders)
         return ret
 
     def POST(self, url, data):
