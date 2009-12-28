@@ -241,15 +241,11 @@ class ServerManager(EntityManager):
 
     def wait (self, server, timeout=None):
         """
-        For Servers, an end condition is determined by an end state such as 
-        ACTIVE or ERROR and may also be determined by a progress setting of 100.
-
       	timeout is in milliseconds
         """
         if timeout==None:
             self._wait(server)
         else:
-            print "start counting"
             result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
 
     def notify (self, server, changeListener):
