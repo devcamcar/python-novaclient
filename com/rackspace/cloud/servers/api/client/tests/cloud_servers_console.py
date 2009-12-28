@@ -132,6 +132,21 @@ def showDetails():
     print "Status of server: ", id
     pprint(status)
 
+def showImageDetails():
+    """
+    Get user input of image ID and show details
+    """
+    id = getImageId()
+    try:
+        image = imageManager.find(id)
+    except CloudServersFault, cf:
+        if cf.code == 404:
+            print "Server not found"
+            return
+    print "Image: ", id
+    pprint(image)
+        
+
 def deleteServer():
     """
     Get user input of server ID and delete it
@@ -391,6 +406,7 @@ choicesList = (
     (sepLine,),
     ("li"       , ChoiceItem("List Images",                             lambda: li(False))  ),
     ("lid"      , ChoiceItem("List Images (detail)",                    lambda: li(True))   ),
+    ("lidid"    , ChoiceItem("List Image Details by id",                showImageDetails)   ),
 
     (groupHeader("Shared IP Groups"),),
     ("lip"      , ChoiceItem("List Shared IP Groups",                   lambda: lsip(False))),
