@@ -46,9 +46,41 @@ class ImageManager(EntityManager):
     #
     # Polling Operations
     #
-    def wait (self, entity, timeout=None):
-        "Not implemented by this class, by design."
-        raise _bmf
+    def _imageInWaitState(self, image):
+        
+        # For Images, the following are considered end states by the wait call: 
+        end_states = ['ACTIVE', 'FAILED', 'UNKNOWN']
+        
+        try:
+            end_states.index(image.status)
+            inWaitState = False # if we made it this far, it's not in a wait state
+        except ValueError:
+            inWaitState = True
+        return inWaitState
+    
+    
+    def _wait(self, image):
+        """
+        Wait implementation
+        """
+        while self._imageInWaitState(image):
+            try:
+                self.refresh(image)
+            except OverLimitFault as olf:
+                # sleep until retry_after to avoid more OverLimitFaults
+                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                
+                sleep((timedelta.days * 86400) + timedelta.seconds)
+            except CloudServersFault:
+                pass
+
+    def wait (self, image, timeout=None):
+        """
+      	timeout is in milliseconds
+        """
+        if timeout==None:
+            self._wait(image)
+        else:
+            result = self._timeout(self._wait, (image,), timeout_duration=timeout/1000.0)
 
     def notify (self, entity, changeListener):
         "Not implemented by this class, by design."
