@@ -8,6 +8,7 @@ Provides interface for all Server operations as a component part of a Cloud Serv
 """
 
 from datetime import datetime
+import time
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
@@ -233,7 +234,8 @@ class ServerManager(EntityManager):
                 print "Status: ", server.status, " Progress: ", server.progress
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
-                sleep(olf.retryAfter)
+                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                
+                sleep((timedelta.days * 86400) + timedelta.seconds)
             except CloudServersFault:
                 pass
 
