@@ -924,3 +924,9 @@ is
 []
 {u'servers': []}
 []
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': []}
+[]

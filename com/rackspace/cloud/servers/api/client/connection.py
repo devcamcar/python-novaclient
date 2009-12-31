@@ -12,7 +12,7 @@ from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
 from	com.rackspace.cloud.servers.api.client.shared.utils     import parse_url
 from    com.rackspace.cloud.servers.api.client.authentication import Authentication
 from    com.rackspace.cloud.servers.api.client.consts import default_authurl, user_agent, json_hdrs
-from    com.rackspace.cloud.servers.api.client.errors import CloudServersFault, InvalidArgumentsFault
+from    com.rackspace.cloud.servers.api.client.errors import *
 from    com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class Connection(object):
@@ -132,7 +132,8 @@ class Connection(object):
             retHeaders.extend(response.getheaders())
 
         raw = response.read()
-        # print "raw response: ", raw
+        print "response status:", response.status
+        print "raw response: ", raw
         
         # print "connection: ", self.connection
 
@@ -145,15 +146,25 @@ class Connection(object):
             self._authenticate()
             response = retry_request()
 
-        if response.status == 400:  # badRequest
-            # NOTE: remember to inspect response object carefully if you ever
-            #       need more info from it.  It's not 'the usual' for some
-            #       reason.
-            raise CloudServersFault( "Bad Request", "Bad Request", "Bad Request" ) # theFault["message"], theFault["details"], theFault["code"] )
+        if response.status >= 400 and response.status <= 599:
+            key = responseObj.keys()[0]
+            faultType = key[0].capitalize() + key[1:] + 'Fault'
+            fault = responseObj[key]
+            faultClass = eval(faultType)
+            try:
+                raise faultClass(fault['message'], fault['details'], fault['code'], fault['retry_after'])
+            except:
+                raise faultClass(fault['message'], fault['details'], fault['code'])
 
-        if response.status == 404:  # not found
-            theFault = responseObj["itemNotFound"]
-            raise CloudServersFault( "Item not found", theFault["message"], theFault["code"] )
+        # if response.status == 400:  # badRequest
+        #     # NOTE: remember to inspect response object carefully if you ever
+        #     #       need more info from it.  It's not 'the usual' for some
+        #     #       reason.
+        #     raise CloudServersFault( "Bad Request", "Bad Request", "Bad Request" ) # theFault["message"], theFault["details"], theFault["code"] )
+        # 
+        # if response.status == 404:  # not found
+        #     theFault = responseObj["itemNotFound"]
+        #     raise CloudServersFault( "Item not found", theFault["message"], theFault["code"] )
 
         if response.status == 413:  # rate limit
             raise CloudServersFault( "Query Rate Limit Exceeded")

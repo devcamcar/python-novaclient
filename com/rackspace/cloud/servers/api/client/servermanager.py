@@ -13,7 +13,7 @@ import time
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from com.rackspace.cloud.servers.api.client.errors import NotImplementedException, CloudServersAPIFault
+from com.rackspace.cloud.servers.api.client.errors import NotImplementedException, CloudServersAPIFault, OverLimitFault, CloudServersFault
 from com.rackspace.cloud.servers.api.client.server import Server
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
@@ -64,8 +64,15 @@ class ServerManager(EntityManager):
         server._manager = self
 
     def refresh(self, server):
-        server.initFromResultDict(self.serverDetails(server.id))
-        server._manager = self
+        if server.lastModified == None:
+            retHeaders = [(None, None)]
+            serverDict = self.serverDetails(server.id, retHeaders=retHeaders)            
+            server.initFromResultDict(serverDict, retHeaders)
+            server._manager = self
+        else:
+            serverDict = self.serverDetails(server.id, ifModifiedSince=server.lastModified)
+            if serverDict:
+                server.initFromResultDict(serverDict)
 
     def find(self, id):
         """
@@ -101,7 +108,9 @@ class ServerManager(EntityManager):
         """
         retDict = None
         headers = None
-        if ifModifiedSince:
+        print "ifModifiedSince = ", ifModifiedSince
+        if ifModifiedSince != None:
+            print "setting If-Modified-Since: ", ifModifiedSince
             headers = { 'If-Modified-Since': ifModifiedSince }
         
         ret = self._GET(id, { "now": str(datetime.now()) }, headers=headers, retHeaders=retHeaders)

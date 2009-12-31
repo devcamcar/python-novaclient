@@ -133,6 +133,12 @@ def showDetails():
     pprint(server)
     print "Last Modified: ", server.lastModified
 
+    # test conditional GET
+    i = 0
+    while i < 100:
+        serverManager.refresh(server)
+        i += 1
+
 def showImageDetails():
     """
     Get user input of image ID and show details
@@ -343,6 +349,16 @@ def testEntityListIter():
         actual_length += 1
     print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
     
+def testFaultGeneration():
+    try:
+        print "Expecting an ItemNotFoundFault..."
+        serverManager._cloudServersService.GET('blah', {})
+    except Exception as e:
+        print "Exception type: ", e.__class__
+        print "Exception content: ", e
+        
+    
+    
 def testPersonality():
     s = Server(name="test", imageId=3, flavorId=1)
     p = Personality()
@@ -422,6 +438,7 @@ choicesList = (
     (groupHeader("Misc Functions"),),
     ("iter"     , ChoiceItem("Test EntityList iterator",                testEntityListIter) ),
     ("pers"     , ChoiceItem("Server Personality get/set",              testPersonality)    ),
+    ("fault"    , ChoiceItem("Test Fault Parser",                       testFaultGeneration)),
 
     (groupHeader("Quit"),),
     ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),
