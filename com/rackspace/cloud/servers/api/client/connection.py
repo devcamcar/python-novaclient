@@ -146,6 +146,7 @@ class Connection(object):
             self._authenticate()
             response = retry_request()
 
+        # if the response is bad, parse the result and create a CloudServersFault
         if response.status >= 400 and response.status <= 599:
             key = responseObj.keys()[0]
             faultType = key[0].capitalize() + key[1:] + 'Fault'
@@ -165,8 +166,7 @@ class Connection(object):
         # if response.status == 404:  # not found
         #     theFault = responseObj["itemNotFound"]
         #     raise CloudServersFault( "Item not found", theFault["message"], theFault["code"] )
-
-        if response.status == 413:  # rate limit
-            raise CloudServersFault( "Query Rate Limit Exceeded")
+        # if response.status == 413:  # rate limit
+        #     raise CloudServersFault( "Query Rate Limit Exceeded")
 
         return responseObj
