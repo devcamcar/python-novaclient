@@ -27,7 +27,7 @@ class FlavorManager(EntityManager):
     """
     def __init__(self, cloudServersService):
         super(FlavorManager, self).__init__(cloudServersService, "flavors")
-        self._flavorCopies = {}
+        self._flavorCopies = {} # for wait() comparisons
 
     def create(self, entity):
         raise _bmf

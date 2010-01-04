@@ -380,6 +380,12 @@ def waitOnFlavor():
     print "flavor: ", flavor
     flavorManager.wait(flavor)
 
+def waitOnSharedIpGroup():
+    sharedIpGroupId = getSharedIpGroupId()
+    sharedIpGroup = sharedIpGroupManager.find(sharedIpGroupId)
+    print "Shared IP Group: ", sharedIpGroup
+    sharedIpGroupManager.wait(sharedIpGroup)
+
 choices = dict()                    # just so it's there for beatIt decl
 
 #
@@ -435,6 +441,7 @@ choicesList = (
     ("sipc"     , ChoiceItem("Create Shared IP Group",                  createSharedIpGroup)),
     ("sipdel"   , ChoiceItem("Delete Shared IP Group",                  deleteSharedIpGroup)),
     ("sipadd"   , ChoiceItem("Add Server to Shared IP Group by id",     addServerToIpGroup) ),
+    ("ipwait"   , ChoiceItem("Wait on a Shared IP Group by id",         waitOnSharedIpGroup)),
 
     (groupHeader("Misc Account Functions"),),
     ("ll"       , ChoiceItem("List Account Limits",                     showLimits)         ),

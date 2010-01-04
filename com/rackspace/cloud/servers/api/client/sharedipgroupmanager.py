@@ -10,9 +10,12 @@ Provides interface for all Shared IP Group operations as a component part of a
 Cloud Servers Service object.
 """
 
+import copy
+from datetime import datetime
+
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, NotImplementedException
+from com.rackspace.cloud.servers.api.client.errors import *
 from com.rackspace.cloud.servers.api.client.sharedipgroup import SharedIpGroup
 
 """
@@ -31,6 +34,7 @@ class SharedIpGroupManager(EntityManager):
     """
     def __init__(self, cloudServersService):
         super(SharedIpGroupManager, self).__init__(cloudServersService, "shared_ip_groups", "sharedIpGroups")
+        self._sharedIpGroupCopies = {} # for wait() comparisons
 
     def create(self, ipgroup):
         """
@@ -45,8 +49,9 @@ class SharedIpGroupManager(EntityManager):
     def update(self, ipgroup):
         raise _nie
 
-    def refresh(self, ipgroup):
-        raise _nie
+    def refresh(self, entity):
+        entity.initFromResultDict(self.sharedIpGroupDetails(entity.id))
+        entity._manager = self
 
     def find(self, id):
         """
@@ -54,17 +59,17 @@ class SharedIpGroupManager(EntityManager):
         object or None if the `id` can't be found.
         """
         try:
-            detailsDict = self.serverDetails(id)
+            detailsDict = self.sharedIpGroupDetails(id)
         except CloudServersAPIFault, e:
             if e.code == 404:   # not found
                 return None     # just return None
             else:               # some other exception, just re-raise
                 raise
 
-        retServer = Server("")  # create empty server
-        retServer.initFromResultDict(detailsDict)
-        retServer._manager = self
-        return retServer
+        retSharedIpGroup = SharedIpGroup()  # create shared ip group to populate
+        retSharedIpGroup.initFromResultDict(detailsDict)
+        retSharedIpGroup._manager = self
+        return retSharedIpGroup
 
     def sharedIpGroupDetails(self, id):
         """
@@ -72,7 +77,7 @@ class SharedIpGroupManager(EntityManager):
         if the sharedIpGroup can't be found.
         """
         retDict = None
-        ret = self._GET(id)
+        ret = self._GET(id, { "now": str(datetime.now()) })
         try:
             retDict = ret["sharedIpGroup"]
         except KeyError, e:
@@ -83,8 +88,29 @@ class SharedIpGroupManager(EntityManager):
     #
     # Polling Operations
     #
-    def wait (self, ipgroup, timeout=None):
-        raise NotImplementedException
+    def _wait(self, sharedIpGroup):
+        """
+        Wait implementation
+        """
+        while sharedIpGroup == self._sharedIpGroupCopies[sharedIpGroup.id]:
+            try:
+                self.refresh(sharedIpGroup)
+            except OverLimitFault as olf:
+                # sleep until retry_after to avoid more OverLimitFaults
+                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                
+                sleep((timedelta.days * 86400) + timedelta.seconds)
+            except CloudServersFault:
+                pass
+
+    def wait (self, sharedIpGroup, timeout=None):
+        """
+      	timeout is in milliseconds
+        """
+        self._sharedIpGroupCopies[sharedIpGroup.id] = copy.copy(sharedIpGroup)
+        if timeout==None:
+            self._wait(sharedIpGroup)
+        else:
+            result = self._timeout(self._wait, (sharedIpGroup,), timeout_duration=timeout/1000.0)
 
     def notify (self, ipgroup, changeListener):
         raise NotImplementedException
