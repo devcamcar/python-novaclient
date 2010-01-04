@@ -153,7 +153,6 @@ class CloudServersService(object):
         """
         Feed a DELETE request through to our connection.
         """
-        # print "DELETE, url == ", url
         ret = self.make_request("DELETE", url)
         return ret
 
@@ -174,7 +173,6 @@ class CloudServersService(object):
     @property
     def serviceInfoLimits(self):
         limits_dict = self.GET("limits")
-        # print type(limits_dict)
         return limits_dict["limits"]
 
     @property

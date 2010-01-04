@@ -108,9 +108,7 @@ class ServerManager(EntityManager):
         """
         retDict = None
         headers = None
-        print "ifModifiedSince = ", ifModifiedSince
         if ifModifiedSince != None:
-            print "setting If-Modified-Since: ", ifModifiedSince
             headers = { 'If-Modified-Since': ifModifiedSince }
         
         ret = self._GET(id, { "now": str(datetime.now()) }, headers=headers, retHeaders=retHeaders)
@@ -127,7 +125,6 @@ class ServerManager(EntityManager):
 
     def _post_action(self, id, data):
         url_parts = (id, "action")
-        print "url_parts: ", url_parts
         self._POST(data, url_parts)
 
     def _put_action(self, id, action):
@@ -173,7 +170,6 @@ class ServerManager(EntityManager):
             flavorId = server.flavorId
         data = json.dumps({"resize": {"flavorId":flavorId}})
         id = server.id
-        print "data: ", data
         self._post_action(id, data)
 
     def confirmResize(self, server):
@@ -183,7 +179,6 @@ class ServerManager(EntityManager):
         """
         data = json.dumps({"confirmResize": None})
         id = server.id
-        print "data: ", data
         self._post_action(id, data)
 
 
@@ -194,14 +189,11 @@ class ServerManager(EntityManager):
         """
         data = json.dumps({"revertResize": None})
         id = server.id
-        print "data: ", data
         self._post_action(id, data)
 
     def shareIp (server, ipAddr, sharedIpGroupId, configureServer):
         url_parts = (id, "ips", "public", ipAddr)
-        print "url_parts: ", url_parts
         data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId,"configureServer": configureServer}})
-        print "data: ", data
         self._PUT(data, url_parts)
 
     def unshareIp (server, ipAddr):        
@@ -245,7 +237,6 @@ class ServerManager(EntityManager):
         while self._serverInWaitState(server):
             try:
                 self.refresh(server)
-                print "Status: ", server.status, " Progress: ", server.progress
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
                 timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                

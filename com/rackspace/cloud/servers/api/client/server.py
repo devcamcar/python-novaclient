@@ -64,8 +64,6 @@ class Server(Entity):
         self._id        = dic['id']
         self._name      = dic['name']
 
-        # print "server.initFromResult", dic
-
         #
         ## if it has status, assume it's got all details
         #

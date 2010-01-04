@@ -99,8 +99,6 @@ class SharedIpGroup(Entity):
         #
         ## All status queries return at least this
         #
-        # print "shared IP -- initFromResultDict, dic =  ", dic
-
         self._id        = dic['id']
         self._name      = dic['name']
 

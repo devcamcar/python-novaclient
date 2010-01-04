@@ -109,7 +109,6 @@ class FlavorManager(EntityManager):
         Creates list of Flavor objects from response to list command sent
         to API
         """
-        # print response
         theList = []
         data = response["flavors"]
         for jsonObj in data:

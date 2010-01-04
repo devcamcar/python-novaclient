@@ -70,8 +70,6 @@ class Authentication(BaseAuthentication):
         conn.request('GET', self.authurl, '', self.headers)
         response = conn.getresponse()
         buff = response.read()
-        print "raw auth response: ", buff
-        print "auth response status: ", response.status
 
         # A status code of 401 indicates that the supplied credentials
         # were not accepted by the authentication service.
@@ -98,7 +96,6 @@ class Authentication(BaseAuthentication):
         if not (auth_token and compute_url):
             raise AuthenticationError("Invalid response from the " \
                     "authentication service.")
-        # print auth_token, compute_url
 
         return (compute_url, auth_token)
 

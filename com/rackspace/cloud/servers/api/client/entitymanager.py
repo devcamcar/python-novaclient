@@ -85,7 +85,6 @@ class EntityManager(object):
         Put together a full POST request and send to our cloudServersService.
         """
         url = build_url(self._requestPrefix, *url_parts)
-        # print "entitymanager._POST, url == ", url, data
         retVal = self._cloudServersService.POST(url, data=data)
         return(retVal)
 
