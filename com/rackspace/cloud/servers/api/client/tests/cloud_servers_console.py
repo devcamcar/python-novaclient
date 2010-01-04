@@ -356,8 +356,6 @@ def testFaultGeneration():
     except Exception as e:
         print "Exception type: ", e.__class__
         print "Exception content: ", e
-        
-    
     
 def testPersonality():
     s = Server(name="test", imageId=3, flavorId=1)
@@ -376,6 +374,11 @@ def testPersonality():
     s.personality = None
     print s.asJSON
 
+def waitOnFlavor():
+    flavorId = getFlavorId()
+    flavor = flavorManager.find(flavorId)
+    print "flavor: ", flavor
+    flavorManager.wait(flavor)
 
 choices = dict()                    # just so it's there for beatIt decl
 
@@ -424,6 +427,7 @@ choicesList = (
     ("li"       , ChoiceItem("List Images",                             lambda: li(False))  ),
     ("lid"      , ChoiceItem("List Images (detail)",                    lambda: li(True))   ),
     ("lidid"    , ChoiceItem("List Image Details by id",                showImageDetails)   ),
+    ("fwait"    , ChoiceItem("Wait on a Flavor by id",                  waitOnFlavor)       ),
 
     (groupHeader("Shared IP Groups"),),
     ("lip"      , ChoiceItem("List Shared IP Groups",                   lambda: lsip(False))),

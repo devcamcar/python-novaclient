@@ -31,11 +31,8 @@ class ChoiceItem(object):
         self.prompt = prompt
         self.func = func
 
-def getServerId():
-    """
-    Prompt for a server ID
-    """
-    print "Server Id: "
+def getId(idType):
+    print idType + " ID: "
     id = stdin.readline().strip()
     if id == "":    # If they leave it blank, just bail returning -1
         return -1
@@ -46,22 +43,18 @@ def getServerId():
         print "ValueError : ", e
         id = -1
     return id
+    
+def getServerId():
+    return getId("Server")
 
 def getImageId():
-    """
-    Prompt for an image ID
-    """
-    print "Image Id: "
-    id = stdin.readline().strip()
-    if id == "":    # If they leave it blank, just bail returning -1
-        return -1
+    return getId("Image")
 
-    try:
-        id = int(id)
-    except ValueError, e:
-        print "ValueError : ", e
-        id = -1
-    return id
+def getFlavorId():
+    return getId("Flavor")
+    
+def getSharedIpGroupId():
+    return getId("Shared IP Group")
 
 def printChoices(choices):
     """
