@@ -101,6 +101,7 @@ class ImageManager(EntityManager):
         Wait implementation
         """
         while self._imageInWaitState(image):
+        # while image == self._entityCopies[image.id]:
             try:
                 self.refresh(image)
             except OverLimitFault as olf:

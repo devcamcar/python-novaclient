@@ -167,7 +167,9 @@ class EntityManager(object):
                     if self._stopped == False:
                         self._entityManager.wait(self._entity)
                     if self._stopped == False:
-                        self._changeListener(False, self._entity)
+                        # double check in case wait uses statuses as end states
+                        if self._entity != self._entityManager._entityCopies[self._entity.id]:
+                            self._changeListener(False, self._entity)
             except CloudServersFault, fault:
                 if self._stopped == False:
                     self._changeListener(True, self._entity, fault)

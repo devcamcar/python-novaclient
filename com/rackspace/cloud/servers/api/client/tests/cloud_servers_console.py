@@ -422,12 +422,8 @@ def _testNotify(entityId, entityManager):
     if entity.name == dic['name']:
         dic['name'] = 'test2' # in case the entity happened to be named test1
     entity.initFromResultDict(dic)
-    dic['name'] = 'test2'
-    if entity.name == dic['name']:
-        dic['name'] = 'test3' # in case the entity happened to be named test2
-    entity.initFromResultDict(dic)
 
-    sleep(1) # sleeping before stopNotify to catch any extra notify events that shouldn't happen
+    sleep(2) # sleeping before stopNotify to catch any extra notify events that shouldn't happen
     
     entityManager.stopNotify(entity, simpleNotify)
 
