@@ -6,7 +6,9 @@
 # Copyright (c) 2009, Rackspace.
 # See COPYING for details.
 #
-# Written by Steve Steiner, ssteinerX at gmail dot com.
+# Authors:
+# Steve Steiner, ssteinerX at gmail dot com.
+# Mike Mayo, mike.mayo@rackspace.com, twitter: @greenisus
 #-----------------------------------------------------------------------------
 
 Welcome to the beta test for the Rackspace Cloud Servers Python Client API.
@@ -102,16 +104,13 @@ one to find out...
 Bug Reports
 -----------
 
-We have an open bug tracking system at :  TBD -- BUG TRACKER?
+We have an open bug tracking system at github.com/rackspace/python-cloudservers/issues
 
 Please, before reporting bugs, we ask that you first:
 
     1> Pull the latest version from version control. This product is under
     heavy development and we may already have fixed your issue.
 
-     2> If you're still having a bug, please provide a minimal test case that
+    2> If you're still having a bug, please provide a minimal test case that
     demonstrates the issue.
-
-We are still finalizing packaging and determining what, exactly, will be
-included when you install the API.
 
