@@ -112,12 +112,6 @@ class SharedIpGroupManager(EntityManager):
         else:
             result = self._timeout(self._wait, (sharedIpGroup,), timeout_duration=timeout/1000.0)
 
-    def notify (self, ipgroup, changeListener):
-        raise NotImplementedException
-
-    def stopNotify (self, ipgroup, changeListener):
-        raise NotImplementedException
-
     def createEntityListFromResponse(self, response, detail):
         ip_groups = response["sharedIpGroups"]
         retList = []

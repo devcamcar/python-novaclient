@@ -160,6 +160,10 @@ class ServerManager(EntityManager):
         id = server.id
         self._post_action(id, data)
 
+    def _resizeNotifyCallback(isError, server, fault):
+        if isError == False and server.status == 'VERIFY_RESIZE':
+            self._resizedServerIds.append(server)
+
     def resize(self, server, flavorId):
         """
         Change a server to a different size/flavor.  A backup is kept of the
@@ -171,6 +175,11 @@ class ServerManager(EntityManager):
         data = json.dumps({"resize": {"flavorId":flavorId}})
         id = server.id
         self._post_action(id, data)
+        self.notify(server, _resizeNotifyCallback)
+
+    def _confirmResizeNotifyCallback(isError, server, fault):
+        if isError == False and server.status != 'VERIFY_RESIZE':
+            self._resizedServerIds.remove(server)
 
     def confirmResize(self, server):
         """
@@ -180,7 +189,7 @@ class ServerManager(EntityManager):
         data = json.dumps({"confirmResize": None})
         id = server.id
         self._post_action(id, data)
-
+        self.notify(server, _confirmResizeNotifyCallback)
 
     def revertResize(self, server):
         """
@@ -219,10 +228,14 @@ class ServerManager(EntityManager):
         
         # Note that VERIFY_RESIZE can also serve as a start state, 
         # implementations are responsible for keeping track of whether this state should be 
-        # treated as a start or end condition.        
-        # if self._resizing(server):
-        #     end_states.remove('VERIFY_RESIZE')
-
+        # treated as a start or end condition.
+        try:
+            self._resizedServerIds.index(server)
+            end_states.remove('VERIFY_RESIZE')
+        except ValueError:
+            # server not being resized, so VERIFY_RESIZE is an end state
+            pass
+        
         try:
             end_states.index(server.status)
             inWaitState = False # if we made it this far, it's not in a wait state
@@ -252,12 +265,6 @@ class ServerManager(EntityManager):
             self._wait(server)
         else:
             result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
-
-    # def notify (self, server, changeListener):
-    #     raise NotImplementedException
-    # 
-    # def stopNotify (self, server, changeListener):
-    #     raise NotImplementedException
 
     #
     ## Support methods

@@ -118,14 +118,6 @@ class ImageManager(EntityManager):
         else:
             result = self._timeout(self._wait, (image,), timeout_duration=timeout/1000.0)
 
-    def notify (self, entity, changeListener):
-        "Not implemented by this class, by design."
-        raise _bmf
-
-    def stopNotify (self, entity, changeListener):
-        "Not implemented by this class, by design."
-        raise _bmf
-
     def createEntityListFromResponse(self, response, detail):
         """
         Creates list of image objects from response to list command sent
