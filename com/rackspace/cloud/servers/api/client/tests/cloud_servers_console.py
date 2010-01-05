@@ -218,15 +218,16 @@ def createServer():
     pprint(s)
     print "Server is now: ", s # just to show the server with all values filled in
 
-    sleepTime = getSleepTime()
-    status = s.status
-    while status == "BUILD":
-        status = s.status
-        # print "Status   : ", s.status
-        print "Progress : ", s.progress
-        # print "Sleeping : ", sleepTime
-        # sleep(sleepTime)
+    # sleepTime = getSleepTime()
+    # status = s.status
+    # while status == "BUILD":
+    #     status = s.status
+    #     # print "Status   : ", s.status
+    #     print "Progress : ", s.progress
+    #     # print "Sleeping : ", sleepTime
+    #     # sleep(sleepTime)
 
+    # TODO: this is awkward, put the polling back (with refresh!) and have a separate notify test
     print "Built!"
 
 def createServerAndWait():

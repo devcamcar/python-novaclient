@@ -8,6 +8,7 @@ one is provided for each type of managed Entity: Servers, Images, Flavors, and
 Shared IP Group.
 """
 import sys
+import threading
 
 from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
@@ -44,7 +45,7 @@ class EntityManager(object):
         # TBD: what's currently referred to as "cloudServersService", really is our owner
         self._cloudServersService = cloudServersService
         self._requestPrefix = requestPrefix
-        self._changeListeners = []
+        self._changeListeners = {}
 
         #
         ## responseKey is used to handle cases where the key into the returned
@@ -152,11 +153,36 @@ class EntityManager(object):
         "wait, implemented by child classes."
         raise _bmf
 
+    class Notifier(threading.Thread):
+        def __init__ (self, entityManager, entity, changeListener):
+            self._entityManager = entityManager
+            self._entity = entity
+            self._changeListener = changeListener
+            self._stopped = False
+            threading.Thread.__init__ ( self )
+        def run (self):
+            # check the stopped flag at every step to ensure stopNotify
+            # kills the thread
+            try:
+                while True: # poll forever or until an error occurs
+                    if self._stopped == False:
+                        self._entityManager.wait(self._entity)
+                    if self._stopped == False:
+                        self._changeListener(False, self._entity)
+            except CloudServersAPIFault, fault:
+                if self._stopped == False:
+                    self._changeListener(True, self._entity, fault)
+        def stop (self):
+            self._stopped = True
+
     def notify (self, entity, changeListener):
-        self._changeListeners.append(changeListener)
+        notifier = self.Notifier(self, entity, changeListener)
+        self._changeListeners[changeListener] = notifier
+        notifier.start()
 
     def stopNotify (self, entity, changeListener):
-        self._changeListeners.remove(changeListenger)
+        self._changeListeners[changeListener].stop()
+        del self._changeListeners[changeListener]
 
     #
     # Lists
