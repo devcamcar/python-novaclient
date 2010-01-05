@@ -35,6 +35,9 @@ class Image(Entity):
         if dic == None:
             return
 
+        # make a copy so we can decide if we should notify later
+        imageCopy = copy.copy(self)
+
         #
         ## All status queries return at least this
         #
@@ -56,6 +59,9 @@ class Image(Entity):
         # User created images have this...
         if 'progress' in dic:
             self._progress  = dic['progress']
+
+        # notify change listeners if there are any and the server has changed
+        self._notifyIfChanged_(imageCopy)
 
     @property
     def updated(self):

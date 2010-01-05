@@ -48,3 +48,18 @@ class Entity(object):
         except AttributeError:
             return False
         return True
+
+    def __ne__(self, other):
+        if self.__eq__(other):
+            return False
+        else:
+            return True
+
+    def _notifyIfChanged_(self, other):
+        """
+        notify change listeners if there are any and the entity has changed
+        """
+        if self._manager != None and len(self._manager._changeListeners) > 0 and other != self:
+            for changeListener in self._manager._changeListeners:
+                changeListener(False, self)
+        

@@ -197,6 +197,12 @@ def rebootServer():
 
     print "Rebooted!"
 
+def notifyCallback(isError, entity, fault=None):
+    print "we have been notified!"
+    print "isError: ", isError
+    print "fault: ", fault
+    print "entity: ", entity
+
 def createServer():
     """
     Creates a server with entered name, then shows how to poll for it
@@ -208,6 +214,7 @@ def createServer():
     # Create doesn't return anything, but fills in the server with info
     # (including) admin p/w
     serverManager.create(s)
+    serverManager.notify(s, notifyCallback)
     pprint(s)
     print "Server is now: ", s # just to show the server with all values filled in
 
@@ -215,10 +222,10 @@ def createServer():
     status = s.status
     while status == "BUILD":
         status = s.status
-        print "Status   : ", s.status
+        # print "Status   : ", s.status
         print "Progress : ", s.progress
-        print "Sleeping : ", sleepTime
-        sleep(sleepTime)
+        # print "Sleeping : ", sleepTime
+        # sleep(sleepTime)
 
     print "Built!"
 

@@ -96,6 +96,9 @@ class SharedIpGroup(Entity):
         if dic == None:
             return
 
+        # make a copy so we can decide if we should notify later
+        sharedIpGroupCopy = copy.copy(self)
+
         #
         ## All status queries return at least this
         #
@@ -107,3 +110,6 @@ class SharedIpGroup(Entity):
         #
         if 'servers' in dic:
             self._servers = dic['servers']
+
+        # notify change listeners if there are any and the server has changed
+        self._notifyIfChanged_(sharedIpGroupCopy)

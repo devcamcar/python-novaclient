@@ -196,7 +196,7 @@ class ServerManager(EntityManager):
         data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId,"configureServer": configureServer}})
         self._PUT(data, url_parts)
 
-    def unshareIp (self, server, ipAddr):        
+    def unshareIp (self, server, ipAddr):
         self._DELETE(server.id, "ips", "public", ipAddr)
 
     def setSchedule(self, server, backupSchedule):
@@ -253,11 +253,11 @@ class ServerManager(EntityManager):
         else:
             result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
 
-    def notify (self, server, changeListener):
-        raise NotImplementedException
-
-    def stopNotify (self, server, changeListener):
-        raise NotImplementedException
+    # def notify (self, server, changeListener):
+    #     raise NotImplementedException
+    # 
+    # def stopNotify (self, server, changeListener):
+    #     raise NotImplementedException
 
     #
     ## Support methods

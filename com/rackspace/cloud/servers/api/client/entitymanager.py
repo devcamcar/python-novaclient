@@ -44,6 +44,7 @@ class EntityManager(object):
         # TBD: what's currently referred to as "cloudServersService", really is our owner
         self._cloudServersService = cloudServersService
         self._requestPrefix = requestPrefix
+        self._changeListeners = []
 
         #
         ## responseKey is used to handle cases where the key into the returned
@@ -152,12 +153,10 @@ class EntityManager(object):
         raise _bmf
 
     def notify (self, entity, changeListener):
-        "notify, implemented by child classes."
-        raise _bmf
+        self._changeListeners.append(changeListener)
 
     def stopNotify (self, entity, changeListener):
-        "stopNotify, implemented by child classes."
-        raise _bmf
+        self._changeListeners.remove(changeListenger)
 
     #
     # Lists

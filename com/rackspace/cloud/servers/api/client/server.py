@@ -5,6 +5,8 @@
 Server Entity
 """
 
+import copy
+
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 from com.rackspace.cloud.servers.api.client.entity import Entity
 
@@ -42,6 +44,14 @@ class Server(Entity):
     def __str__(self):
         return self.asJSON
 
+    # def __eq__(self, other):
+    #     print "calling __eq__"
+    #     return other != None and self._imageId == other._imageId and self._flavorId == other._flavorId and self._metadata == other._metadata and self._id == other._id and self._hostId == other._hostId and self._progress == other._progress and self._addresses == other._addresses and self._personality == other._personality
+    # 
+    # def __ne__(self, other):
+    #     print "calling __ne__"
+    #     return self._imageId != other._imageId or self._flavorId != other._flavorId or self._metadata != other._metadata or self._id != other._id or self._hostId != other._hostId or self._progress != other._progress or self._addresses != other._addresses or self._personality != other._personality
+
     def initFromResultDict(self, dic, headers=None):
         """
         Fills up a server object from the dict which is a result of a query
@@ -50,7 +60,10 @@ class Server(Entity):
         # This will happen when e.g. a find() fails.
         if dic == None:
             return
-            
+        
+        # make a copy so we can decide if we should notify later
+        serverCopy = copy.copy(self)
+         
         if headers:
             # they're tuples, so loop through and find the date
             for header in headers:
@@ -82,7 +95,10 @@ class Server(Entity):
         # We only get this on creation
         if 'adminPass' in dic:
             self._adminPass = dic['adminPass']
-            
+
+        # notify change listeners if there are any and the server has changed
+        self._notifyIfChanged_(serverCopy)
+        
     def get_name(self):
         """Server's name (immutable once created @ Rackspace)."""
         return self._name

@@ -39,6 +39,9 @@ class Flavor(Entity):
         if dic == None:
             return
 
+        # make a copy so we can decide if we should notify later
+        flavorCopy = copy.copy(self)
+
         #
         ## All status queries return at least this
         #
@@ -53,6 +56,9 @@ class Flavor(Entity):
 
         if 'disk' in dic:
             self._disk  = dic['disk']
+
+        # notify change listeners if there are any and the server has changed
+        self._notifyIfChanged_(flavorCopy)
 
     @property
     def ram(self):
