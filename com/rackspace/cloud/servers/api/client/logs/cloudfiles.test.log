@@ -966,3 +966,59 @@ is
 []
 {u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
 []
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': []}
+[]
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': [{u'id': 127862, u'name': u'testresizing27'}, {u'id': 127876, u'name': u'testlistcache24'}, {u'id': 134280, u'name': u'slice134280'}, {u'id': 134281, u'name': u'slice134281'}, {u'id': 134282, u'name': u'slice134282'}, {u'id': 134283, u'name': u'slice134283'}]}
+[]
+{u'servers': []}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing27', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}, {u'status': u'ACTIVE', u'hostId': u'fd3e9c28bdbd02978e52dfd794eebf06', u'name': u'testlistcache24', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127876, u'addresses': {u'public': [u'174.143.170.219'], u'private': [u'10.176.247.217']}}, {u'status': u'ACTIVE', u'hostId': u'492a4aaf00fa900383d1e1167f4963d6', u'name': u'slice134280', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134280, u'addresses': {u'public': [u'174.143.173.72'], u'private': [u'10.176.251.38']}}, {u'status': u'ACTIVE', u'hostId': u'950846f8c4aab716690a500199b366e3', u'name': u'slice134281', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134281, u'addresses': {u'public': [u'174.143.175.55'], u'private': [u'10.176.251.39']}}, {u'status': u'ACTIVE', u'hostId': u'c534c91593b73d149aa87f8aab85ef7d', u'name': u'slice134282', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134282, u'addresses': {u'public': [u'174.143.175.246'], u'private': [u'10.176.251.40']}}, {u'status': u'ACTIVE', u'hostId': u'85e606bfd1d2fccc83685042a85f2a74', u'name': u'slice134283', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134283, u'addresses': {u'public': [u'67.23.42.124'], u'private': [u'10.176.251.41']}}]}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing27', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}, {u'status': u'ACTIVE', u'hostId': u'fd3e9c28bdbd02978e52dfd794eebf06', u'name': u'testlistcache24', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127876, u'addresses': {u'public': [u'174.143.170.219'], u'private': [u'10.176.247.217']}}, {u'status': u'ACTIVE', u'hostId': u'492a4aaf00fa900383d1e1167f4963d6', u'name': u'slice134280', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134280, u'addresses': {u'public': [u'174.143.173.72'], u'private': [u'10.176.251.38']}}, {u'status': u'ACTIVE', u'hostId': u'950846f8c4aab716690a500199b366e3', u'name': u'slice134281', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134281, u'addresses': {u'public': [u'174.143.175.55'], u'private': [u'10.176.251.39']}}, {u'status': u'ACTIVE', u'hostId': u'c534c91593b73d149aa87f8aab85ef7d', u'name': u'slice134282', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134282, u'addresses': {u'public': [u'174.143.175.246'], u'private': [u'10.176.251.40']}}, {u'status': u'ACTIVE', u'hostId': u'85e606bfd1d2fccc83685042a85f2a74', u'name': u'slice134283', u'metadata': {}, u'imageId': 8, u'progress': 100, u'flavorId': 1, u'id': 134283, u'addresses': {u'public': [u'67.23.42.124'], u'private': [u'10.176.251.41']}}]}
+[]
+{u'servers': []}
+[]

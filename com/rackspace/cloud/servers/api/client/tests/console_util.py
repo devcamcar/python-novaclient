@@ -31,17 +31,21 @@ class ChoiceItem(object):
         self.prompt = prompt
         self.func = func
 
-def getId(idType):
-    print idType + " ID: "
+def getId(idType, showId=True):
+    if showId == True:
+        print idType + " ID: "
+    else:
+        print idType + ": "
     id = stdin.readline().strip()
     if id == "":    # If they leave it blank, just bail returning -1
         return -1
 
-    try:
-        id = int(id)
-    except ValueError, e:
-        print "ValueError : ", e
-        id = -1
+    # don't mind if it's not numeric
+    # try:
+    #     id = int(id)
+    # except ValueError, e:
+    #     print "ValueError : ", e
+    #     id = -1
     return id
     
 def getServerId():
@@ -55,6 +59,9 @@ def getFlavorId():
     
 def getSharedIpGroupId():
     return getId("Shared IP Group")
+
+def getIpAddress():
+    return getId("IP Address", showId=False)
 
 def printChoices(choices):
     """

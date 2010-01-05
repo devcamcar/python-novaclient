@@ -319,6 +319,14 @@ def addServerToIpGroup():
     """
     Add server to IP Group by id
     """
+    serverId = getServerId()
+    server = serverManager.find(serverId)
+    print "server: ", server
+    sharedIpGroupId = getSharedIpGroupId()
+    sharedIpGroup = sharedIpGroupManager.find(sharedIpGroupId)
+    print "shared ip group: ", sharedIpGroup
+    ipAddress = getIpAddress()
+    serverManager.shareIp(server, ipAddress, sharedIpGroupId, True)
     pass
 
 def testEntityListIter():

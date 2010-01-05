@@ -191,13 +191,13 @@ class ServerManager(EntityManager):
         id = server.id
         self._post_action(id, data)
 
-    def shareIp (server, ipAddr, sharedIpGroupId, configureServer):
-        url_parts = (id, "ips", "public", ipAddr)
+    def shareIp (self, server, ipAddr, sharedIpGroupId, configureServer):
+        url_parts = (server.id, "ips", "public", ipAddr)
         data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId,"configureServer": configureServer}})
         self._PUT(data, url_parts)
 
-    def unshareIp (server, ipAddr):        
-        self._DELETE(id, "ips", "public", ipAddr)
+    def unshareIp (self, server, ipAddr):        
+        self._DELETE(server.id, "ips", "public", ipAddr)
 
     def setSchedule(self, server, backupSchedule):
         url_parts = (server.id, "backup_schedule")
@@ -239,7 +239,7 @@ class ServerManager(EntityManager):
                 self.refresh(server)
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
-                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                
+                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')
                 sleep((timedelta.days * 86400) + timedelta.seconds)
             except CloudServersFault:
                 pass
