@@ -402,6 +402,54 @@ def waitOnSharedIpGroup():
     print "Shared IP Group: ", sharedIpGroup
     sharedIpGroupManager.wait(sharedIpGroup)
 
+####
+# Notify tests
+####
+
+def simpleNotify(isError, entity, fault=None):
+    print "notified!"
+
+def _testNotify(entityId, entityManager):
+    
+    # first, we get the entity to run the notify call on.  we need a real one because notify
+    # will actually refresh via the API as well
+    entity = entityManager.find(entityId)
+    print "You should see the notify callback execute twice.  If something is happening to the entity during this test, you may see the notify call execute more than twice.  If nothing is happening to the entity and you see more than two notify events, the test has failed."
+    entityManager.notify(entity, simpleNotify)
+
+    # all entities have a name, so let's change that to trigger the notify event
+    dic = { 'name': 'test1', 'id': entityId }
+    if entity.name == dic['name']:
+        dic['name'] = 'test2' # in case the entity happened to be named test1
+    entity.initFromResultDict(dic)
+    dic['name'] = 'test2'
+    if entity.name == dic['name']:
+        dic['name'] = 'test3' # in case the entity happened to be named test2
+    entity.initFromResultDict(dic)
+
+    sleep(1) # sleeping before stopNotify to catch any extra notify events that shouldn't happen
+    
+    entityManager.stopNotify(entity, simpleNotify)
+
+def testServerNotify():
+    # serverId = getServerId()
+    serverId = 127862 # TODO: remove    
+    _testNotify(serverId, serverManager)
+    
+def testImageNotify():
+    # imageId = getImageId()
+    imageId = 3
+    _testNotify(imageId, imageManager)
+
+def testFlavorNotify():
+    # flavorId = getFlavorId()
+    flavorId = 1
+    _testNotify(flavorId, flavorManager)
+
+def testSharedIpGroupNotify():
+    sharedIpGroupId = 22
+    _testNotify(sharedIpGroupId, sharedIpGroupManager)
+
 choices = dict()                    # just so it's there for beatIt decl
 
 #
@@ -466,6 +514,13 @@ choicesList = (
     ("iter"     , ChoiceItem("Test EntityList iterator",                testEntityListIter) ),
     ("pers"     , ChoiceItem("Server Personality get/set",              testPersonality)    ),
     ("fault"    , ChoiceItem("Test Fault Parser",                       testFaultGeneration)),
+
+    (groupHeader("Notifiers"),),
+    ("notifyserver", ChoiceItem("Test ServerManager.notify()",          testServerNotify)),
+    ("notifyimage",  ChoiceItem("Test ImageManager.notify()",           testImageNotify)),
+    ("notifyflavor", ChoiceItem("Test FlavorManager.notify()",          testFlavorNotify)),
+    ("notifysip",    ChoiceItem("Test SharedIpGroupManager.notify()",   testSharedIpGroupNotify)),
+    
 
     (groupHeader("Quit"),),
     ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),

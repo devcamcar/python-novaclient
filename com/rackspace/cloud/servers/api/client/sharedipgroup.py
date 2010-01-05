@@ -5,6 +5,8 @@
 SharedIpGroup object
 """
 
+import copy
+
 from com.rackspace.cloud.servers.api.client.entity import Entity
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 

@@ -12,7 +12,7 @@ import threading
 
 from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import BadMethodFault
+from com.rackspace.cloud.servers.api.client.errors import *
 from com.rackspace.cloud.servers.api.client.shared.utils import build_url, find_in_list
 from com.rackspace.cloud.servers.api.client.shared.cslogging import cslogger
 
@@ -145,9 +145,6 @@ class EntityManager(object):
     #
     # Polling Operations
     #
-    # def _wait (self, entity):
-    #     "wait, implemented by child classes."
-    #     #raise _bmf
         
     def wait (self, entity, timeout=None):
         "wait, implemented by child classes."
@@ -164,12 +161,12 @@ class EntityManager(object):
             # check the stopped flag at every step to ensure stopNotify
             # kills the thread
             try:
-                while True: # poll forever or until an error occurs
+                while self._stopped == False: # poll forever or until an error occurs
                     if self._stopped == False:
                         self._entityManager.wait(self._entity)
                     if self._stopped == False:
                         self._changeListener(False, self._entity)
-            except CloudServersAPIFault, fault:
+            except CloudServersFault, fault:
                 if self._stopped == False:
                     self._changeListener(True, self._entity, fault)
         def stop (self):

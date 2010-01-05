@@ -1022,3 +1022,83 @@ is
 []
 {u'servers': []}
 []
+{u'flavors': [{u'id': 1, u'name': u'256 server'}, {u'id': 2, u'name': u'512 server'}, {u'id': 3, u'name': u'1GB server'}, {u'id': 4, u'name': u'2GB server'}, {u'id': 5, u'name': u'4GB server'}, {u'id': 6, u'name': u'8GB server'}, {u'id': 7, u'name': u'15.5GB server'}]}
+[]
+{u'flavors': [{u'id': 1, u'name': u'256 server'}, {u'id': 2, u'name': u'512 server'}, {u'id': 3, u'name': u'1GB server'}, {u'id': 4, u'name': u'2GB server'}, {u'id': 5, u'name': u'4GB server'}, {u'id': 6, u'name': u'8GB server'}, {u'id': 7, u'name': u'15.5GB server'}]}
+[]
+{u'flavors': []}
+[]
+{u'images': [{u'id': 3, u'name': u'Gentoo 2008.0'}, {u'id': 4, u'name': u'Debian 5.0 (lenny)'}, {u'id': 5, u'name': u'Fedora 10 (Cambridge)'}, {u'id': 7, u'name': u'CentOS 5.3'}, {u'id': 8, u'name': u'Ubuntu 9.04 (jaunty)'}, {u'id': 9, u'name': u'Arch 2009.02'}, {u'id': 10, u'name': u'Ubuntu 8.04.2 LTS (hardy)'}, {u'id': 11, u'name': u'Ubuntu 8.10 (intrepid)'}, {u'id': 12, u'name': u'Red Hat EL 5.3'}, {u'id': 13, u'name': u'Fedora 11 (Leonidas)'}, {u'id': 14, u'name': u'Red Hat EL 5.4'}, {u'id': 17, u'name': u'Fedora 12 (Constantine)'}, {u'id': 19, u'name': u'Gentoo 10.1'}, {u'id': 14362, u'name': u'Ubuntu 9.10 (karmic)'}, {u'id': 187811, u'name': u'CentOS 5.4'}]}
+[]
+{u'images': [{u'id': 3, u'name': u'Gentoo 2008.0'}, {u'id': 4, u'name': u'Debian 5.0 (lenny)'}, {u'id': 5, u'name': u'Fedora 10 (Cambridge)'}, {u'id': 7, u'name': u'CentOS 5.3'}, {u'id': 8, u'name': u'Ubuntu 9.04 (jaunty)'}, {u'id': 9, u'name': u'Arch 2009.02'}, {u'id': 10, u'name': u'Ubuntu 8.04.2 LTS (hardy)'}, {u'id': 11, u'name': u'Ubuntu 8.10 (intrepid)'}, {u'id': 12, u'name': u'Red Hat EL 5.3'}, {u'id': 13, u'name': u'Fedora 11 (Leonidas)'}, {u'id': 14, u'name': u'Red Hat EL 5.4'}, {u'id': 17, u'name': u'Fedora 12 (Constantine)'}, {u'id': 19, u'name': u'Gentoo 10.1'}, {u'id': 14362, u'name': u'Ubuntu 9.10 (karmic)'}, {u'id': 187811, u'name': u'CentOS 5.4'}]}
+[]
+{u'images': []}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]
+{u'sharedIpGroups': [{u'id': 21, u'name': u'ABC Group'}, {u'id': 22, u'name': u'DEF Group'}]}
+[]

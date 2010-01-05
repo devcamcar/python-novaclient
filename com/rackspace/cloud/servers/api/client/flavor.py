@@ -9,6 +9,8 @@ A flavor is an available hardware configuration fora server. Each flavor has a
 unique combination of disk space and memory capacity.
 """
 
+import copy
+
 from com.rackspace.cloud.servers.api.client.entity import Entity
 
 class Flavor(Entity):
@@ -23,6 +25,7 @@ class Flavor(Entity):
     def __init__(self, name=None):
         super(Flavor, self).__init__(name)
         self._id = self._ram = self._disk = None
+        self._manager = None
 
     def __eq__(self, other):
         return self._id == other._id and self._name == other._name and self._ram == other._ram and self._disk == other._disk

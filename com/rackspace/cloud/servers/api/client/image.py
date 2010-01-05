@@ -9,6 +9,8 @@ An image is a collection of files you use to create or rebuild a server.
 Rackspace provides pre-built OS images by default.
 """
 
+import copy
+
 from com.rackspace.cloud.servers.api.client.entity import Entity
 
 
@@ -24,6 +26,7 @@ class Image(Entity):
         super(Image, self).__init__(name)
         self._id = self._updated = self._created = None
         self._status = self._progress = None
+        self._manager = None
 
     def initFromResultDict(self, dic):
         """
