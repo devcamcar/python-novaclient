@@ -46,6 +46,8 @@ class EntityManager(object):
         self._cloudServersService = cloudServersService
         self._requestPrefix = requestPrefix
         self._changeListeners = {}
+        self._entityCopies = {} # for wait() comparisons
+        
 
         #
         ## responseKey is used to handle cases where the key into the returned

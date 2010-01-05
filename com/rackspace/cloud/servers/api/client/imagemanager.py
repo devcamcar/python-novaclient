@@ -8,6 +8,7 @@ ImageManager - EntityManager for managing image entities.
 
 from datetime import datetime
 import time
+import copy
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
@@ -113,6 +114,7 @@ class ImageManager(EntityManager):
         """
       	timeout is in milliseconds
         """
+        self._entityCopies[image.id] = copy.copy(image)
         if timeout==None:
             self._wait(image)
         else:

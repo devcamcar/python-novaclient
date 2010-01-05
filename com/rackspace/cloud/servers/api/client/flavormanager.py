@@ -27,7 +27,6 @@ class FlavorManager(EntityManager):
     """
     def __init__(self, cloudServersService):
         super(FlavorManager, self).__init__(cloudServersService, "flavors")
-        self._flavorCopies = {} # for wait() comparisons
 
     def create(self, entity):
         raise _bmf
@@ -78,7 +77,7 @@ class FlavorManager(EntityManager):
         """
         Wait implementation
         """
-        while flavor == self._flavorCopies[flavor.id]:
+        while flavor == self._entityCopies[flavor.id]:
             try:
                 self.refresh(flavor)
             except OverLimitFault as olf:
@@ -92,7 +91,7 @@ class FlavorManager(EntityManager):
         """
       	timeout is in milliseconds
         """
-        self._flavorCopies[flavor.id] = copy.copy(flavor)
+        self._entityCopies[flavor.id] = copy.copy(flavor)
         if timeout==None:
             self._wait(flavor)
         else:

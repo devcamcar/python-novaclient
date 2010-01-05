@@ -34,7 +34,6 @@ class SharedIpGroupManager(EntityManager):
     """
     def __init__(self, cloudServersService):
         super(SharedIpGroupManager, self).__init__(cloudServersService, "shared_ip_groups", "sharedIpGroups")
-        self._sharedIpGroupCopies = {} # for wait() comparisons
 
     def create(self, ipgroup):
         """
@@ -92,7 +91,7 @@ class SharedIpGroupManager(EntityManager):
         """
         Wait implementation
         """
-        while sharedIpGroup == self._sharedIpGroupCopies[sharedIpGroup.id]:
+        while sharedIpGroup == self._entityCopies[sharedIpGroup.id]:
             try:
                 self.refresh(sharedIpGroup)
             except OverLimitFault as olf:
@@ -106,7 +105,7 @@ class SharedIpGroupManager(EntityManager):
         """
       	timeout is in milliseconds
         """
-        self._sharedIpGroupCopies[sharedIpGroup.id] = copy.copy(sharedIpGroup)
+        self._entityCopies[sharedIpGroup.id] = copy.copy(sharedIpGroup)
         if timeout==None:
             self._wait(sharedIpGroup)
         else:

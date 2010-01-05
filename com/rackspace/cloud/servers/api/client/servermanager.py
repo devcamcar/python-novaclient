@@ -9,6 +9,7 @@ Provides interface for all Server operations as a component part of a Cloud Serv
 
 from datetime import datetime
 import time
+import copy
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
@@ -261,6 +262,7 @@ class ServerManager(EntityManager):
         """
       	timeout is in milliseconds
         """
+        self._entityCopies[server.id] = copy.copy(server)
         if timeout==None:
             self._wait(server)
         else:
