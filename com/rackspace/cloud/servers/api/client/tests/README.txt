@@ -10,11 +10,9 @@
 #*****************************************************************************
 # Please be aware that these tests create and destroy a LARGE number of 
 # servers and, while we haven't computed the net cost of doing so, it could be 
-# quite expensive and, since some of the tests look quite 'hackish' may lead
-# to account suspension; at least until you explain yourself to the right 
-# people.
+# quite expensive.
 #
-# Please don't do this with a paid account unless you're prepared to pay all
+# Please don't do this unless you're prepared to pay all
 # associated fees including those resulting from failed tests that may leave
 # servers (and your bill!) running.
 #*****************************************************************************
