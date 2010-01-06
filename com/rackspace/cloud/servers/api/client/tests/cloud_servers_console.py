@@ -229,7 +229,6 @@ def createServer():
     #     # print "Sleeping : ", sleepTime
     #     # sleep(sleepTime)
 
-    # TODO: this is awkward, put the polling back (with refresh!) and have a separate notify test
     print "Built!"
 
 def createServerAndWait():
@@ -368,7 +367,6 @@ def testEntityListIter():
     print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
     
 def testServerDeltaList():
-    # TODO: test with HTTP client to be sure this is being done right
     datestr = datetime.now().strftime('%s')
     deltaList = serverManager.createDeltaList(True, changes_since=datestr)
     print "deltaList since ", datestr, ": "
@@ -438,8 +436,7 @@ def _testNotify(entityId, entityManager):
     entityManager.stopNotify(entity, simpleNotify)
 
 def testServerNotify():
-    # serverId = getServerId()
-    serverId = 127862 # TODO: remove    
+    serverId = getServerId()
     _testNotify(serverId, serverManager)
     
 def testImageNotify():
