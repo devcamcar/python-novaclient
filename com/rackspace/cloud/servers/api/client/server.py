@@ -223,13 +223,6 @@ class Server(Entity):
     @property
     def status(self):
         """
-        Get `status` of server by querying API if server is attached to
-        a ServerManager, else None
+        Get `status` of server
         """
-        if not self._manager:
-            return "Not connected to manager"
-        else:
-            details = self._manager.serverDetails(self.id)
-            self.initFromResultDict(details)
-            return details["status"]
-
+        return self._status
