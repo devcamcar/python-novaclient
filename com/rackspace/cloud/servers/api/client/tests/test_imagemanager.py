@@ -23,7 +23,8 @@ class TestImageManager(unittest.TestCase):
 
     def test_createEntityListFromResponse(self):
         # image_manager = ImageManager(cloudServersService)
-        # self.assertEqual(expected, image_manager.createEntityListFromResponse(response))
+        # self.assertEqual(expected, \
+        #               image_manager.createEntityListFromResponse(response))
         raise  SkipTest # TODO: implement your test here
 
     def test_find(self):

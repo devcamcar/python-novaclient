@@ -2,15 +2,18 @@
 # See COPYING for details.
 
 """
-Test Server object.  These tests just test the internals of the class itself, not the use thereof.
+Test Server object.  These tests just test the internals of the class itself, 
+not the use thereof.
 """
 
 from com.rackspace.cloud.servers.api.client.server import Server
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
-from com.rackspace.cloud.servers.api.client.tests.unittest_wrapper import unittest
+from com.rackspace.cloud.servers.api.client.tests.unittest_wrapper \
+    import unittest
 
-from com.rackspace.cloud.servers.api.client.tests.shared.printdoc import printdoc
+from com.rackspace.cloud.servers.api.client.tests.shared.printdoc \
+    import printdoc
 
 from com.rackspace.cloud.servers.api.client.tests import css, sm, im, fm, sipgm
 
@@ -20,7 +23,8 @@ class ServerClassTestCase(unittest.TestCase):
     """
     def setUp(self):
         """Create a couple of server objects to play with"""
-        self.server0 = Server(name="TestServer0", imageId=1, flavorId=2, metadata={"meta1":"0meta1 value", "meta2":"0meta2 value"})
+        self.server0 = Server(name="TestServer0", imageId=1, flavorId=2, \
+                    metadata={"meta1":"0meta1 value", "meta2":"0meta2 value"})
         self.server1 = Server(name="TestServer1", imageId=2, flavorId=3)
 
     def tearDown(self):
@@ -69,7 +73,8 @@ class ServerClassTestCase(unittest.TestCase):
                             "name"      : "TestServer0",
                             "imageId"   : 1,
                             "flavorId"  : 2,
-                            "metadata"  : {"meta1":"0meta1 value", "meta2":"0meta2 value"}
+                            "metadata"  : {"meta1":"0meta1 value",
+                                           "meta2":"0meta2 value"}
                         }
                     }
         srvr0Json = json.dumps(srvr0Dict)

@@ -23,7 +23,8 @@ class TestFlavorManager(unittest.TestCase):
 
     def test_createEntityListFromResponse(self):
         # flavor_manager = FlavorManager(cloudServersService)
-        # self.assertEqual(expected, flavor_manager.createEntityListFromResponse(response))
+        # self.assertEqual(expected, \
+        #               flavor_manager.createEntityListFromResponse(response))
         pass # TODO: implement your test here
 
 if __name__ == '__main__':

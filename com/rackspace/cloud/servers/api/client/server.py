@@ -15,10 +15,12 @@ from com.rackspace.cloud.servers.api.client.entity import Entity
 ## wanted to have this around for reference
 #
 serverStatus = ("ACTIVE", "BUILD", "REBUILD", "SUSPENDED", "QUEUE_RESIZE",
-                "PREP_RESIZE", "VERIFY_RESIZE", "PASSWORD", "RESCUE", "UNKNOWN")
+                "PREP_RESIZE", "VERIFY_RESIZE", "PASSWORD", "RESCUE", 
+                "UNKNOWN")
 
 class Server(Entity):
-    def __init__(self, name, imageId=None, flavorId=None, metadata=None, personality=None):
+    def __init__(self, name, imageId=None, flavorId=None, metadata=None, \
+                 personality=None):
         """
         Create new Server instance with specified name, imageId, flavorId and
         optional metadata.
@@ -167,15 +169,16 @@ class Server(Entity):
     @property
     def progress(self):
         """
-        Server's progress as of the most recent status or serverManager.ssupdate()
+        Server's progress as of the most recent status or 
+        serverManager.ssupdate()
         """
         return self._progress
 
     @property
     def lastModified(self):
         """
-        Server's last modified date as returned in Date header.  May not be the actual
-        last modified date
+        Server's last modified date as returned in Date header.  
+        May not be the actual last modified date
         """
         return self._lastModified
 

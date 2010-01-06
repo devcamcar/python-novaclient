@@ -19,8 +19,8 @@ class Image(Entity):
     Image
 
     An image is a collection of files you use to create or rebuild a server.
-    Rackspace provides pre-built OS images by default. You may also create custom
-    images.
+    Rackspace provides pre-built OS images by default. You may also create 
+    custom images.
     """
     def __init__(self, name=None):
         super(Image, self).__init__(name)

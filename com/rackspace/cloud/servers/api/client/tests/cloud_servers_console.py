@@ -36,16 +36,17 @@ from pprint import pprint
 # NOTE: this file must be created, see testing README.txt for info
 from account import RS_UN, RS_KEY
 
-# The __init__ for com.rackspace.cloud.servers.api.client.tests creates a a CloudServersServices instance
-# (named `css`) as well as one of each type of manager.  A *lot* has to go
-# right for this to get past this import at all.
-from com.rackspace.cloud.servers.api.client.tests import css, serverManager, flavorManager, \
-                               imageManager, sharedIpGroupManager
+# The __init__ for com.rackspace.cloud.servers.api.client.tests creates a 
+# CloudServersServices instance (named `css`) as well as one of each type of 
+# manager.  A *lot* has to go right for this to get past this import at all.
+from com.rackspace.cloud.servers.api.client.tests import css, serverManager, \
+                            flavorManager, imageManager, sharedIpGroupManager
 
 from com.rackspace.cloud.servers.api.client.sharedipgroup import SharedIpGroup
 from com.rackspace.cloud.servers.api.client.servermanager import rebootType
 from com.rackspace.cloud.servers.api.client.server import Server
-from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
+from com.rackspace.cloud.servers.api.client.backupschedule \
+    import BackupSchedule
 from com.rackspace.cloud.servers.api.client.errors import CloudServersFault
 from com.rackspace.cloud.servers.api.client.personality import Personality
 from com.rackspace.cloud.servers.api.client.file import File
@@ -218,7 +219,7 @@ def createServer():
     serverManager.create(s)
     serverManager.notify(s, notifyCallback)
     pprint(s)
-    print "Server is now: ", s # just to show the server with all values filled in
+    print "Server is now: ", s # show the server with all values filled in
 
     # sleepTime = getSleepTime()
     # status = s.status
@@ -233,8 +234,8 @@ def createServer():
 
 def createServerAndWait():
     """
-    Creates a server with entered name, then uses the wait() method to poll for it
-    to be created.
+    Creates a server with entered name, then uses the wait() method to poll 
+    for it to be created.
     """
     print "Server Name to Create: "
     name = stdin.readline().strip()
@@ -243,7 +244,7 @@ def createServerAndWait():
     # (including) admin p/w
     serverManager.create(s)
     pprint(s)
-    print "Server is now: ", s # just to show the server with all values filled in
+    print "Server is now: ", s # show the server with all values filled in
     serverManager.wait(s)
 
     print "Built!"
@@ -270,7 +271,8 @@ def resizeServer():
     serverManager.resize(server, flavorId)
     serverManager.wait(server)
     
-    print "Done!  Ready to confirm or revert?  Type confirm or revert or press enter to do nothing:"
+    print "Done!  Ready to confirm or revert?\
+           Type confirm or revert or press enter to do nothing:"
     action = stdin.readline().strip()
     
     if action == 'confirm':
@@ -349,7 +351,8 @@ def testEntityListIter():
     actual_length = 0
     for server in serverList:
         actual_length += 1
-    print "testing 'for server in serverList': ", 'PASS' if actual_length == expected_length else ''
+    print "testing 'for server in serverList': ", \
+            'PASS' if actual_length == expected_length else ''
 
     # test hasNext() and next()
     actual_length = 0
@@ -357,14 +360,16 @@ def testEntityListIter():
     while serverList.hasNext():
         serverList.next()
         actual_length += 1
-    print "testing hasNext() and next():       ", 'PASS' if actual_length == expected_length else 'FAIL'
+    print "testing hasNext() and next():       ", \
+            'PASS' if actual_length == expected_length else 'FAIL'
 
     # test reset()
     actual_length = 0
     serverList.reset()
     for server in serverList:
         actual_length += 1
-    print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
+    print "testing reset():                    ", \
+            'PASS' if actual_length == expected_length else 'FAIL'
     
 def testServerDeltaList():
     datestr = datetime.now().strftime('%s')
@@ -384,8 +389,10 @@ def testFaultGeneration():
 def testPersonality():
     s = Server(name="test", imageId=3, flavorId=1)
     p = Personality()
-    f1 = File('/usr/local/personality1', 'this is a test.  if it is legible, the test failed')
-    f2 = File('/usr/local/personality2', 'this is another test.  if it is legible, the test failed')
+    f1 = File('/usr/local/personality1', \
+              'this is a test.  if it is legible, the test failed')
+    f2 = File('/usr/local/personality2', \
+              'this is another test.  if it is legible, the test failed')
     p.files = [f1, f2]
     s.personality = p
     print "personality: ", s.personality
@@ -419,19 +426,23 @@ def simpleNotify(isError, entity, fault=None):
 
 def _testNotify(entityId, entityManager):
     
-    # first, we get the entity to run the notify call on.  we need a real one because notify
-    # will actually refresh via the API as well
+    # first, we get the entity to run the notify call on.  we need a real one 
+    # because notify will actually refresh via the API as well
     entity = entityManager.find(entityId)
-    print "You should see the notify callback execute twice.  If something is happening to the entity during this test, you may see the notify call execute more than twice.  If nothing is happening to the entity and you see more than two notify events, the test has failed."
+    print "You should see the notify callback execute twice.\
+           If something is happening to the entity during this test, you may\
+           see the notify call execute more than twice.  If nothing is\
+           happening to the entity and you see more than two notify events,\
+           the test has failed."
     entityManager.notify(entity, simpleNotify)
 
-    # all entities have a name, so let's change that to trigger the notify event
+    # all entities have a name, so let's use that to trigger the notify event
     dic = { 'name': 'test1', 'id': entityId }
     if entity.name == dic['name']:
         dic['name'] = 'test2' # in case the entity happened to be named test1
     entity.initFromResultDict(dic)
 
-    sleep(2) # sleeping before stopNotify to catch any extra notify events that shouldn't happen
+    sleep(2) # sleeping to catch any extra notify events that shouldn't happen
     
     entityManager.stopNotify(entity, simpleNotify)
 
@@ -478,56 +489,65 @@ def groupHeader(groupName):
 
 choicesList = (
     (groupHeader("Servers"),),
-    ("ls"       , ChoiceItem("List Servers",                            lambda: ls(False))  ),
-    ("lsd"      , ChoiceItem("List Servers Detail",                     lambda: ls(True))   ),
-    ("sdelta"   , ChoiceItem("Servers Delta List",                      testServerDeltaList)),
+    ("ls"       , ChoiceItem("List Servers",            lambda: ls(False))  ),
+    ("lsd"      , ChoiceItem("List Servers Detail",     lambda: ls(True))   ),
+    ("sdelta"   , ChoiceItem("Servers Delta List",      testServerDeltaList)),
     (sepLine,),
-    ("ss"       , ChoiceItem("Show Server's Status by id",              showStatus)         ),
-    ("sd"       , ChoiceItem("Show Server's Details by id",             showDetails)        ),
+    ("ss"       , ChoiceItem("Show Server's Status by id", showStatus)),
+    ("sd"       , ChoiceItem("Show Server's Details by id", showDetails)),
     (sepLine,),
-    ("sc"       , ChoiceItem("Create Server",                           createServer)       ),
-    ("scw"      , ChoiceItem("Create Server and wait",                  createServerAndWait)),
-    ("sdel"     , ChoiceItem("Delete Server by id",                     deleteServer)       ),
-    ("sr"       , ChoiceItem("Reboot Server by id",                     rebootServer)       ),
-    ("sresize"  , ChoiceItem("Resize Server by id",                     resizeServer)       ),
+    ("sc"       , ChoiceItem("Create Server",           createServer)),
+    ("scw"      , ChoiceItem("Create Server and wait",  createServerAndWait)),
+    ("sdel"     , ChoiceItem("Delete Server by id",     deleteServer)),
+    ("sr"       , ChoiceItem("Reboot Server by id",     rebootServer)),
+    ("sresize"  , ChoiceItem("Resize Server by id",     resizeServer)),
     (sepLine,),
-    ("sbs"      , ChoiceItem("Show Server's Backup Schedule by id",     showBackupSchedule) ),
-    ("sbsup"    , ChoiceItem("Update Server's Backup Schedule by id",   setBackupSchedule)  ),
+    ("sbs"      , ChoiceItem("Show Server's Backup Schedule by id", \
+                                                        showBackupSchedule)),
+    ("sbsup"    , ChoiceItem("Update Server's Backup Schedule by id", \
+                                                        setBackupSchedule)),
 
     (groupHeader("Flavors, Images"),),
-    ("lf"       , ChoiceItem("List Flavors",                            lambda: lf(False))  ),
-    ("lfd"      , ChoiceItem("List Flavors (detail)",                   lambda: lf(True))   ),
+    ("lf"       , ChoiceItem("List Flavors",            lambda: lf(False))  ),
+    ("lfd"      , ChoiceItem("List Flavors (detail)",   lambda: lf(True))   ),
     (sepLine,),
-    ("li"       , ChoiceItem("List Images",                             lambda: li(False))  ),
-    ("lid"      , ChoiceItem("List Images (detail)",                    lambda: li(True))   ),
-    ("lidid"    , ChoiceItem("List Image Details by id",                showImageDetails)   ),
-    ("fwait"    , ChoiceItem("Wait on a Flavor by id",                  waitOnFlavor)       ),
+    ("li"       , ChoiceItem("List Images",             lambda: li(False))  ),
+    ("lid"      , ChoiceItem("List Images (detail)",    lambda: li(True))   ),
+    ("lidid"    , ChoiceItem("List Image Details by id", showImageDetails)   ),
+    ("fwait"    , ChoiceItem("Wait on a Flavor by id",   waitOnFlavor)       ),
 
     (groupHeader("Shared IP Groups"),),
-    ("lip"      , ChoiceItem("List Shared IP Groups",                   lambda: lsip(False))),
-    ("lipd"     , ChoiceItem("List Shared IP Groups (detail)",          lambda: lsip(True)) ),
-    ("sipc"     , ChoiceItem("Create Shared IP Group",                  createSharedIpGroup)),
-    ("sipdel"   , ChoiceItem("Delete Shared IP Group",                  deleteSharedIpGroup)),
-    ("sipadd"   , ChoiceItem("Add Server to Shared IP Group by id",     addServerToIpGroup) ),
-    ("ipwait"   , ChoiceItem("Wait on a Shared IP Group by id",         waitOnSharedIpGroup)),
+    ("lip"      , ChoiceItem("List Shared IP Groups",   lambda: lsip(False))),
+    ("lipd"     , ChoiceItem("List Shared IP Groups (detail)", \
+                                                        lambda: lsip(True)) ),
+    ("sipc"     , ChoiceItem("Create Shared IP Group",  createSharedIpGroup)),
+    ("sipdel"   , ChoiceItem("Delete Shared IP Group",  deleteSharedIpGroup)),
+    ("sipadd"   , ChoiceItem("Add Server to Shared IP Group by id", \
+                                                        addServerToIpGroup) ),
+    ("ipwait"   , ChoiceItem("Wait on a Shared IP Group by id", \
+                                                        waitOnSharedIpGroup)),
 
     (groupHeader("Misc Account Functions"),),
-    ("ll"       , ChoiceItem("List Account Limits",                     showLimits)         ),
+    ("ll"       , ChoiceItem("List Account Limits",     showLimits)         ),
 
     (groupHeader("Misc Functions"),),
-    ("iter"     , ChoiceItem("Test EntityList iterator",                testEntityListIter) ),
-    ("pers"     , ChoiceItem("Server Personality get/set",              testPersonality)    ),
-    ("fault"    , ChoiceItem("Test Fault Parser",                       testFaultGeneration)),
+    ("iter"     , ChoiceItem("Test EntityList iterator", testEntityListIter)),
+    ("pers"     , ChoiceItem("Server Personality get/set", testPersonality)),
+    ("fault"    , ChoiceItem("Test Fault Parser",       testFaultGeneration)),
 
     (groupHeader("Notifiers"),),
-    ("notifyserver", ChoiceItem("Test ServerManager.notify()",          testServerNotify)),
-    ("notifyimage",  ChoiceItem("Test ImageManager.notify()",           testImageNotify)),
-    ("notifyflavor", ChoiceItem("Test FlavorManager.notify()",          testFlavorNotify)),
-    ("notifysip",    ChoiceItem("Test SharedIpGroupManager.notify()",   testSharedIpGroupNotify)),
+    ("notifyserver", ChoiceItem("Test ServerManager.notify()", \
+                                                            testServerNotify)),
+    ("notifyimage",  ChoiceItem("Test ImageManager.notify()", \
+                                                            testImageNotify)),
+    ("notifyflavor", ChoiceItem("Test FlavorManager.notify()", \
+                                                            testFlavorNotify)),
+    ("notifysip",    ChoiceItem("Test SharedIpGroupManager.notify()", \
+                                                    testSharedIpGroupNotify)),
     
 
     (groupHeader("Quit"),),
-    ("q"        , ChoiceItem("quit",                                    lambda: exit(0))    ),
+    ("q"        , ChoiceItem("quit",                    lambda: exit(0))    ),
     (sepLine,),
 )
 

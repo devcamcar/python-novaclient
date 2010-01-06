@@ -8,10 +8,13 @@ Tests for utility functions
 
 import unittest
 
-from com.rackspace.cloud.servers.api.client.shared.utils import build_url, parse_url, find_in_list
+from com.rackspace.cloud.servers.api.client.shared.utils \
+    import build_url, parse_url, find_in_list
 from com.rackspace.cloud.servers.api.client.errors import InvalidUrl
-from com.rackspace.cloud.servers.api.client.consts import get_version, __version__
-from com.rackspace.cloud.servers.api.client.version import get_version as csv_get_version
+from com.rackspace.cloud.servers.api.client.consts \
+    import get_version, __version__
+from com.rackspace.cloud.servers.api.client.version \
+    import get_version as csv_get_version
 
 class TestConsts(unittest.TestCase):
     """
@@ -111,7 +114,8 @@ class TestUtilities(unittest.TestCase):
             self.assertEqual(rslt, tr)
 
     def test_parse_url(self):
-        self.assertRaises(InvalidUrl, parse_url, "bad://doggie.not.valid.url.scheme")
+        self.assertRaises(InvalidUrl, parse_url, \
+                          "bad://doggie.not.valid.url.scheme")
         self.assertRaises(InvalidUrl, parse_url, "http://%%")
 
     def test_find_in_list(self):

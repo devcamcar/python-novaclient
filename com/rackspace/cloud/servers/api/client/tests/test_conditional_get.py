@@ -19,7 +19,8 @@ from nose import SkipTest
 #
 #  Mark time Z.
 #
-# A conditional get on any value between X and Y should return both new servers.
+# A conditional get on any value between X and Y should return both new 
+# servers.
 #
 # A conditional get on Z or greater should just the one new server.
 #

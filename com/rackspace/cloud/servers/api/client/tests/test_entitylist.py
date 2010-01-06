@@ -11,9 +11,11 @@ def setupModule(module):
 class TestEntityList(unittest.TestCase):
 
     def test___init__(self):
-        self.assertRaises(InvalidInitialization, EntityList,None,True,None)
-        self.assertRaises(InvalidInitialization, EntityList,"not a list",True,None)
-        self.assertRaises(InvalidInitialization, EntityList,{"also":None, "not a list":None},True,None)
+        self.assertRaises(InvalidInitialization, EntityList, None, True, None)
+        self.assertRaises(InvalidInitialization, EntityList, "not a list", \
+                          True, None)
+        self.assertRaises(InvalidInitialization, EntityList, {"also":None, \
+                          "not a list":None}, True, None)
 
     def test___iter__(self):
         # entity_list = EntityList(data)

@@ -17,8 +17,8 @@ class Personality:
     @property
     def asDict(self):
         """
-        Return personality object with attributes as a dictionary suitable for use
-        in creating a server json object.
+        Return personality object with attributes as a dictionary suitable for 
+        use in creating a server json object.
         """
         personalityAsDict = { "personality": [] }
         

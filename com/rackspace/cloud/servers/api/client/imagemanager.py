@@ -13,7 +13,9 @@ import copy
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, NotImplementedException, CloudServersAPIFault
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, \
+                                                    NotImplementedException, \
+                                                    CloudServersAPIFault
 from com.rackspace.cloud.servers.api.client.image import Image
 
 """
@@ -90,7 +92,7 @@ class ImageManager(EntityManager):
         
         try:
             end_states.index(image.status)
-            inWaitState = False # if we made it this far, it's not in a wait state
+            inWaitState = False # if we made it this far, it's not waiting
         except ValueError:
             inWaitState = True
         return inWaitState
@@ -118,7 +120,8 @@ class ImageManager(EntityManager):
         if timeout==None:
             self._wait(image)
         else:
-            result = self._timeout(self._wait, (image,), timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (image,), \
+                                   timeout_duration=timeout/1000.0)
 
     def createEntityListFromResponse(self, response, detail):
         """

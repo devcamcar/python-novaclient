@@ -3,8 +3,8 @@
 
 
 """
-EntityList base class. Entity lists are created by an entity manager via the the
-createList and createDeltaList calls.
+EntityList base class. Entity lists are created by an entity manager via the 
+the createList and createDeltaList calls.
 """
 
 from datetime import datetime
@@ -34,7 +34,8 @@ class EntityList(list):
         if requested, and using manager to perform database operations for it.
          """
         if not isinstance(data, list):
-            raise InvalidInitialization("Attempt to initialize EntityList with non-list 'data'", data)
+            raise InvalidInitialization("Attempt to initialize EntityList with\
+                                         non-list 'data'", data)
 
         list.__init__(self)
         self.extend(data)
@@ -94,10 +95,12 @@ class EntityList(list):
         return self.manager.createDeltaList(self.detail, self.lastModified)
 
     def hasNext(self):
-        if self._entityIndex < (len(self) + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+        if self._entityIndex < (len(self) \
+                + (self._pageIndex * DEFAULT_PAGE_SIZE)):
             return True
         else:
-            self = self.manager.createListP(self.detail, self._entityIndex, DEFAULT_PAGE_SIZE)
+            self = self.manager.createListP(self.detail, self._entityIndex, \
+                                            DEFAULT_PAGE_SIZE)
             if len(self) > 0:
                 self._pageIndex += 1
                 return True
@@ -105,11 +108,13 @@ class EntityList(list):
                 return False
         
     def next(self):
-        if self._entityIndex < (len(self) + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+        if self._entityIndex < (len(self) \
+                + (self._pageIndex * DEFAULT_PAGE_SIZE)):
             self._entityIndex += 1
             return self[self._entityIndex - 1]
         else:
-            self = self.manager.createListP(self.detail, self._entityIndex, DEFAULT_PAGE_SIZE)
+            self = self.manager.createListP(self.detail, self._entityIndex, \
+                                            DEFAULT_PAGE_SIZE)
             if len(self) > 0:
                 self._pageIndex += 1
                 return self[self._entityIndex - 1]

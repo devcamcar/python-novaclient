@@ -28,10 +28,12 @@ class Flavor(Entity):
         self._manager = None
 
     def __eq__(self, other):
-        return self._id == other._id and self._name == other._name and self._ram == other._ram and self._disk == other._disk
+        return self._id == other._id and self._name == other._name \
+               and self._ram == other._ram and self._disk == other._disk
 
     def __ne__(self, other):
-        return self._id != other._id or self._name != other._name or self._ram != other._ram or self._disk != other._disk
+        return self._id != other._id or self._name != other._name \
+               or self._ram != other._ram or self._disk != other._disk
 
     def initFromResultDict(self, dic):
         """

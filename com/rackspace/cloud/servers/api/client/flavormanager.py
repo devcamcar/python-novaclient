@@ -94,7 +94,8 @@ class FlavorManager(EntityManager):
         if timeout==None:
             self._wait(flavor)
         else:
-            result = self._timeout(self._wait, (flavor,), timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (flavor,), \
+                                   timeout_duration=timeout/1000.0)
 
     def createEntityListFromResponse(self, response, detail):
         """

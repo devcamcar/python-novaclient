@@ -5,18 +5,20 @@
 Connection class.
 """
 
-import  socket
-from    urllib    import quote
-from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
-from    time      import sleep
-from    datetime  import datetime
+import socket
+from urllib import quote
+from httplib import HTTPSConnection, HTTPConnection, HTTPException
+from time import sleep
+from datetime import datetime
 
-
-from	com.rackspace.cloud.servers.api.client.shared.utils     import parse_url
-from    com.rackspace.cloud.servers.api.client.authentication import Authentication
-from    com.rackspace.cloud.servers.api.client.consts import default_authurl, user_agent, json_hdrs
-from    com.rackspace.cloud.servers.api.client.errors import *
-from    com.rackspace.cloud.servers.api.client.jsonwrapper import json
+from com.rackspace.cloud.servers.api.client.shared.utils import parse_url
+from com.rackspace.cloud.servers.api.client.authentication \
+    import Authentication
+from com.rackspace.cloud.servers.api.client.consts import default_authurl, \
+                                                             user_agent, \
+                                                             json_hdrs
+from com.rackspace.cloud.servers.api.client.errors import *
+from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
 class Connection(object):
     """
@@ -78,7 +80,8 @@ class Connection(object):
         self.connection = self.conn_class(host, port=port)
         self.connection.set_debuglevel(self.debuglevel)
 
-    def make_request(self, method, path=[], data='', hdrs=None, params=None, retHeaders=None):
+    def make_request(self, method, path=[], data='', hdrs=None, params=None, \
+                     retHeaders=None):
         """
         Given a method (i.e. GET, PUT, POST, DELETE etc), a path, data, header
         and metadata dicts, and an optional dictionary of query parameters,
@@ -89,8 +92,8 @@ class Connection(object):
             (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
 
         if isinstance(params, dict) and params:
-            query_args = \
-                ['%s=%s' % (quote(x),quote(str(y))) for (x,y) in params.items()]
+            query_args = ['%s=%s' \
+                    % (quote(x),quote(str(y))) for (x,y) in params.items()]
             path = '%s?%s' % (path, '&'.join(query_args))
 
         headers = {
@@ -144,29 +147,17 @@ class Connection(object):
             self._authenticate()
             response = retry_request()
 
-        # if the response is bad, parse the result and create a CloudServersFault
+        # if the response is bad, parse and raise the CloudServersFault
         if response.status >= 400 and response.status <= 599:
             key = responseObj.keys()[0]
             faultType = key[0].capitalize() + key[1:] + 'Fault'
             fault = responseObj[key]
             faultClass = eval(faultType)
-            # try:
-                # message = fault['message']
-            raise faultClass(fault['message'], '', fault['code'], fault['retryAfter'])
-            # raise faultClass('', '', '', fault['retryAfter'])
-            # except:
-            #     raise faultClass(fault['message'], fault['details'], fault['code'])
-
-        # if response.status == 400:  # badRequest
-        #     # NOTE: remember to inspect response object carefully if you ever
-        #     #       need more info from it.  It's not 'the usual' for some
-        #     #       reason.
-        #     raise CloudServersFault( "Bad Request", "Bad Request", "Bad Request" ) # theFault["message"], theFault["details"], theFault["code"] )
-        # 
-        # if response.status == 404:  # not found
-        #     theFault = responseObj["itemNotFound"]
-        #     raise CloudServersFault( "Item not found", theFault["message"], theFault["code"] )
-        # if response.status == 413:  # rate limit
-        #     raise CloudServersFault( "Query Rate Limit Exceeded")
+            try:
+                raise faultClass(fault['message'], '', fault['code'], \
+                                 fault['retryAfter'])
+            except:
+                raise faultClass(fault['message'], fault['details'], \
+                                 fault['code'])
 
         return responseObj

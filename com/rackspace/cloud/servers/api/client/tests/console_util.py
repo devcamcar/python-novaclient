@@ -11,11 +11,11 @@
 from sys import stdin, exit
 from functools import partial
 
-# The __init__ for com.rackspace.cloud.servers.api.client.tests creates a a CloudServersServices instance
-# (named `css`) as well as one of each type of manager.  A *lot* has to go
-# right for this to get past this import at all.
-from com.rackspace.cloud.servers.api.client.tests import css, serverManager, flavorManager, \
-                               imageManager, sharedIpGroupManager
+# The __init__ for com.rackspace.cloud.servers.api.client.tests creates a 
+# CloudServersServices instance (named `css`) as well as one of each type of 
+# manager.  A *lot* has to go right for this to get past this import at all.
+from com.rackspace.cloud.servers.api.client.tests import css, serverManager, \
+                            flavorManager, imageManager, sharedIpGroupManager
 
 #
 # Choices for our fancy menu system
@@ -83,9 +83,9 @@ def getSleepTime():
     limits = css.serviceInfoLimits
     print "Limits are: ", limits
 
-    queriesRateRecord =  limits["rate"][1]        # TBD: hard coded, fix this
-    queriesPerMinute = queriesRateRecord["value"]     # NOTE: need utility functions
-                                                    # to hide this ickyness
+    queriesRateRecord =  limits["rate"][1]        
+    queriesPerMinute = queriesRateRecord["value"] 
+
     sleepTime = 60/queriesPerMinute
 
     return sleepTime

@@ -41,7 +41,8 @@ class CloudServersAPIFault(Exception):
         return str(self._code) + ":" + self._message + " : " + self._details
 
     def __str__(self):
-        return "Code   : " + str(self.code) + " Message: " + self._message + " Details: " + self._details
+        return "Code   : " + str(self.code) + " Message: " + self._message \
+               + " Details: " + self._details
 
     @property
     def message(self):
@@ -55,7 +56,9 @@ class CloudServersAPIFault(Exception):
     def code(self):
         return self._code
 
-NotImplementedException = CloudServersAPIFault("Required Method not Implemented", "", ec.E_NOT_IMPLEMENTED)
+NotImplementedException = CloudServersAPIFault("Required Method not\
+                                               Implemented", "", \
+                                               ec.E_NOT_IMPLEMENTED)
 
 class OverLimitAPIFault(CloudServersAPIFault):
     """
@@ -91,7 +94,10 @@ class BadMethodFault(CloudServersAPIFault):
     @param className: the name of the class on which the method was called
     """
     def __init__(self, className):
-        super(BadMethodFault, self).__init__("Bad Method Fault", "Method not allowd on %s class" % (className,),ec.E_BAD_METHOD_FAULT)
+        super(BadMethodFault, self).__init__("Bad Method Fault", \
+                                             "Method not allowd on %s class" \
+                                             % (className,), \
+                                             ec.E_BAD_METHOD_FAULT)
 
 class InvalidArgumentsFault(CloudServersAPIFault):
     """
@@ -99,18 +105,23 @@ class InvalidArgumentsFault(CloudServersAPIFault):
     which call/parameter was involved.
     """
     def __init__(self, message):
-        super(InvalidArgumentsFault,self).__init__(message, "Bad or missing arguments passed to API call", ec.E_BAD_PARAMETERS_FAULT)
+        super(InvalidArgumentsFault,self).__init__(message, \
+              "Bad or missing arguments passed to API call", \
+              ec.E_BAD_PARAMETERS_FAULT)
 
 class HTTPLibFault(CloudServersAPIFault):
     """
     Wraps HTTPExceptions into our exceptions as per spec
     """
     def __init__(self, message):
-        super(HTTPLibFault,self).__init__(message, "Low Level HTTPLib Exception", ec.E_HTTPLIB_EXCEPTION)
+        super(HTTPLibFault,self).__init__(message, \
+                                          "Low Level HTTPLib Exception", \
+                                          ec.E_HTTPLIB_EXCEPTION)
 
 class ServerNameIsImmutable(CloudServersAPIFault):
     def __init(self, message):
-        super(ServerNameIsImmutable, self).__init__(message, "Server can't be renamed when managed by ServerManager")
+        super(ServerNameIsImmutable, self).__init__(message, \
+                    "Server can't be renamed when managed by ServerManager")
 
 #-----------------------------------------------------------------------------
 # Faults from the Cloud Servers Developer Guide
@@ -118,7 +129,8 @@ class ServerNameIsImmutable(CloudServersAPIFault):
 
 class ServiceUnavailableFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ServiceUnavailableFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(ServiceUnavailableFault, self).__init__(message, "", \
+                                                      ec.E_UNKNOWN)
 
 class UnauthorizedFault(CloudServersAPIFault):
     def __init(self, message):
@@ -142,11 +154,13 @@ class BuildInProgressFault(CloudServersAPIFault):
 
 class ServerCapacityUnavailableFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ServerCapacityUnavailableFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(ServerCapacityUnavailableFault, self).__init__(message, "", \
+                                                             ec.E_UNKNOWN)
 
 class BackupOrResizeInProgressFault(CloudServersAPIFault):
     def __init(self, message):
-        super(BackupOrResizeInProgressFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(BackupOrResizeInProgressFault, self).__init__(message, "", \
+                                                            ec.E_UNKNOWN)
 
 class ResizeNotAllowedFault(CloudServersAPIFault):
     def __init(self, message):
@@ -164,7 +178,9 @@ class InvalidServerNameFault(CloudServersAPIFault):
     Thrown when an invalid server name is specified.
     """
     def __init__(self, serverName):
-        super(InvalidServerName, self).__init__("Invalid Server Name", serverName, ec.E_INVALID_SERVER_NAME )
+        super(InvalidServerName, self).__init__("Invalid Server Name", \
+                                                serverName, \
+                                                ec.E_INVALID_SERVER_NAME)
 
 class ResponseError(Exception):
     """

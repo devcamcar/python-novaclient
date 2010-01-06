@@ -8,14 +8,17 @@ Container for the various Entity Managers that manage Rackspace Cloud Servers
 entities such as Servers, Images, Shared IP Groups, and Flavors.
 """
 
-from com.rackspace.cloud.servers.api.client.errors import NotImplementedException
-from com.rackspace.cloud.servers.api.client.authentication import Authentication
+from com.rackspace.cloud.servers.api.client.errors \
+    import NotImplementedException
+from com.rackspace.cloud.servers.api.client.authentication \
+    import Authentication
 from com.rackspace.cloud.servers.api.client.connection import Connection
 
 from com.rackspace.cloud.servers.api.client.flavormanager import FlavorManager
 from com.rackspace.cloud.servers.api.client.servermanager import ServerManager
 from com.rackspace.cloud.servers.api.client.imagemanager import ImageManager
-from com.rackspace.cloud.servers.api.client.sharedipgroupmanager import SharedIpGroupManager
+from com.rackspace.cloud.servers.api.client.sharedipgroupmanager \
+    import SharedIpGroupManager
 
 from com.rackspace.cloud.servers.api.client.consts import json_hdrs
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
@@ -119,9 +122,11 @@ class CloudServersService(object):
             self._flavorManager = FlavorManager(self)
         return self._flavorManager
 
-    def make_request(self, method, url, data='', headers=None, params=None, retHeaders=None):
+    def make_request(self, method, url, data='', headers=None, params=None, \
+                     retHeaders=None):
         conn = self.get_connection()
-        return conn.make_request(method, (url,), data=data, hdrs=headers, params=params, retHeaders=retHeaders )
+        return conn.make_request(method, (url,), data=data, hdrs=headers, \
+                                 params=params, retHeaders=retHeaders)
 
     def get_connection(self):
         """
@@ -139,7 +144,8 @@ class CloudServersService(object):
         # NOTE: ret is NOT an http response object, it's a digested
         #       object from reading the response object
         #       see Connection for implementation
-        ret = self.make_request("GET", url, params=params, headers=headers, retHeaders=retHeaders)
+        ret = self.make_request("GET", url, params=params, headers=headers, \
+                                retHeaders=retHeaders)
         return ret
 
     def POST(self, url, data):

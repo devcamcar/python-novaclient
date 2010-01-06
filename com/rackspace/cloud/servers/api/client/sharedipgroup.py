@@ -41,10 +41,12 @@ class SharedIpGroup(Entity):
         return "Name = %s : servers = %s" % (self._name, self._servers)
 
     def __eq__(self, other):
-        return self._id == other._id and self._name == other._name and self._servers == other._servers
+        return self._id == other._id and self._name == other._name \
+               and self._servers == other._servers
 
     def __ne__(self, other):
-        return self._id != other._id or self._name != other._name or self._servers != other._servers
+        return self._id != other._id or self._name != other._name \
+               or self._servers != other._servers
 
     def get_name(self):
         """Get name from shared ip group object."""

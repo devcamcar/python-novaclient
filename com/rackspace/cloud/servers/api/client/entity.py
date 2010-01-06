@@ -59,7 +59,8 @@ class Entity(object):
         """
         notify change listeners if there are any and the entity has changed
         """
-        if self._manager != None and len(self._manager._changeListeners) > 0 and other != self:
+        if self._manager != None and len(self._manager._changeListeners) > 0 \
+                and other != self:
             for changeListener in self._manager._changeListeners:
                 changeListener(False, self)
         

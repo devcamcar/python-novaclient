@@ -14,7 +14,8 @@ __all__ = []
 #try:
 #    from twisted.trial import unittest as ut
 #    import unittest as regular_unittest
-#    ut.main = regular_unittest.main         # workaround for twisted.trial's lack of main()
+#    # workaround for twisted.trial's lack of main()
+#    ut.main = regular_unittest.main 
 #except ImportError:
 #    import unittest as ut
 

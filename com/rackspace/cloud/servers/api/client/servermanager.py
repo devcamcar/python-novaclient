@@ -4,7 +4,8 @@
 """
 ServerManager class.  Cloud Servers Entity Manager for Servers.
 
-Provides interface for all Server operations as a component part of a Cloud Servers Service object.
+Provides interface for all Server operations as a component part of 
+a Cloud Servers Service object.
 """
 
 from datetime import datetime
@@ -14,10 +15,11 @@ import copy
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from com.rackspace.cloud.servers.api.client.errors import NotImplementedException, CloudServersAPIFault, OverLimitFault, CloudServersFault
+from com.rackspace.cloud.servers.api.client.errors import *
 from com.rackspace.cloud.servers.api.client.server import Server
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
-from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
+from com.rackspace.cloud.servers.api.client.backupschedule \
+        import BackupSchedule
 
 class RebootType(object):
     """
@@ -71,7 +73,8 @@ class ServerManager(EntityManager):
             server.initFromResultDict(serverDict, retHeaders)
             server._manager = self
         else:
-            serverDict = self.serverDetails(server.id, ifModifiedSince=server.lastModified)
+            serverDict = self.serverDetails(server.id, \
+                                        ifModifiedSince=server.lastModified)
             if serverDict:
                 server.initFromResultDict(serverDict)
 
@@ -112,7 +115,8 @@ class ServerManager(EntityManager):
         if ifModifiedSince != None:
             headers = { 'If-Modified-Since': ifModifiedSince }
         
-        ret = self._GET(id, { "now": str(datetime.now()) }, headers=headers, retHeaders=retHeaders)
+        ret = self._GET(id, { "now": str(datetime.now()) }, headers=headers, \
+                        retHeaders=retHeaders)
         try:
             retDict = ret["server"]
         except KeyError, e:
@@ -148,7 +152,8 @@ class ServerManager(EntityManager):
             self._post_action(id, data)
             self.refresh(server)    # get updated status
         else:
-            raise InvalidArgumentsFault("Bad value %s passed for reboot type, must be 'HARD' or 'SOFT'", rebootType)
+            raise InvalidArgumentsFault("Bad value %s passed for reboot type,\
+                                        must be 'HARD' or 'SOFT'", rebootType)
 
     def rebuild(self, server, imageId=None):
         """
@@ -203,7 +208,8 @@ class ServerManager(EntityManager):
 
     def shareIp (self, server, ipAddr, sharedIpGroupId, configureServer):
         url_parts = (server.id, "ips", "public", ipAddr)
-        data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId,"configureServer": configureServer}})
+        data = json.dumps({"shareIp": {"sharedIpGroupId": sharedIpGroupId, \
+                            "configureServer": configureServer}})
         self._PUT(data, url_parts)
 
     def unshareIp (self, server, ipAddr):
@@ -224,12 +230,13 @@ class ServerManager(EntityManager):
     #
     def _serverInWaitState(self, server):
         
-        # For Servers, the following are considered end states by the wait call: 
-        end_states = ['ACTIVE', 'SUSPENDED', 'VERIFY_RESIZE', 'DELETED', 'ERROR', 'UNKNOWN']
+        # For Servers, the following are considered end states: 
+        end_states = ['ACTIVE', 'SUSPENDED', 'VERIFY_RESIZE', 'DELETED', \
+                      'ERROR', 'UNKNOWN']
         
         # Note that VERIFY_RESIZE can also serve as a start state, 
-        # implementations are responsible for keeping track of whether this state should be 
-        # treated as a start or end condition.
+        # implementations are responsible for keeping track of whether this 
+        # state should be treated as a start or end condition.
         try:
             self._resizedServerIds.index(server)
             end_states.remove('VERIFY_RESIZE')
@@ -239,7 +246,7 @@ class ServerManager(EntityManager):
         
         try:
             end_states.index(server.status)
-            inWaitState = False # if we made it this far, it's not in a wait state
+            inWaitState = False # if we made it this far, it's not waiting
         except ValueError:
             inWaitState = True
         return inWaitState
@@ -265,7 +272,8 @@ class ServerManager(EntityManager):
         if timeout==None:
             self._wait(server)
         else:
-            result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (server,), \
+                                   timeout_duration=timeout/1000.0)
 
     #
     ## Support methods

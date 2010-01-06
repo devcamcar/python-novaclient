@@ -3,9 +3,9 @@
 
 
 """
-EntityManager base class.  EntityManagers belong to a CloudServersService object and
-one is provided for each type of managed Entity: Servers, Images, Flavors, and
-Shared IP Group.
+EntityManager base class.  EntityManagers belong to a CloudServersService 
+object and one is provided for each type of managed Entity: Servers, Images, 
+Flavors, and Shared IP Group.
 """
 import sys
 import threading
@@ -14,10 +14,12 @@ from dateutil.parser import parse
 from time import sleep
 import time
 
-from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
+from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, \
+                                                          BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 from com.rackspace.cloud.servers.api.client.errors import *
-from com.rackspace.cloud.servers.api.client.shared.utils import build_url, find_in_list
+from com.rackspace.cloud.servers.api.client.shared.utils import build_url, \
+                                                                find_in_list
 from com.rackspace.cloud.servers.api.client.shared.cslogging import cslogger
 
 _bmf = BadMethodFault
@@ -42,11 +44,11 @@ class EntityManager(object):
 
         Since not every entity type uses the `_requestPrefix` to retrieve
         data from the API's response object, we can send in an optional
-        responseKey.  If there's no responseKey, it defaults to the requestPrefix.
+        responseKey.  If there's no responseKey, it defaults to the 
+        requestPrefix.
 
         The responseKey is only necessary, so far, on Shared IP Groups.
         """
-        # TBD: what's currently referred to as "cloudServersService", really is our owner
         self._cloudServersService = cloudServersService
         self._requestPrefix = requestPrefix
         self._changeListeners = {}
@@ -86,7 +88,8 @@ class EntityManager(object):
                     return it.result	
 
     #
-    ## These methods hide that we're calling our _cloudServersService to do everything
+    ## These methods hide that we're calling our _cloudServersService to do 
+    ## everything
     #
     def _POST(self, data, *url_parts):
         """
@@ -98,7 +101,8 @@ class EntityManager(object):
 
     def _DELETE(self, id, *url_parts):
         """
-        Put together a full DELETE request and send it on via our cloudServersService
+        Put together a full DELETE request and send it on via our 
+        cloudServersService
         """
         url = build_url(self._requestPrefix, id, *url_parts)
         retVal = self._cloudServersService.DELETE(url)
@@ -106,7 +110,8 @@ class EntityManager(object):
 
     def _GET(self, url, params=None, headers=None, retHeaders=None):
         url = build_url(self._requestPrefix, url)
-        retVal = self._cloudServersService.GET(url, params, headers=headers, retHeaders=retHeaders)
+        retVal = self._cloudServersService.GET(url, params, headers=headers, \
+                                               retHeaders=retHeaders)
         return retVal
 
     def _PUT(self, *url_parts):
@@ -167,12 +172,13 @@ class EntityManager(object):
             # check the stopped flag at every step to ensure stopNotify
             # kills the thread
             try:
-                while self._stopped == False: # poll forever or until an error occurs
+                while self._stopped == False: # poll forever or until error
                     if self._stopped == False:
                         self._entityManager.wait(self._entity)
                     if self._stopped == False:
                         # double check in case wait uses statuses as end states
-                        if self._entity != self._entityManager._entityCopies[self._entity.id]:
+                        ec = self._entityManager._entityCopies[self._entity.id]                        
+                        if self._entity != ec:
                             self._changeListener(False, self._entity)
             except CloudServersFault, fault:
                 if self._stopped == False:
@@ -195,14 +201,17 @@ class EntityManager(object):
         retryAfter = retryAfter - retryAfter.tzinfo.utcoffset(retryAfter)
         retryAfter = retryAfter.replace(tzinfo=None)                    
         timedelta = retryAfter - now
-        # print 'caught an overlimit fault.  sleeping for ', (timedelta.days * 86400) + timedelta.seconds, ' seconds'
-        # use absolute value in case retry after ends up accidentally giving us a date in the past
+        # print 'caught an overlimit fault.  sleeping for ', \
+        #       (timedelta.days * 86400) + timedelta.seconds, ' seconds'
+        # use absolute value in case retry after ends up accidentally giving 
+        # us a date in the past
         sleep(abs((timedelta.days * 86400) + timedelta.seconds))
 
     #
     # Lists
     #
-    def _createList(self, detail=False, offset=0, limit=DEFAULT_PAGE_SIZE, lastModified=BEGINNING_OF_TIME):
+    def _createList(self, detail=False, offset=0, limit=DEFAULT_PAGE_SIZE, \
+                    lastModified=BEGINNING_OF_TIME):
         """
         Master function that can perform all possible combinations.
 
@@ -234,7 +243,8 @@ class EntityManager(object):
             deltaReturned = False
             while deltaReturned == False:
                 try:
-                    ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)                    
+                    ret_obj = self._cloudServersService.GET(uri, params, \
+                                                        retHeaders=retHeaders)                    
                     if len(ret_obj) > 0:
                         try:
                             ret_obj['cloudServersFault']
@@ -245,7 +255,8 @@ class EntityManager(object):
                     # sleep until retry_after to avoid more OverLimitFaults
                     self._sleepUntilRetryAfter_(olf)
         else:
-            ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
+            ret_obj = self._cloudServersService.GET(uri, params, \
+                                                    retHeaders=retHeaders)
         
         # print "ret_obj: " + str(ret_obj)
         
@@ -301,4 +312,5 @@ class EntityManager(object):
         """
         Create a paged list of items changed since a particular time
         """
-        return self._createDeltaList(detail, changes_since=changes_since, offset=offset, limit=limit,)
+        return self._createDeltaList(detail, changes_since=changes_since, \
+                                     offset=offset, limit=limit,)

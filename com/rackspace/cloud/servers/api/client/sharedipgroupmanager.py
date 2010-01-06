@@ -34,7 +34,8 @@ class SharedIpGroupManager(EntityManager):
     Manages the list of shared IP groups
     """
     def __init__(self, cloudServersService):
-        super(SharedIpGroupManager, self).__init__(cloudServersService, "shared_ip_groups", "sharedIpGroups")
+        super(SharedIpGroupManager, self).__init__(cloudServersService, \
+                                        "shared_ip_groups", "sharedIpGroups")
 
     def create(self, ipgroup):
         """
@@ -109,7 +110,8 @@ class SharedIpGroupManager(EntityManager):
         if timeout==None:
             self._wait(sharedIpGroup)
         else:
-            result = self._timeout(self._wait, (sharedIpGroup,), timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (sharedIpGroup,), \
+                                   timeout_duration=timeout/1000.0)
 
     def createEntityListFromResponse(self, response, detail):
         ip_groups = response["sharedIpGroups"]

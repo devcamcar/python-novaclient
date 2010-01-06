@@ -15,7 +15,9 @@ class TestImage(unittest.TestCase):
         # flavor = Image(name)
         # self.assertEqual(expected, flavor.initFromResultDict(dic))
         f = Image("fido")
-        f.initFromResultDict({'updated': "whatever", 'id': 1, 'created': "whenever", 'status': 'stateriffic', 'progress':'progresseriffic'})
+        f.initFromResultDict({'updated': "whatever", 'id': 1, \
+                              'created': "whenever", 'status': 'stateriffic', \
+                              'progress':'progresseriffic'})
         self.assertEqual(f.updated,"whatever")
         self.assertEqual(f.id,1)
         self.assertEqual(f.created,"whenever")

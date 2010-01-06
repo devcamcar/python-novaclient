@@ -16,7 +16,8 @@ class TestFlavor(unittest.TestCase):
         # flavor = Flavor(name)
         # self.assertEqual(expected, flavor.initFromResultDict(dic))
         f = Flavor("fido")
-        f.initFromResultDict({'disk': 10, 'id': 1, 'ram': 256, 'name': u'256 server'})
+        f.initFromResultDict({'disk': 10, 'id': 1, 'ram': 256, \
+                              'name': u'256 server'})
         self.assertEqual(f.disk,10)
         self.assertEqual(f.id,1)
         self.assertEqual(f.ram,256)
@@ -42,7 +43,8 @@ class TestFlavor(unittest.TestCase):
 
     def test_repr(self):
         f = Flavor("Snoopy")
-        f.initFromResultDict({'disk': 10, 'id': 1, 'ram': 256, 'name': u'256 server'})
+        f.initFromResultDict({'disk': 10, 'id': 1, 'ram': 256, \
+                              'name': u'256 server'})
         rep = f.__repr__()        # Just to make it happen for coverage
 
     def test_extra_attr(self):
