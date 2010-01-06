@@ -26,6 +26,8 @@ servers in the RackSpace Cloud.
 paying for it!
 """
 
+from datetime import datetime
+
 from sys import stdin, exit
 from time import sleep
 from functools import partial
@@ -365,6 +367,13 @@ def testEntityListIter():
         actual_length += 1
     print "testing reset():                    ", 'PASS' if actual_length == expected_length else 'FAIL'
     
+def testServerDeltaList():
+    # TODO: test with HTTP client to be sure this is being done right
+    deltaList = serverManager.createDeltaList(True, changes_since=datetime.now().strftime('%s'))
+    print "deltaList since ", datestr, ": "
+    for item in deltaList:
+        print item.id, " - ", item.name
+
 def testFaultGeneration():
     try:
         print "Expecting an ItemNotFoundFault..."
@@ -473,6 +482,7 @@ choicesList = (
     (groupHeader("Servers"),),
     ("ls"       , ChoiceItem("List Servers",                            lambda: ls(False))  ),
     ("lsd"      , ChoiceItem("List Servers Detail",                     lambda: ls(True))   ),
+    ("sdelta"   , ChoiceItem("Servers Delta List",                      testServerDeltaList)),
     (sepLine,),
     ("ss"       , ChoiceItem("Show Server's Status by id",              showStatus)         ),
     ("sd"       , ChoiceItem("Show Server's Details by id",             showDetails)        ),

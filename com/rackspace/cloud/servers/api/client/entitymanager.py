@@ -9,6 +9,10 @@ Shared IP Group.
 """
 import sys
 import threading
+from datetime import datetime
+from dateutil.parser import parse
+from time import sleep
+import time
 
 from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
@@ -211,8 +215,36 @@ class EntityManager(object):
         if detail:
             uri += "/detail"
         params = {"offset":offset, "limit":limit}
+        
+        if conditionalGet:
+            params['changes-since'] = lastModified
+        
         retHeaders = list() # we may need "last-modified"
-        ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
+        if conditionalGet == True:
+            deltaReturned = False
+            while deltaReturned == False:
+                try:
+                    print 'time to retry'                
+                    ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
+                    print 'retried'
+                except OverLimitFault as olf:
+                    # sleep until retry_after to avoid more OverLimitFaults
+                    # s = '2010-01-05T18:19:18.219-06:00'
+                    # datetime.strptime(s, '%Y-%m-%dT%H:%M:%S.%f%Z')
+                    # datetime.strptime(s, '%Y-%m-%dT%H:%M:%S.%f')
+                    # timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%S.%f%Z')
+                    retryAfter = parse(olf.retryAfter)
+                    print "retry after: ", retryAfter
+                    # time.timezone / 60 / 60
+                    timedelta = datetime.now(retryAfter.tzinfo) - retryAfter
+                    print 'caught an overlimit fault.  sleeping for ', (timedelta.days * 86400) + timedelta.seconds, ' seconds'
+                    # TODO: don't use abs, use actual timezone conversion for timedelta
+                    sleep(abs((timedelta.days * 86400) + timedelta.seconds))
+        else:
+            ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
+        
+        print "ret_obj: " + str(ret_obj)
+        
         theList = ret_obj[self._responseKey]
 
         # Create the entity list
@@ -221,6 +253,7 @@ class EntityManager(object):
         cslogger.debug(ret_obj)
         cslogger.debug(retHeaders)
 
+        lastModifiedAsString = None
         if not conditionalGet:
             # For a non-conditional get, we store the one from the
             # returned headers for subsequent conditional gets
@@ -230,9 +263,11 @@ class EntityManager(object):
         # perform future operations properly
         data = {'conditionalGet': conditionalGet,
                 'pagedGet'      : pagedGet,
-                'lastModified'  : lastModified,
-                'lastModifiedAsString' : lastModifiedAsString,
+                'lastModified'  : lastModified
                 }
+
+        if lastModifiedAsString != None:
+            data['lastModifiedAsString'] = lastModifiedAsString
 
         return entityList
 
@@ -244,8 +279,10 @@ class EntityManager(object):
 
     def createDeltaList(self, detail, changes_since):
         """
-        Create a list of all items modified since a specific time."""
-        return self._createList(detail, changes_since=changes_since)
+        Create a list of all items modified since a specific time.
+        Do not return until something has changed.
+        """
+        return self._createList(detail, lastModified=changes_since)
 
     #
     # Lists, Paged

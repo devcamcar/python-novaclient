@@ -8,6 +8,9 @@ Connection class.
 import  socket
 from    urllib    import quote
 from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
+from    time      import sleep
+from    datetime  import datetime
+
 
 from	com.rackspace.cloud.servers.api.client.shared.utils     import parse_url
 from    com.rackspace.cloud.servers.api.client.authentication import Authentication
@@ -127,7 +130,25 @@ class Connection(object):
         if retHeaders:
             retHeaders.extend(response.getheaders())
 
+        # try:
+        #     params['changes-since']
+        #     while response.status == 304:
+        #         try:
+        #             print 'time to retry'                
+        #             response = retry_request()
+        #             print 'retried'                
+        #         except OverLimitFault as olf:
+        #             # sleep until retry_after to avoid more OverLimitFaults
+        #             timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')
+        #             print 'caught an overlimit fault.  sleeping for ', timedelta
+        #             sleep((timedelta.days * 86400) + timedelta.seconds)                
+        # except KeyError:
+        #     pass
+
         raw = response.read()
+
+        print "status: ", response.status
+        print "response: ", raw
 
         try:
             responseObj = json.loads(raw)
@@ -144,10 +165,12 @@ class Connection(object):
             faultType = key[0].capitalize() + key[1:] + 'Fault'
             fault = responseObj[key]
             faultClass = eval(faultType)
-            try:
-                raise faultClass(fault['message'], fault['details'], fault['code'], fault['retry_after'])
-            except:
-                raise faultClass(fault['message'], fault['details'], fault['code'])
+            # try:
+                # message = fault['message']
+            raise faultClass(fault['message'], '', fault['code'], fault['retryAfter'])
+            # raise faultClass('', '', '', fault['retryAfter'])
+            # except:
+            #     raise faultClass(fault['message'], fault['details'], fault['code'])
 
         # if response.status == 400:  # badRequest
         #     # NOTE: remember to inspect response object carefully if you ever
