@@ -369,7 +369,8 @@ def testEntityListIter():
     
 def testServerDeltaList():
     # TODO: test with HTTP client to be sure this is being done right
-    deltaList = serverManager.createDeltaList(True, changes_since=datetime.now().strftime('%s'))
+    datestr = datetime.now().strftime('%s')
+    deltaList = serverManager.createDeltaList(True, changes_since=datestr)
     print "deltaList since ", datestr, ": "
     for item in deltaList:
         print item.id, " - ", item.name

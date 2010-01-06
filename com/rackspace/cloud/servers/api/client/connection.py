@@ -130,25 +130,10 @@ class Connection(object):
         if retHeaders:
             retHeaders.extend(response.getheaders())
 
-        # try:
-        #     params['changes-since']
-        #     while response.status == 304:
-        #         try:
-        #             print 'time to retry'                
-        #             response = retry_request()
-        #             print 'retried'                
-        #         except OverLimitFault as olf:
-        #             # sleep until retry_after to avoid more OverLimitFaults
-        #             timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')
-        #             print 'caught an overlimit fault.  sleeping for ', timedelta
-        #             sleep((timedelta.days * 86400) + timedelta.seconds)                
-        # except KeyError:
-        #     pass
-
         raw = response.read()
 
-        print "status: ", response.status
-        print "response: ", raw
+        # print "status: ", response.status
+        # print "response: ", raw
 
         try:
             responseObj = json.loads(raw)

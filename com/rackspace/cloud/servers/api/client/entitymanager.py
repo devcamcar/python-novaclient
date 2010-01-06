@@ -189,6 +189,16 @@ class EntityManager(object):
         self._changeListeners[changeListener].stop()
         del self._changeListeners[changeListener]
 
+    def _sleepUntilRetryAfter_ (self, overLimitFault):
+        retryAfter = parse(overLimitFault.retryAfter)
+        now = datetime.utcnow()
+        retryAfter = retryAfter - retryAfter.tzinfo.utcoffset(retryAfter)
+        retryAfter = retryAfter.replace(tzinfo=None)                    
+        timedelta = retryAfter - now
+        # print 'caught an overlimit fault.  sleeping for ', (timedelta.days * 86400) + timedelta.seconds, ' seconds'
+        # use absolute value in case retry after ends up accidentally giving us a date in the past
+        sleep(abs((timedelta.days * 86400) + timedelta.seconds))
+
     #
     # Lists
     #
@@ -224,26 +234,20 @@ class EntityManager(object):
             deltaReturned = False
             while deltaReturned == False:
                 try:
-                    print 'time to retry'                
-                    ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
-                    print 'retried'
+                    ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)                    
+                    if len(ret_obj) > 0:
+                        try:
+                            ret_obj['cloudServersFault']
+                        except KeyError:
+                            # we actually have a delta list!
+                            deltaReturned = True
                 except OverLimitFault as olf:
                     # sleep until retry_after to avoid more OverLimitFaults
-                    # s = '2010-01-05T18:19:18.219-06:00'
-                    # datetime.strptime(s, '%Y-%m-%dT%H:%M:%S.%f%Z')
-                    # datetime.strptime(s, '%Y-%m-%dT%H:%M:%S.%f')
-                    # timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%S.%f%Z')
-                    retryAfter = parse(olf.retryAfter)
-                    print "retry after: ", retryAfter
-                    # time.timezone / 60 / 60
-                    timedelta = datetime.now(retryAfter.tzinfo) - retryAfter
-                    print 'caught an overlimit fault.  sleeping for ', (timedelta.days * 86400) + timedelta.seconds, ' seconds'
-                    # TODO: don't use abs, use actual timezone conversion for timedelta
-                    sleep(abs((timedelta.days * 86400) + timedelta.seconds))
+                    self._sleepUntilRetryAfter_(olf)
         else:
             ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
         
-        print "ret_obj: " + str(ret_obj)
+        # print "ret_obj: " + str(ret_obj)
         
         theList = ret_obj[self._responseKey]
 

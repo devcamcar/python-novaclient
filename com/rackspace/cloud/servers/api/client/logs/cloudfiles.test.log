@@ -8,3 +8,17 @@
 []
 {u'servers': []}
 []
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing27', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}]}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing271', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}]}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing271', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}, {u'status': u'ACTIVE', u'hostId': u'fd3e9c28bdbd02978e52dfd794eebf06', u'name': u'testlistcache24', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127876, u'addresses': {u'public': [u'174.143.170.219'], u'private': [u'10.176.247.217']}}]}
+[]
+{u'servers': []}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing27', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}]}
+[]
+{u'servers': [{u'status': u'ACTIVE', u'hostId': u'b646de8df8b23cdfbe2f719a1345eca1', u'name': u'testresizing271', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127862, u'addresses': {u'public': [u'174.143.170.130'], u'private': [u'10.176.247.208']}}, {u'status': u'ACTIVE', u'hostId': u'fd3e9c28bdbd02978e52dfd794eebf06', u'name': u'testlistcache24', u'metadata': {}, u'imageId': 3, u'progress': 100, u'flavorId': 1, u'id': 127876, u'addresses': {u'public': [u'174.143.170.219'], u'private': [u'10.176.247.217']}}]}
+[]
+{u'servers': []}
+[]

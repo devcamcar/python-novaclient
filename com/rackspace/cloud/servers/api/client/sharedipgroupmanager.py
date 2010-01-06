@@ -96,8 +96,7 @@ class SharedIpGroupManager(EntityManager):
                 self.refresh(sharedIpGroup)
             except OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
-                timedelta = datetime.now - datetime.strptime(olf.retryAfter, '%Y-%m-%dT%H:%M:%SZ')                
-                sleep((timedelta.days * 86400) + timedelta.seconds)
+                self._sleepUntilRetryAfter_(olf)
             except CloudServersFault:
                 pass
 
