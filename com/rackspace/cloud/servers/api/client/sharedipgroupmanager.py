@@ -4,7 +4,8 @@
 # See COPYING for details.
 
 """
-SharedIpGroupManager class.  Cloud Servers Entity Manager for Shared IP Groups.
+SharedIpGroupManager class.  
+Cloud Servers Entity Manager for Shared IP Groups.
 
 Provides interface for all Shared IP Group operations as a component part of a
 Cloud Servers Service object.
@@ -65,7 +66,7 @@ class SharedIpGroupManager(EntityManager):
             else:               # some other exception, just re-raise
                 raise
 
-        retSharedIpGroup = SharedIpGroup()  # create shared ip group to populate
+        retSharedIpGroup = SharedIpGroup()  # shared ip group to populate
         retSharedIpGroup.initFromResultDict(detailsDict)
         retSharedIpGroup._manager = self
         return retSharedIpGroup

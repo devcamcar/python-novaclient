@@ -58,7 +58,9 @@ class BackupSchedule(object):
         self._weekly  = weekly
 
     def __str__(self):
-        return "Enabled = %s : Daily = %s : Weekly = %s" % (self._enabled, self._daily, self._weekly)
+        return "Enabled = %s : Daily = %s : Weekly = %s" % (self._enabled, \
+                                                            self._daily, \
+                                                            self._weekly)
 
     def get_enabled(self):
         """Whether or not backups are enabled for this server."""
@@ -76,7 +78,8 @@ class BackupSchedule(object):
         if value in wbs:
             self._weekly = value
         else:
-            raise InvalidArgumentsFault("Bad value %s passed for weekly backup", value)
+            raise InvalidArgumentsFault("Bad value %s passed for weekly\
+                                         backup", value)
     weekly = property(get_weekly, set_weekly)
 
     def get_daily(self):
@@ -86,7 +89,8 @@ class BackupSchedule(object):
         if value in dbs:
             self._daily = value
         else:
-            raise InvalidArgumentsFault("Bad value %s passed for daily backup", value)
+            raise InvalidArgumentsFault("Bad value %s passed for daily\
+                                         backup", value)
     daily = property(get_daily, set_daily)
 
     @property

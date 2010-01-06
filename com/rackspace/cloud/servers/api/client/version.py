@@ -8,8 +8,8 @@
 Current Cloud Servers version constant plus version pretty-print method.
 
 This functionality is contained in its own module to prevent circular import
-problems with ``__init__.py`` (which is loaded by setup.py during installation,
-which in turn needs access to this version information.)
+problems with ``__init__.py`` (which is loaded by setup.py during 
+installation, which in turn needs access to this version information.)
 
 This code was lifted from Fabric (http://fabfile.org) which borrowed it from
 Django.
@@ -42,7 +42,7 @@ def get_version(verbose=False, line_only=False):
         version = '%s.%s' % (version, VERSION[2])
     # Append alpha/beta modifier if not a final release
     if VERSION[3] != 'final':
-        # If non-verbose, just the first letter of the modifier, and no spaces.
+        # If non-verbose, just the first letter of the modifier, no spaces.
         if not verbose:
             version = '%s%s%s' % (version, VERSION[3][0], VERSION[4])
         # Otherwise, be more generous.

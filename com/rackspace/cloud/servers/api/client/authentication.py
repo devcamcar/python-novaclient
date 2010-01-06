@@ -4,21 +4,16 @@
 """
 Authentication Classes
 
-Authentication instances are used to interact with the remote authentication service,
-retreiving storage system routing information and session tokens.
+Authentication instances are used to interact with the remote authentication 
+service, retreiving storage system routing information and session tokens.
 """
 
 import urllib
-from httplib                    import  HTTPSConnection, \
-                                        HTTPConnection, \
-                                        HTTPException
-from com.rackspace.cloud.servers.api.client.shared.utils  import  parse_url
-from com.rackspace.cloud.servers.api.client.errors        import  ResponseError, \
-                                        AuthenticationError, \
-                                        AuthenticationFailed, \
-                                        HTTPLibFault
-from com.rackspace.cloud.servers.api.client.consts        import  user_agent, default_authurl
-
+from httplib import HTTPSConnection, HTTPConnection, HTTPException
+from com.rackspace.cloud.servers.api.client.shared.utils import parse_url
+from com.rackspace.cloud.servers.api.client.errors import *
+from com.rackspace.cloud.servers.api.client.consts import user_agent, \
+                                                          default_authurl
 
 class BaseAuthentication(object):
     """
@@ -79,7 +74,8 @@ class Authentication(BaseAuthentication):
         if response.status != 204:
             raise ResponseError(response.status, response.reason)
 
-        compute_url = auth_token = None # these must be provided or we have an error
+        # these must be provided or we have an error
+        compute_url = auth_token = None
 
         hdrs = response.getheaders()
 
