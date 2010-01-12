@@ -253,8 +253,7 @@ def resizeServer():
     """
     Resizes a server and asks you to confirm the resize.
     """
-    #id = getServerId()
-    id = 127862 # sample on mike's account for faster testing
+    id = getServerId()
 
     # Find is guaranteed not to throw a not-found exception
     server = serverManager.find(id)

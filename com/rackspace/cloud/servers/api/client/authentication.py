@@ -21,12 +21,12 @@ class BaseAuthentication(object):
     """
     def __init__(self, username, api_key, authurl=default_authurl):
         self.authurl = authurl
-        self.headers = dict()
-        self.headers['x-auth-user'] = username
-        self.headers['x-auth-key'] = api_key
-        self.headers['User-Agent'] = user_agent
-        (self.host, self.port, self.uri, self.is_ssl) = parse_url(self.authurl)
-        self.conn_class = self.is_ssl and HTTPSConnection or HTTPConnection
+        self.headers = {
+                'x-auth-user': username,
+                'x-auth-key': api_key,
+                'User-Agent': user_agent}
+        self.host, self.port, self.uri, self.is_ssl = parse_url(self.authurl)
+        self.conn_class = (self.is_ssl and HTTPSConnection) or HTTPConnection
 
     def authenticate(self):
         """
@@ -70,8 +70,7 @@ class Authentication(BaseAuthentication):
         # were not accepted by the authentication service.
         if response.status == 401:
             raise AuthenticationFailed()
-
-        if response.status != 204:
+        elif response.status != 204:
             raise ResponseError(response.status, response.reason)
 
         # these must be provided or we have an error
@@ -84,14 +83,13 @@ class Authentication(BaseAuthentication):
             hdr_value = hdr[1]
             if hdr_key_lc == "x-auth-token":
                 auth_token = hdr_value
-            if hdr_key_lc == "x-server-management-url":
+            elif hdr_key_lc == "x-server-management-url":
                 compute_url = hdr_value
 
         conn.close()
 
         if not (auth_token and compute_url):
-            raise AuthenticationError("Invalid response from the " \
-                    "authentication service.")
+            raise AuthenticationError("Invalid response from the authentication service.")
 
         return (compute_url, auth_token)
 

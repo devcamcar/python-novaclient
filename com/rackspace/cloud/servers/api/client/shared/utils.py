@@ -29,13 +29,13 @@ def parse_url(url):
     NOTE: this routine's error checking is very weak.  Bad ports like ABC are
     not detected, for example.
     """
-    (scheme, netloc, path, params, query, frag) = urlparse(url)
+    scheme, netloc, path, params, query, frag = urlparse(url)
 
     # We only support web services
     if not scheme in ('http', 'https'):
         raise InvalidUrl('Scheme must be one of http or https')
 
-    is_ssl = scheme == 'https' and True or False
+    is_ssl = (scheme == 'https')
 
     # Verify hostnames are valid and parse a port spec (if any)
     match = re.match('([a-zA-Z0-9\-\.]+):?([0-9]{2,5})?', netloc)
@@ -43,11 +43,11 @@ def parse_url(url):
     if match:
         (host, port) = match.groups()
         if not port:
-            port = is_ssl and '443' or '80'
+            port = {True: 443, False: 80}[is_ssl]
     else:
         raise InvalidUrl('Invalid host and/or port: %s' % netloc)
 
-    return (host, int(port), path.strip('/'), is_ssl)
+    return (host, port, path.strip('/'), is_ssl)
 
 
 
