@@ -137,10 +137,10 @@ def showDetails():
     print "Last Modified: ", server.lastModified
 
     # test conditional GET
-    i = 0
-    while i < 100:
-        serverManager.refresh(server)
-        i += 1
+    #i = 0
+    #while i < 100:
+    #    serverManager.refresh(server)
+    #    i += 1
 
 def showImageDetails():
     """
@@ -313,17 +313,17 @@ def createSharedIpGroup():
         print "IP group is now:"
         pprint(ipg)
 
-def deleteSharedIpGroup(self):
+def deleteSharedIpGroup():
     """
     Delete a shared ip group by id
     """
     print "Shared IP Group id to delete: "
-    name = stdin.readline().strip()
-    ipg = sharedIpGroupManager.find(id)
+    name = getSharedIpGroupId()
+    ipg = sharedIpGroupManager.find(name)
     if not ipg:
         print "IP Group not found"
     else:
-        sharedIpGroupManager.delete(ipg)
+        sharedIpGroupManager.remove(ipg)
 
 def addServerToIpGroup():
     """
@@ -372,6 +372,7 @@ def testEntityListIter():
     
 def testServerDeltaList():
     datestr = datetime.now().strftime('%s')
+    print "To see anything listed, change a server"
     deltaList = serverManager.createDeltaList(True, changes_since=datestr)
     print "deltaList since ", datestr, ": "
     for item in deltaList:
@@ -428,11 +429,6 @@ def _testNotify(entityId, entityManager):
     # first, we get the entity to run the notify call on.  we need a real one 
     # because notify will actually refresh via the API as well
     entity = entityManager.find(entityId)
-    print "You should see the notify callback execute twice.\
-           If something is happening to the entity during this test, you may\
-           see the notify call execute more than twice.  If nothing is\
-           happening to the entity and you see more than two notify events,\
-           the test has failed."
     entityManager.notify(entity, simpleNotify)
 
     # all entities have a name, so let's use that to trigger the notify event
@@ -460,7 +456,7 @@ def testFlavorNotify():
     _testNotify(flavorId, flavorManager)
 
 def testSharedIpGroupNotify():
-    sharedIpGroupId = 22
+    sharedIpGroupId = getSharedIpGroupId()
     _testNotify(sharedIpGroupId, sharedIpGroupManager)
 
 choices = dict()                    # just so it's there for beatIt decl
@@ -472,6 +468,8 @@ choices = dict()                    # just so it's there for beatIt decl
 ls   = partial(lister, manager=serverManager, tag="Server")
 lf   = partial(lister, manager=flavorManager, tag="Flavor")
 li   = partial(lister, manager=imageManager, tag="Image")
+
+# TODO: lists in an infinite loop
 lsip = partial(lister, manager=sharedIpGroupManager, tag="SharedIP")
 
 # TBD:

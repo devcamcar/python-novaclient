@@ -222,7 +222,11 @@ class ServerManager(EntityManager):
     def getSchedule(self, server):
         backupDict = self._GET(server.id, "backup_schedule")
         backupSchedule = BackupSchedule()
-        backupSchedule.initFromResultDict(backupDict["backupSchedule"])
+        print "backupDict: ", backupDict
+        try:
+            backupSchedule.initFromResultDict(backupDict["backupSchedule"])
+        except:
+            pass # return an empty backup schedule
         return backupSchedule
 
     #

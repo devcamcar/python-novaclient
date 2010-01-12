@@ -153,11 +153,9 @@ class Connection(object):
             faultType = key[0].capitalize() + key[1:] + 'Fault'
             fault = responseObj[key]
             faultClass = eval(faultType)
-            try:
-                raise faultClass(fault['message'], '', fault['code'], \
-                                 fault['retryAfter'])
-            except:
-                raise faultClass(fault['message'], fault['details'], \
-                                 fault['code'])
+            if faultType == 'OverLimitFault':
+                raise faultClass(fault['message'], '', fault['code'], fault['retryAfter'])
+            else:
+                raise faultClass(fault['message'], fault['details'], fault['code'])
 
         return responseObj

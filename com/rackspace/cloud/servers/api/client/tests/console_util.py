@@ -93,7 +93,7 @@ def getSleepTime():
 #
 # Generic Lister
 #
-def lister( detail, manager, tag):
+def lister(detail, manager, tag):
     """
     List using:
         `manager`   manager to use to create the list
