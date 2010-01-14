@@ -101,6 +101,7 @@ def lister(detail, manager, tag):
         `detail`    whether to show detail or not
     """
     theList = (manager).createList(detail)
+    
     print "%s List of %ss" %(detail and "Detailed" or "Quick", tag)
     for item in theList:
         print "id=%s" % (item.id,)

@@ -1,6 +1,6 @@
 # -*- test-case-name: com.rackspace.cloud.servers.api.client.tests.test_version -*-
 
-# Copyright (c) 2009, Rackspace.
+# Copyright (c) 2010, Rackspace.
 # See COPYING for details.
 
 
