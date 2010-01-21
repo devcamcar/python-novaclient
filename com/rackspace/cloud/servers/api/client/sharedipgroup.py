@@ -43,23 +43,21 @@ class SharedIpGroup(Entity):
 
 
     def __eq__(self, other):
-        return self._id == other._id and self._name == other._name \
-               and self._servers == other._servers
+        return (self._id, self._name, self._servers) == (other._id, other._name, other._servers)
 
 
     def __ne__(self, other):
-        return self._id != other._id or self._name != other._name \
-               or self._servers != other._servers
+        return (self._id, self._name, self._servers) != (other._id, other._name, other._servers)
 
 
-    def get_name(self):
+    def _get_name(self):
         """Get name from shared ip group object."""
         return self._name
 
-    def set_name(self, value):
+    def _set_name(self, value):
         """Set name for this IP Group"""
         self._name = value
-    name = property(get_name, set_name)
+    name = property(_get_name, _set_name)
 
 
     @property
@@ -74,27 +72,19 @@ class SharedIpGroup(Entity):
         # The key changes depending on whether we're dealing with a request,
         # where we're only supposed to have one, or a response, where the
         # API returns the list of servers in the IP group
-        if hasattr(self._servers , '__iter__'):
+        if hasattr(self._servers , "__iter__"):
             serverKey = "servers"
         else:
             serverKey = "server"
 
-        bsAsDict = { "sharedIpGroup" :
-                        {
-                            "id"        : self._id,
-                            "name"      : self._name,
-                            serverKey   : self._servers,
-                        }
-                     }
-        return bsAsDict
+        return { "sharedIpGroup": { "id": self._id, "name": self._name, serverKey: self._servers } }
 
     @property
     def asJSON(self):
         """
         Return the backup schedule object converted to JSON
         """
-        sharedIpAsJson = json.dumps(self.asDict)
-        return sharedIpAsJson
+        return json.dumps(self.asDict)
 
 
     def initFromResultDict(self, dic):
@@ -103,7 +93,7 @@ class SharedIpGroup(Entity):
         query (detailed or not) from the API
         """
         # This will happen when e.g. a find() fails.
-        if dic == None:
+        if dic is None:
             return
 
         # make a copy so we can decide if we should notify later
@@ -112,14 +102,10 @@ class SharedIpGroup(Entity):
         #
         ## All status queries return at least this
         #
-        self._id        = dic['id']
-        self._name      = dic['name']
-
-        #
-        ## if it has servers, grab those too
-        #
-        if 'servers' in dic:
-            self._servers = dic['servers']
+        self._id = dic.get("id")
+        self._name = dic.get("name")
+        # if it has servers, grab those too
+        self._servers = dic.get("servers")
 
         # notify change listeners if there are any and the server has changed
         self._notifyIfChanged_(sharedIpGroupCopy)

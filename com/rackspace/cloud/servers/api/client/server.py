@@ -58,13 +58,14 @@ class Server(Entity):
         
         # make a copy so we can decide if we should notify later
         serverCopy = copy.copy(self)
-         
+
         if headers:
-            # they're tuples, so loop through and find the date
-            for header in headers:
-                if header[0] == 'date':
-                    self._lastModified = header[1]
-                    break
+            try:
+                self._lastModified = [hd[1] for hd in headers
+                        if hd[0] == "date"][0]
+            except IndexError:
+                # No date header
+                self._lastModified = None
 
         #
         ## All status queries return at least this
