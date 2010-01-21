@@ -5,22 +5,21 @@
 Constants used across entire Rackspace Cloud Servers Python API.
 """
 import datetime
+import com.rackspace.cloud.servers.api.client as ApiClient
 
-from com.rackspace.cloud.servers.api.client.version import get_version
-__version__ = get_version()
+__version__ = ApiClient.version.get_version()
 
 user_agent = "python-cloudservers/%s" % __version__
 
 default_authurl =  "https://auth.api.rackspacecloud.com/v1.0"
 
 json_hdrs = {
-   # "Accept"         :   "application/json",
-   "Content-Type"   :   "application/json",
+   "Content-Type": "application/json",
 }
 
 xml_hdrs = {
-    "Accept"        :   "application/xml",
-    "Content-Type"  :   "application/xml",
+    "Accept": "application/xml",
+    "Content-Type": "application/xml",
 }
 
 DEFAULT_PAGE_SIZE = 1000

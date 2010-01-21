@@ -12,13 +12,11 @@ from time import sleep
 from datetime import datetime
 
 from com.rackspace.cloud.servers.api.client.shared.utils import parse_url
-from com.rackspace.cloud.servers.api.client.authentication \
-    import Authentication
-from com.rackspace.cloud.servers.api.client.consts import default_authurl, \
-                                                             user_agent, \
-                                                             json_hdrs
-from com.rackspace.cloud.servers.api.client.errors import *
+from com.rackspace.cloud.servers.api.client.authentication import Authentication
+from com.rackspace.cloud.servers.api.client.consts import default_authurl, user_agent, json_hdrs
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
+
+import com.rackspace.cloud.servers.api.client.errors as ClientErrors
 
 class Connection(object):
     """
@@ -57,9 +55,9 @@ class Connection(object):
                     err_msg += "- missing api_key"
                 if not authurl:
                     err_msg += "- missing authurl"
-                raise InvalidArgumentsFault(err_msg)
-
+                raise ClientErrors.InvalidArgumentsFault(err_msg)
         self._authenticate()
+
 
     def _authenticate(self):
         """
@@ -67,41 +65,37 @@ class Connection(object):
         """
         (self.url, self.token) = self.auth.authenticate()
         self.connection_args = parse_url(self.url)
-        self.conn_class = self.connection_args[3] and HTTPSConnection or \
-                                                      HTTPConnection
+        self.conn_class = (self.connection_args[3] and HTTPSConnection) or HTTPConnection
         self.http_connect()
+
 
     def http_connect(self):
         """
         Setup the http connection instance.
         """
-        (host, port, self.uri, is_ssl) = self.connection_args
-
+        host, port, self.uri, is_ssl = self.connection_args
         self.connection = self.conn_class(host, port=port)
         self.connection.set_debuglevel(self.debuglevel)
 
-    def make_request(self, method, path=[], data='', hdrs=None, params=None, \
+
+    def make_request(self, method, path=[], data='', hdrs=None, params=None,
                      retHeaders=None):
         """
         Given a method (i.e. GET, PUT, POST, DELETE etc), a path, data, header
         and metadata dicts, and an optional dictionary of query parameters,
         performs an http request.
         """
-
-        path = '/%s/%s' % \
-            (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
+        path = '/%s/%s' % (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
 
         if isinstance(params, dict) and params:
             query_args = ['%s=%s' \
                     % (quote(x),quote(str(y))) for (x,y) in params.items()]
             path = '%s?%s' % (path, '&'.join(query_args))
 
-        headers = {
-                    'User-Agent': user_agent,
-                    'X-Auth-Token': self.token
-                  }
+        headers = { 'User-Agent': user_agent,
+                    'X-Auth-Token': self.token }
                   
-        if len(data) > 0 and (method == 'POST' or method == 'PUT'):
+        if data and (method in ('POST', 'PUT')):
             # content type is required for requests with a body
             headers.update(json_hdrs)
             
@@ -109,7 +103,7 @@ class Connection(object):
             headers.update(hdrs)
 
         dataLen = len(data)
-        if dataLen != 0:
+        if dataLen:
             headers['Content-Length'] = dataLen
 
         def retry_request():
@@ -123,7 +117,6 @@ class Connection(object):
         try:
             self.connection.request(method, path, data, headers)
             response = self.connection.getresponse()
-
         except HTTPException:
             # A simple HTTP exception, just retry once
             response = retry_request()
@@ -148,11 +141,11 @@ class Connection(object):
             response = retry_request()
 
         # if the response is bad, parse and raise the CloudServersFault
-        if response.status >= 400 and response.status <= 599:
+        if 400 <= response.status <= 599:
             key = responseObj.keys()[0]
-            faultType = key[0].capitalize() + key[1:] + 'Fault'
+            faultType = "%s%s%s" % (key[0].capitalize(), key[1:], 'Fault')
             fault = responseObj[key]
-            faultClass = eval(faultType)
+            faultClass = getattr(ClientErrors, faultType)
             if faultType == 'OverLimitFault':
                 raise faultClass(fault['message'], '', fault['code'], fault['retryAfter'])
             else:
