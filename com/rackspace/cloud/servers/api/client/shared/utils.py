@@ -9,6 +9,7 @@ from com.rackspace.cloud.servers.api.client.errors import InvalidUrl
 # initialize only once, when this is imported
 stripchars = string.whitespace + '/'
 
+
 def find_in_list(somelist, searchValue, keyIndex=0, valueIndex=0):
     """
     Finds an item in a list of sequences where the key is in
@@ -73,8 +74,10 @@ def build_url(*params):
     """
 
     path = ""
+    elems = []
     for p in params:
-        if not p:       # we handle skipping None so callers needn't worry
+        # we handle skipping None so callers needn't worry
+        if not p:
             continue
 
         # If it's an iterable (this test will skip strings)
@@ -82,20 +85,12 @@ def build_url(*params):
         if hasattr(p , '__iter__'):
             # Expand the iterable and pass it on, assign return value
             # to path and continue
-            path = build_url(path, *p)
+            elems.append(build_url(path, *p))
         else:
-            if type(p) == type(123):    # see if it's the same type as an int
+            if isinstance(p, int):    # see if it's the same type as an int
                 p = str(p)
 
             # strip all leading and trailing whitespace and '/'
-
-            p = p.strip(stripchars)
-
-            # If path isn't empty, add trailing slash
-            if path != "":
-                path += '/'
-
-            path += p
-
-    return path
+            elems.append(p.strip(stripchars))
+    return "/".join(elems)
 
