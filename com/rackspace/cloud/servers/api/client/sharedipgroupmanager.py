@@ -16,26 +16,22 @@ from datetime import datetime
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import *
+import com.rackspace.cloud.servers.api.client.errors as ClientErrors
 from com.rackspace.cloud.servers.api.client.sharedipgroup import SharedIpGroup
 
-"""
-_bmf is shortcut for BadMethodFault with our classname
-"""
-_bmf = BadMethodFault("SharedIpGroupManager")
+# _bmf is shortcut for BadMethodFault with our classname
+_bmf = ClientErrors.BadMethodFault("SharedIpGroupManager")
+# _nie is shortcut for NotImplementedException
+_nie = ClientErrors.NotImplementedException
 
-"""
-_nie is shortcut for NotImplementedException
-"""
-_nie = NotImplementedException
 
 class SharedIpGroupManager(EntityManager):
     """
     Manages the list of shared IP groups
     """
     def __init__(self, cloudServersService):
-        super(SharedIpGroupManager, self).__init__(cloudServersService, \
-                                        "shared_ip_groups", "sharedIpGroups")
+        super(SharedIpGroupManager, self).__init__(cloudServersService, "shared_ip_groups", "sharedIpGroups")
+
 
     def create(self, ipgroup):
         """
@@ -47,12 +43,15 @@ class SharedIpGroupManager(EntityManager):
         ret = self._POST(ipgroup.asJSON)
         ipgroup._manager = self
 
+
     def update(self, ipgroup):
         raise _nie
+
 
     def refresh(self, entity):
         entity.initFromResultDict(self.sharedIpGroupDetails(entity.id))
         entity._manager = self
+
 
     def find(self, id):
         """
@@ -61,16 +60,19 @@ class SharedIpGroupManager(EntityManager):
         """
         try:
             detailsDict = self.sharedIpGroupDetails(id)
-        except CloudServersAPIFault, e:
-            if e.code == 404:   # not found
-                return None     # just return None
-            else:               # some other exception, just re-raise
+        except ClientErrors.CloudServersAPIFault, e:
+            if e.code == 404:
+                # not found; just return None
+                return None
+            else:
+                # some other exception, just re-raise
                 raise
 
         retSharedIpGroup = SharedIpGroup()  # shared ip group to populate
         retSharedIpGroup.initFromResultDict(detailsDict)
         retSharedIpGroup._manager = self
         return retSharedIpGroup
+
 
     def sharedIpGroupDetails(self, id):
         """
@@ -83,7 +85,6 @@ class SharedIpGroupManager(EntityManager):
             retDict = ret["sharedIpGroup"]
         except KeyError, e:
             retDict = None
-
         return retDict
 
     #
@@ -93,33 +94,33 @@ class SharedIpGroupManager(EntityManager):
         """
         Wait implementation
         """
-        while sharedIpGroup == self._entityCopies[sharedIpGroup.id]:
+        thisGroup = self._entityCopies[sharedIpGroup.id]
+        while sharedIpGroup == thisGroup:
             try:
                 self.refresh(sharedIpGroup)
-            except OverLimitFault as olf:
+            except ClientErrors.OverLimitFault, e:
                 # sleep until retry_after to avoid more OverLimitFaults
-                self._sleepUntilRetryAfter_(olf)
-            except CloudServersFault:
+                self._sleepUntilRetryAfter_(e)
+            except ClientErrors.CloudServersFault:
                 pass
+
 
     def wait (self, sharedIpGroup, timeout=None):
         """
       	timeout is in milliseconds
         """
         self._entityCopies[sharedIpGroup.id] = copy.copy(sharedIpGroup)
-        if timeout==None:
+        if timeout is None:
             self._wait(sharedIpGroup)
         else:
-            result = self._timeout(self._wait, (sharedIpGroup,), \
-                                   timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (sharedIpGroup,), timeout_duration=timeout/1000.0)
+
 
     def createEntityListFromResponse(self, response, detail):
         ip_groups = response["sharedIpGroups"]
         retList = []
         for g in ip_groups:
-            s = SharedIpGroup()
-            s.initFromResultDict(g)
-            retList.append(s)
-
+            shared = SharedIpGroup()
+            shared.initFromResultDict(g)
+            retList.append(shared)
         return EntityList(retList, detail, self)
-

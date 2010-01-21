@@ -14,8 +14,7 @@ from dateutil.parser import parse
 from time import sleep
 import time
 
-from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, \
-                                                          BEGINNING_OF_TIME
+from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 from com.rackspace.cloud.servers.api.client.errors import *
 from com.rackspace.cloud.servers.api.client.shared.utils import build_url, \
@@ -53,8 +52,6 @@ class EntityManager(object):
         self._requestPrefix = requestPrefix
         self._changeListeners = {}
         self._entityCopies = {} # for wait() comparisons
-        
-
         #
         ## responseKey is used to handle cases where the key into the returned
         ## response is not the same as the url component used to make
@@ -64,6 +61,7 @@ class EntityManager(object):
             self._responseKey = responseKey
         else:
             self._responseKey = requestPrefix
+
 
     def _timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
         """
@@ -99,6 +97,7 @@ class EntityManager(object):
         retVal = self._cloudServersService.POST(url, data=data)
         return(retVal)
 
+
     def _DELETE(self, id, *url_parts):
         """
         Put together a full DELETE request and send it on via our 
@@ -108,11 +107,13 @@ class EntityManager(object):
         retVal = self._cloudServersService.DELETE(url)
         return retVal
 
+
     def _GET(self, url, params=None, headers=None, retHeaders=None):
         url = build_url(self._requestPrefix, url)
         retVal = self._cloudServersService.GET(url, params, headers=headers, \
                                                retHeaders=retHeaders)
         return retVal
+
 
     def _PUT(self, *url_parts):
         url = build_url(self._requestPrefix, *url_parts)
@@ -167,7 +168,8 @@ class EntityManager(object):
             self._entity = entity
             self._changeListener = changeListener
             self._stopped = False
-            threading.Thread.__init__ ( self )
+            threading.Thread.__init__(self)
+
         def run (self):
             # check the stopped flag at every step to ensure stopNotify
             # kills the thread
