@@ -10,7 +10,6 @@ Rackspace provides pre-built OS images by default.
 """
 
 import copy
-
 from com.rackspace.cloud.servers.api.client.entity import Entity
 
 
@@ -28,6 +27,7 @@ class Image(Entity):
         self._status = self._progress = None
         self._manager = None
 
+
     def initFromResultDict(self, dic):
         """
         Fills up a Image object dict which is a result of a
@@ -35,7 +35,7 @@ class Image(Entity):
         """
 
         # This will happen when e.g. a find() fails.
-        if dic == None:
+        if dic is None:
             return
 
         # make a copy so we can decide if we should notify later
@@ -44,27 +44,18 @@ class Image(Entity):
         #
         ## All status queries return at least this
         #
-        self._id    = dic['id']
-
-        if 'name' in dic:
-            self._name  = dic['name']
-
+        self._id = dic.get("id")
+        self._name = dic.get("name")
         # Detailed queries have 'updated'
-        if 'updated' in dic:
-            self._updated   = dic['updated']
-
-        if 'created' in dic:
-            self._created   = dic['created']
-
-        if 'status' in dic:
-            self._status    = dic['status']
-
+        self._updated = dic.get("updated")
+        self._created = dic.get("created")
+        self._status = dic.get("status")
         # User created images have this...
-        if 'progress' in dic:
-            self._progress  = dic['progress']
+        self._progress = dic.get("progress")
 
         # notify change listeners if there are any and the server has changed
         self._notifyIfChanged_(imageCopy)
+
 
     @property
     def updated(self):
@@ -81,9 +72,3 @@ class Image(Entity):
     @property
     def progress(self):
         return self._progress
-
-
-
-
-
-

@@ -38,7 +38,7 @@ import logging.handlers
 #
 ## Get the full path of the current Python file (cslogging.py)
 #
-this_file_path = os.path.dirname( os.path.realpath( __file__ ) )
+this_file_path = os.path.dirname(os.path.realpath(__file__))
 
 #
 ## The log file path is one up (..) from this file, in a subdir called 'logs'
@@ -68,7 +68,7 @@ LOG_FILE = os.path.join(LOG_FILE_PATH, LOG_FILE_NAME)
 #
 ## Create a logger
 #
-cslogger =  logging.getLogger('cs')
+cslogger =  logging.getLogger("cs")
 
 #
 ## Make sure it captures everything up to and including DEBUG output
@@ -78,17 +78,14 @@ cslogger.setLevel(logging.DEBUG)
 #
 ## Keep history of last five runs, keep 125k of debug info
 #
-handler = logging.handlers.RotatingFileHandler(
-              LOG_FILE, maxBytes=125*1024, backupCount=5)
+handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=125*1024, backupCount=5)
 
 #
 ## Set formatting to something we can read
 #
-formatter \
-    = logging.Formatter("%(levelname)s: %(message)s %(pathname)s:%(lineno)d")
+formatter = logging.Formatter("%(levelname)s: %(message)s %(pathname)s:%(lineno)d")
 
 #
 ## Make sure out logger writes to the log file
 #
 cslogger.addHandler(handler)
-

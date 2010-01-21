@@ -4,22 +4,21 @@
 import re
 import string
 from urlparse  import urlparse
-
-from com.rackspace.cloud.servers.api.client.errors    import InvalidUrl
+from com.rackspace.cloud.servers.api.client.errors import InvalidUrl
 
 # initialize only once, when this is imported
 stripchars = string.whitespace + '/'
 
-def find_in_list(list, searchValue, keyIndex=0, valueIndex=0):
+def find_in_list(somelist, searchValue, keyIndex=0, valueIndex=0):
     """
     Finds an item in a list of sequences where the key is in
     list[item][keyIndex] and the value is in list[item][valueIndex]
     """
-    for i in list:
+    for i in somelist:
         if searchValue == i[keyIndex].lower():
             return i[valueIndex]
-
     return None
+
 
 def parse_url(url):
     """
@@ -39,7 +38,6 @@ def parse_url(url):
 
     # Verify hostnames are valid and parse a port spec (if any)
     match = re.match('([a-zA-Z0-9\-\.]+):?([0-9]{2,5})?', netloc)
-
     if match:
         (host, port) = match.groups()
         if not port:
@@ -47,8 +45,7 @@ def parse_url(url):
     else:
         raise InvalidUrl('Invalid host and/or port: %s' % netloc)
 
-    return (host, port, path.strip('/'), is_ssl)
-
+    return (host, int(port), path.strip('/'), is_ssl)
 
 
 def build_url(*params):

@@ -12,10 +12,8 @@ import copy
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-
-from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, \
-                                                    NotImplementedException, \
-                                                    CloudServersAPIFault
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, 
+        NotImplementedException, CloudServersAPIFault
 from com.rackspace.cloud.servers.api.client.image import Image
 
 """
@@ -23,8 +21,8 @@ BadMethodFault is raised whenever a method is called that is not allowed
 for flavors. Images are (currently) immutable (provided by the API) and can
 not be changed through the API.
 """
-
 _bmf = BadMethodFault("ImageManager")
+
 
 class ImageManager(EntityManager):
     """

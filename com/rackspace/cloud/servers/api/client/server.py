@@ -15,12 +15,11 @@ from com.rackspace.cloud.servers.api.client.entity import Entity
 ## wanted to have this around for reference
 #
 serverStatus = ("ACTIVE", "BUILD", "REBUILD", "SUSPENDED", "QUEUE_RESIZE",
-                "PREP_RESIZE", "VERIFY_RESIZE", "PASSWORD", "RESCUE", 
-                "UNKNOWN")
+        "PREP_RESIZE", "VERIFY_RESIZE", "PASSWORD", "RESCUE", "UNKNOWN")
+
 
 class Server(Entity):
-    def __init__(self, name, imageId=None, flavorId=None, metadata=None, \
-                 personality=None):
+    def __init__(self, name, imageId=None, flavorId=None, metadata=None, personality=None):
         """
         Create new Server instance with specified name, imageId, flavorId and
         optional metadata.
@@ -28,23 +27,25 @@ class Server(Entity):
         NOTE: This creates the data about the server, to actually create
         an actual "Server", you must ask a ServerManager.
         """
-
         super(Server, self).__init__(name)
 
-        self._imageId       = imageId
-        self._flavorId      = flavorId
-        self._metadata      = metadata  
-        self._manager       = None      # Set when a ServerManager creates
-                                        # a server
-        self._id            = None      # this server's ID
-        self._hostId        = None
-        self._progress      = None
-        self._addresses     = None
-        self._personality   = None
-        self._lastModified  = None
+        self._imageId = imageId
+        self._flavorId = flavorId
+        self._metadata = metadata
+        # Set when a ServerManager creates a server
+        self._manager = None
+        # this server's ID
+        self._id = None
+        self._hostId = None
+        self._progress = None
+        self._addresses = None
+        self._personality = None
+        self._lastModified = None
+
 
     def __str__(self):
         return self.asJSON
+
 
     def initFromResultDict(self, dic, headers=None):
         """
@@ -52,7 +53,7 @@ class Server(Entity):
         (detailed or not) from the API
         """
         # This will happen when e.g. a find() fails.
-        if dic == None:
+        if dic is None:
             return
         
         # make a copy so we can decide if we should notify later
@@ -68,36 +69,27 @@ class Server(Entity):
         #
         ## All status queries return at least this
         #
-        self._id        = dic['id']
-        self._name      = dic['name']
-
-        #
-        ## if it has status, assume it's got all details
-        #
-        if 'status' in dic:
-            self._status    = dic['status']
-            self._hostId    = dic['hostId']
-            self._metadata  = dic['metadata']
-            self._imageId   = dic['imageId']
-            self._flavorId  = dic['flavorId']
-            self._addresses  = dic['addresses']
-
+        self._id = dic.get("id")
+        self._name = dic.get("name")
+        self._status = dic.get("status")
+        self._hostId = dic.get("hostId")
+        self._metadata = dic.get("metadata")
+        self._imageId = dic.get("imageId")
+        self._flavorId = dic.get("flavorId")
+        self._addresses = dic.get("addresses")
         # progress isn't necessarily always available
-        if 'progress' in dic:
-            self._progress  = dic['progress']
-
+        self._progress = dic.get("progress")
         # We only get this on creation
-        if 'adminPass' in dic:
-            self._adminPass = dic['adminPass']
+        self._adminPass = dic.get("adminPass")
 
         # notify change listeners if there are any and the server has changed
         self._notifyIfChanged_(serverCopy)
         
-    def get_name(self):
+    def _get_name(self):
         """Server's name (immutable once created @ Rackspace)."""
         return self._name
 
-    def set_name(self, value):
+    def _set_name(self, value):
         """
         Rename a server.
         NOTE: This routine will throw a ServerNameIsImmutable fault if you try
@@ -112,24 +104,25 @@ class Server(Entity):
 
         TBD: Capture this comment/plan for next version.
         """
-
-        if self._manager == None:   # if we're not owned by anyone
+        if self._manager is None:   # if we're not owned by anyone
             self._name = value
         else:
             raise ServerNameIsImmutable("Can't rename server")
-    name = property(get_name, set_name)
+    name = property(_get_name, _set_name)
 
-    def get_personality(self):
+
+    def _get_personality(self):
         """Server's personality."""
         if self._personality:
             return self._personality
         else:
             return None
 
-    def set_personality(self, value):
+    def _set_personality(self, value):
         """Server's personality."""
         self._personality = value
-    personality = property(get_personality, set_personality)
+    personality = property(_get_personality, _set_personality)
+
 
     @property
     def imageId(self):
@@ -138,12 +131,14 @@ class Server(Entity):
         """
         return self._imageId
 
+
     @property
     def flavorId(self):
         """
         Get server's current flavorId
         """
         return self._flavorId
+
 
     @property
     def metadata(self):
@@ -152,6 +147,7 @@ class Server(Entity):
         """
         return self._metadata
 
+
     @property
     def id(self):
         """
@@ -159,12 +155,14 @@ class Server(Entity):
         """
         return self._id
 
+
     @property
     def hostId(self):
         """
         Get the server's hostId
         """
         return self._hostId
+
 
     @property
     def progress(self):
@@ -174,6 +172,7 @@ class Server(Entity):
         """
         return self._progress
 
+
     @property
     def lastModified(self):
         """
@@ -182,12 +181,14 @@ class Server(Entity):
         """
         return self._lastModified
 
+
     @property
     def addresses(self):
         """
         IP addresses associated with this server.
         """
         return self._addresses
+
 
     @property
     def adminPass(self):
@@ -196,23 +197,21 @@ class Server(Entity):
         """
         return self._adminPass
 
+
     @property
     def asDict(self):
         """
         Return server object with attributes as a dictionary suitable for use
         in creating a server json object.
         """
-        serverAsDict = { "server" :
-                        {
-                            "name"      : self.name,
-                            "imageId"   : self.imageId,
-                            "flavorId"  : self.flavorId,
-                            "metadata"  : self.metadata
-                        }
-                     }
+        serverAsDict = { "server": { "name": self.name,
+                "imageId": self.imageId,
+                "flavorId": self.flavorId,
+                "metadata": self.metadata } }
         if self.personality:
-            serverAsDict['server']['personality'] = self.personality.asDict
+            serverAsDict["server"]["personality"] = self.personality.asDict
         return serverAsDict
+
 
     @property
     def asJSON(self):
@@ -220,12 +219,12 @@ class Server(Entity):
         Return the server object converted to JSON suitable for creating a
         server.
         """
-        serverAsJSON = json.dumps(self.asDict)
-        return serverAsJSON
+        return json.dumps(self.asDict)
+
 
     @property
     def status(self):
         """
-        Get `status` of server
+        Get status of server, such as ACTIVE, BUILD, etc
         """
         return self._status

@@ -37,16 +37,20 @@ class SharedIpGroup(Entity):
         self._servers   = server
         self._manager = None
 
+
     def __str__(self):
         return "Name = %s : servers = %s" % (self._name, self._servers)
+
 
     def __eq__(self, other):
         return self._id == other._id and self._name == other._name \
                and self._servers == other._servers
 
+
     def __ne__(self, other):
         return self._id != other._id or self._name != other._name \
                or self._servers != other._servers
+
 
     def get_name(self):
         """Get name from shared ip group object."""
@@ -56,6 +60,7 @@ class SharedIpGroup(Entity):
         """Set name for this IP Group"""
         self._name = value
     name = property(get_name, set_name)
+
 
     @property
     def servers(self):
@@ -90,6 +95,7 @@ class SharedIpGroup(Entity):
         """
         sharedIpAsJson = json.dumps(self.asDict)
         return sharedIpAsJson
+
 
     def initFromResultDict(self, dic):
         """
