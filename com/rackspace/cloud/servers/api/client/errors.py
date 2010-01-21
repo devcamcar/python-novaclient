@@ -25,14 +25,14 @@ class ErrorCodes(object):
     # A low-level exception, wrapped in one of our exceptions
     E_HTTPLIB_EXCEPTION = 40
 
-ec = ErrorCodes
 
 class CloudServersAPIFault(Exception):
     """Interface definition for CloudServersFault"""
     def __init__(self, message, details, code):
         self._message = message
         self._details = details
-        self._code    = code
+        self._code = code
+
 
     def __repr__(self):
         """
@@ -43,6 +43,7 @@ class CloudServersAPIFault(Exception):
     def __str__(self):
         return "Code   : " + str(self.code) + " Message: " + self._message \
                + " Details: " + self._details
+
 
     @property
     def message(self):
@@ -58,13 +59,13 @@ class CloudServersAPIFault(Exception):
 
 NotImplementedException = CloudServersAPIFault("Required Method not\
                                                Implemented", "", \
-                                               ec.E_NOT_IMPLEMENTED)
+                                               ErrorCodes.E_NOT_IMPLEMENTED)
 
 class OverLimitAPIFault(CloudServersAPIFault):
     """
     Interface definition for an over-limit exception
     """
-    def __init__(self,message,details,code,retryAfter):
+    def __init__(self, message, details, code, retryAfter):
         super(OverLimitAPIFault, self).__init__(message,details,code)
         self._retryAfter = retryAfter
 
@@ -79,11 +80,13 @@ class CloudServersFault(CloudServersAPIFault):
     """
     pass
 
+
 class OverLimitFault(OverLimitAPIFault):
     """
     Implementation of over-limit exception
     """
     pass
+
 
 class BadMethodFault(CloudServersAPIFault):
     """
@@ -97,7 +100,8 @@ class BadMethodFault(CloudServersAPIFault):
         super(BadMethodFault, self).__init__("Bad Method Fault", \
                                              "Method not allowd on %s class" \
                                              % (className,), \
-                                             ec.E_BAD_METHOD_FAULT)
+                                             ErrorCodes.E_BAD_METHOD_FAULT)
+
 
 class InvalidArgumentsFault(CloudServersAPIFault):
     """
@@ -107,21 +111,23 @@ class InvalidArgumentsFault(CloudServersAPIFault):
     def __init__(self, message):
         super(InvalidArgumentsFault,self).__init__(message, \
               "Bad or missing arguments passed to API call", \
-              ec.E_BAD_PARAMETERS_FAULT)
+              ErrorCodes.E_BAD_PARAMETERS_FAULT)
+
 
 class HTTPLibFault(CloudServersAPIFault):
     """
     Wraps HTTPExceptions into our exceptions as per spec
     """
     def __init__(self, message):
-        super(HTTPLibFault,self).__init__(message, \
-                                          "Low Level HTTPLib Exception", \
-                                          ec.E_HTTPLIB_EXCEPTION)
+        super(HTTPLibFault,self).__init__(message, "Low Level HTTPLib Exception",
+                ErrorCodes.E_HTTPLIB_EXCEPTION)
+
 
 class ServerNameIsImmutable(CloudServersAPIFault):
     def __init(self, message):
-        super(ServerNameIsImmutable, self).__init__(message, \
-                    "Server can't be renamed when managed by ServerManager")
+        super(ServerNameIsImmutable, self).__init__(message,
+                "Server can't be renamed when managed by ServerManager")
+
 
 #-----------------------------------------------------------------------------
 # Faults from the Cloud Servers Developer Guide
@@ -129,58 +135,65 @@ class ServerNameIsImmutable(CloudServersAPIFault):
 
 class ServiceUnavailableFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ServiceUnavailableFault, self).__init__(message, "", \
-                                                      ec.E_UNKNOWN)
+        super(ServiceUnavailableFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class UnauthorizedFault(CloudServersAPIFault):
     def __init(self, message):
-        super(UnauthorizedFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(UnauthorizedFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class BadRequestFault(CloudServersAPIFault):
     def __init(self, message):
-        super(BadRequestFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(BadRequestFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class BadMediaTypeFault(CloudServersAPIFault):
     def __init(self, message):
-        super(BadMediaTypeFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(BadMediaTypeFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class ItemNotFoundFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ItemNotFoundFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(ItemNotFoundFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class BuildInProgressFault(CloudServersAPIFault):
     def __init(self, message):
-        super(BuildInProgressFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(BuildInProgressFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class ServerCapacityUnavailableFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ServerCapacityUnavailableFault, self).__init__(message, "", \
-                                                             ec.E_UNKNOWN)
+        super(ServerCapacityUnavailableFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class BackupOrResizeInProgressFault(CloudServersAPIFault):
     def __init(self, message):
-        super(BackupOrResizeInProgressFault, self).__init__(message, "", \
-                                                            ec.E_UNKNOWN)
+        super(BackupOrResizeInProgressFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 class ResizeNotAllowedFault(CloudServersAPIFault):
     def __init(self, message):
-        super(ResizeNotAllowedFault, self).__init__(message, "", ec.E_UNKNOWN)
+        super(ResizeNotAllowedFault, self).__init__(message, "", ErrorCodes.E_UNKNOWN)
+
 
 #-----------------------------------------------------------------------------
-# Extra exceptions, internal use, not in formal spec
+# Extra exceptions, not in formal spec
 #-----------------------------------------------------------------------------
 
 class NeedsTestError(Exception):
     pass
+
 
 class InvalidServerNameFault(CloudServersAPIFault):
     """
     Thrown when an invalid server name is specified.
     """
     def __init__(self, serverName):
-        super(InvalidServerName, self).__init__("Invalid Server Name", \
-                                                serverName, \
-                                                ec.E_INVALID_SERVER_NAME)
+        super(InvalidServerName, self).__init__("Invalid Server Name",
+                serverName, ErrorCodes.E_INVALID_SERVER_NAME)
+
 
 class ResponseError(Exception):
     """
@@ -190,9 +203,6 @@ class ResponseError(Exception):
         self.status = status
         self.reason = reason
         Exception.__init__(self)
-
-    def __str__(self):
-        return '%d: %s' % (self.status, self.reason)
 
     def __repr__(self):
         return '%d: %s' % (self.status, self.reason)
@@ -204,11 +214,13 @@ class InvalidUrl(Exception):
     """
     pass
 
+
 class IncompleteSend(Exception):
     """
     Raised when there is a insufficient amount of data to send.
     """
     pass
+
 
 class AuthenticationFailed(Exception):
     """
@@ -216,11 +228,13 @@ class AuthenticationFailed(Exception):
     """
     pass
 
+
 class AuthenticationError(Exception):
     """
     Raised when an unspecified authentication error has occurred.
     """
     pass
+
 
 class MustBeOverriddenByChildClass(Exception):
     """
@@ -228,6 +242,7 @@ class MustBeOverriddenByChildClass(Exception):
     base class.
     """
     pass
+
 
 class InvalidInitialization(Exception):
     """

@@ -288,11 +288,13 @@ class EntityManager(object):
 
         return entityList
 
+
     def createList(self, detail):
         """
         Create a list of all items, optionally with details.
         """
         return self._createList(detail)
+
 
     def createDeltaList(self, detail, changes_since):
         """
@@ -300,6 +302,7 @@ class EntityManager(object):
         Do not return until something has changed.
         """
         return self._createList(detail, lastModified=changes_since)
+
 
     #
     # Lists, Paged
@@ -309,6 +312,7 @@ class EntityManager(object):
         Create a paged list.
         """
         return self._createList(detail, offset=offset, limit=limit)
+
 
     def createDeltaListP(self, detail, changes_since, offset, limit):
         """
