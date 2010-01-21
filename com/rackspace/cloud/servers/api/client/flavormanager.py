@@ -21,6 +21,7 @@ through the API.
 """
 _bmf = BadMethodFault("FlavorManager")
 
+
 class FlavorManager(EntityManager):
     """
     Manages the list of server Flavors
@@ -50,11 +51,11 @@ class FlavorManager(EntityManager):
                 return None     # just return None
             else:               # some other exception, just re-raise
                 raise
-
         retFlavor = Flavor("")
         retFlavor.initFromResultDict(detailsDict)
         retFlavor._manager = self
         return retFlavor
+
 
     def flavorDetails(self, id):
         """
@@ -86,6 +87,7 @@ class FlavorManager(EntityManager):
             except CloudServersFault:
                 pass
 
+
     def wait (self, flavor, timeout=None):
         """
       	timeout is in milliseconds
@@ -96,6 +98,7 @@ class FlavorManager(EntityManager):
         else:
             result = self._timeout(self._wait, (flavor,), \
                                    timeout_duration=timeout/1000.0)
+
 
     def createEntityListFromResponse(self, response, detail):
         """

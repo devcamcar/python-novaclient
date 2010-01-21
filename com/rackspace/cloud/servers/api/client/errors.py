@@ -38,11 +38,11 @@ class CloudServersAPIFault(Exception):
         """
         return error as formatted string
         """
-        return str(self._code) + ":" + self._message + " : " + self._details
+        return "%s:%s : %s" % (self._code, self._message, self._details)
+
 
     def __str__(self):
-        return "Code   : " + str(self.code) + " Message: " + self._message \
-               + " Details: " + self._details
+        return "Code   : %s Message: %s Details: %s" % (self.code, self._message, self._details)
 
 
     @property
@@ -57,16 +57,17 @@ class CloudServersAPIFault(Exception):
     def code(self):
         return self._code
 
-NotImplementedException = CloudServersAPIFault("Required Method not\
-                                               Implemented", "", \
-                                               ErrorCodes.E_NOT_IMPLEMENTED)
+
+NotImplementedException = CloudServersAPIFault("Required Method not Implemented", 
+        "", ErrorCodes.E_NOT_IMPLEMENTED)
+
 
 class OverLimitAPIFault(CloudServersAPIFault):
     """
     Interface definition for an over-limit exception
     """
     def __init__(self, message, details, code, retryAfter):
-        super(OverLimitAPIFault, self).__init__(message,details,code)
+        super(OverLimitAPIFault, self).__init__(message, details, code)
         self._retryAfter = retryAfter
 
     @property
@@ -97,10 +98,9 @@ class BadMethodFault(CloudServersAPIFault):
     @param className: the name of the class on which the method was called
     """
     def __init__(self, className):
-        super(BadMethodFault, self).__init__("Bad Method Fault", \
-                                             "Method not allowd on %s class" \
-                                             % (className,), \
-                                             ErrorCodes.E_BAD_METHOD_FAULT)
+        super(BadMethodFault, self).__init__("Bad Method Fault",
+                "Method not allowd on %s class" % (className,),
+                ErrorCodes.E_BAD_METHOD_FAULT)
 
 
 class InvalidArgumentsFault(CloudServersAPIFault):
@@ -109,9 +109,9 @@ class InvalidArgumentsFault(CloudServersAPIFault):
     which call/parameter was involved.
     """
     def __init__(self, message):
-        super(InvalidArgumentsFault,self).__init__(message, \
-              "Bad or missing arguments passed to API call", \
-              ErrorCodes.E_BAD_PARAMETERS_FAULT)
+        super(InvalidArgumentsFault,self).__init__(message,
+                "Bad or missing arguments passed to API call",
+                ErrorCodes.E_BAD_PARAMETERS_FAULT)
 
 
 class HTTPLibFault(CloudServersAPIFault):

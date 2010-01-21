@@ -16,12 +16,10 @@ import time
 
 from com.rackspace.cloud.servers.api.client.consts import DEFAULT_PAGE_SIZE, BEGINNING_OF_TIME
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import *
-from com.rackspace.cloud.servers.api.client.shared.utils import build_url, \
-                                                                find_in_list
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, CloudServersFault, OverLimitFault
+from com.rackspace.cloud.servers.api.client.shared.utils import build_url, find_in_list
 from com.rackspace.cloud.servers.api.client.shared.cslogging import cslogger
 
-_bmf = BadMethodFault
 
 class EntityManager(object):
     """
@@ -80,10 +78,7 @@ class EntityManager(object):
                 it = InterruptableThread()
                 it.start()
                 it.join(timeout_duration)
-                if it.isAlive():
-                    return it.result
-                else:
-                    return it.result	
+                return it.result
 
     #
     ## These methods hide that we're calling our _cloudServersService to do 
@@ -110,8 +105,8 @@ class EntityManager(object):
 
     def _GET(self, url, params=None, headers=None, retHeaders=None):
         url = build_url(self._requestPrefix, url)
-        retVal = self._cloudServersService.GET(url, params, headers=headers, \
-                                               retHeaders=retHeaders)
+        retVal = self._cloudServersService.GET(url, params, headers=headers,
+                retHeaders=retHeaders)
         return retVal
 
 
@@ -134,7 +129,7 @@ class EntityManager(object):
 
     def create(self, entity):
         "Create entity, implemented by child classes."
-        raise _bmf(self.__class__)
+        raise BadMethodFault(self.__class__)
 
     def remove(self, entity):
         "Remove entity."
@@ -142,17 +137,17 @@ class EntityManager(object):
 
     def update(self, entity):
         "Update entity, implemented by child classes."
-        raise _bmf(self.__class__)
+        raise BadMethodFault(self.__class__)
 
     def refresh(self, entity):
         "Refresh entity, implemented by child classes."
-        raise _bmf(self.__class__)
+        raise BadMethodFault(self.__class__)
 
     def find(self, id):
         """
         Find entity by `id`.
         """
-        raise _bmf
+        raise BadMethodFault
 
     #
     # Polling Operations
@@ -160,7 +155,7 @@ class EntityManager(object):
         
     def wait (self, entity, timeout=None):
         "wait, implemented by child classes."
-        raise _bmf
+        raise BadMethodFault
 
     class Notifier(threading.Thread):
         def __init__ (self, entityManager, entity, changeListener):
@@ -174,28 +169,32 @@ class EntityManager(object):
             # check the stopped flag at every step to ensure stopNotify
             # kills the thread
             try:
-                while self._stopped == False: # poll forever or until error
-                    if self._stopped == False:
+                while not self._stopped: # poll forever or until error
+                    if not self._stopped:
                         self._entityManager.wait(self._entity)
-                    if self._stopped == False:
+                    if not self._stopped:
                         # double check in case wait uses statuses as end states
                         ec = self._entityManager._entityCopies[self._entity.id]                        
                         if self._entity != ec:
                             self._changeListener(False, self._entity)
             except CloudServersFault, fault:
-                if self._stopped == False:
+                if not self._stopped:
                     self._changeListener(True, self._entity, fault)
+
         def stop (self):
             self._stopped = True
+
 
     def notify (self, entity, changeListener):
         notifier = self.Notifier(self, entity, changeListener)
         self._changeListeners[changeListener] = notifier
         notifier.start()
 
+
     def stopNotify (self, entity, changeListener):
         self._changeListeners[changeListener].stop()
         del self._changeListeners[changeListener]
+
 
     def _sleepUntilRetryAfter_ (self, overLimitFault):
         retryAfter = parse(overLimitFault.retryAfter)
@@ -209,11 +208,12 @@ class EntityManager(object):
         # us a date in the past
         sleep(abs((timedelta.days * 86400) + timedelta.seconds))
 
+
     #
     # Lists
     #
     def _createList(self, detail=False, offset=0, limit=DEFAULT_PAGE_SIZE, \
-                    lastModified=BEGINNING_OF_TIME):
+            lastModified=BEGINNING_OF_TIME):
         """
         Master function that can perform all possible combinations.
 
@@ -279,13 +279,11 @@ class EntityManager(object):
         # Now, make the entity list aware of enough state information to
         # perform future operations properly
         data = {'conditionalGet': conditionalGet,
-                'pagedGet'      : pagedGet,
-                'lastModified'  : lastModified
-                }
+                'pagedGet': pagedGet,
+                'lastModified': lastModified }
 
-        if lastModifiedAsString != None:
+        if lastModifiedAsString is not None:
             data['lastModifiedAsString'] = lastModifiedAsString
-
         return entityList
 
 
@@ -318,5 +316,5 @@ class EntityManager(object):
         """
         Create a paged list of items changed since a particular time
         """
-        return self._createDeltaList(detail, changes_since=changes_since, \
-                                     offset=offset, limit=limit,)
+        return self._createDeltaList(detail, changes_since=changes_since, 
+                offset=offset, limit=limit)

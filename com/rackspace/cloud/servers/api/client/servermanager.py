@@ -18,8 +18,8 @@ from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 from com.rackspace.cloud.servers.api.client.errors import *
 from com.rackspace.cloud.servers.api.client.server import Server
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
-from com.rackspace.cloud.servers.api.client.backupschedule \
-        import BackupSchedule
+from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
+
 
 class RebootType(object):
     """
@@ -34,6 +34,7 @@ rebootType is just an instance of RebootType() for referring to hard/soft
 reboots
 """
 rebootType = RebootType()
+
 
 class ServerManager(EntityManager):
     """
@@ -268,16 +269,16 @@ class ServerManager(EntityManager):
             except CloudServersFault:
                 pass
 
+
     def wait (self, server, timeout=None):
         """
       	timeout is in milliseconds
         """
         self._entityCopies[server.id] = copy.copy(server)
-        if timeout==None:
+        if timeout is None:
             self._wait(server)
         else:
-            result = self._timeout(self._wait, (server,), \
-                                   timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (server,), timeout_duration=timeout/1000.0)
 
     #
     ## Support methods
@@ -290,9 +291,8 @@ class ServerManager(EntityManager):
         theList = []
         data = response["servers"]
         for jsonObj in data:
-            s = Server("")
-            s.initFromResultDict(jsonObj)
-            theList.append(s)
-
+            srv = Server("")
+            srv.initFromResultDict(jsonObj)
+            theList.append(srv)
         return EntityList(theList, detail, self)
 

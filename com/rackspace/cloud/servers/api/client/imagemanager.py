@@ -59,7 +59,6 @@ class ImageManager(EntityManager):
                 return None     # just return None
             else:               # some other exception, just re-raise
                 raise
-
         retImage = Image("")
         retImage.initFromResultDict(detailsDict)
         retImage._manager = self
@@ -72,54 +71,36 @@ class ImageManager(EntityManager):
         """
         retDict = None
         ret = self._GET(id, { "now": str(datetime.now()) })
-        try:
-            retDict = ret["image"]
-        except KeyError, e:
-            retDict = None
-
-        return retDict
+        return ret.get("image")
 
 
     #
     # Polling Operations
     #
-    def _imageInWaitState(self, image):
-        
-        # For Images, the following are considered end states by the wait call: 
-        end_states = ['ACTIVE', 'FAILED', 'UNKNOWN']
-        
-        try:
-            end_states.index(image.status)
-            inWaitState = False # if we made it this far, it's not waiting
-        except ValueError:
-            inWaitState = True
-        return inWaitState
-    
-    
     def _wait(self, image):
         """
         Wait implementation
         """
-        while self._imageInWaitState(image):
-        # while image == self._entityCopies[image.id]:
+        while image.status in ('ACTIVE', 'FAILED', 'UNKNOWN'):
             try:
                 self.refresh(image)
-            except OverLimitFault as olf:
+            except OverLimitFault, e:
                 # sleep until retry_after to avoid more OverLimitFaults
-                self._sleepUntilRetryAfter_(olf)
+                self._sleepUntilRetryAfter_(e)
             except CloudServersFault:
                 pass
+
 
     def wait (self, image, timeout=None):
         """
       	timeout is in milliseconds
         """
         self._entityCopies[image.id] = copy.copy(image)
-        if timeout==None:
+        if timeout is None:
             self._wait(image)
         else:
-            result = self._timeout(self._wait, (image,), \
-                                   timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (image, ), timeout_duration=timeout/1000.0)
+
 
     def createEntityListFromResponse(self, response, detail):
         """
@@ -129,8 +110,7 @@ class ImageManager(EntityManager):
         theList = []
         data = response["images"]
         for jsonObj in data:
-            i = Image("")
-            i.initFromResultDict(jsonObj)
-            theList.append(i)
-
+            img = Image("")
+            img.initFromResultDict(jsonObj)
+            theList.append(img)
         return EntityList(theList, detail, self)
