@@ -4,7 +4,7 @@
 import base64
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 
-class File:
+class File(object):
     def __init__(self, path=None, contents=None):
         self._path = path
         self._contents = base64.b64encode(contents)
@@ -29,13 +29,7 @@ class File:
         Return file object with attributes as a dictionary suitable for use
         in creating a server json object.
         """
-        fileAsDict = { "file" :
-                        {
-                            "path"       : self.path,
-                            "contents"   : self.contents
-                        }
-                     }
-        return fileAsDict
+        return { "file": { "path": self.path, "contents": self.contents } }
 
     @property
     def asJSON(self):
@@ -43,6 +37,5 @@ class File:
         Return the file object converted to JSON suitable for creating a
         server.
         """
-        fileAsJSON = json.dumps(self.asDict)
-        return fileAsJSON
+        return json.dumps(self.asDict)
     

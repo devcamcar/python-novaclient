@@ -83,10 +83,13 @@ class EntityList(list):
             theList = self.manager.createListP(self.detail, x, DEFAULT_PAGE_SIZE)
             if theList:
                 i = 0
-                while i < len(theList):
-                    yield theList[i]
-                    i += 1
-                x += i
+                while True:
+					try:
+						yield theList[i]
+						i += 1
+					except IndexError:
+						x += i
+						break
             else:
                 break
         raise StopIteration
@@ -115,12 +118,13 @@ class EntityList(list):
                 return True
             else:
                 return False
+    
         
-
     def next(self):
         if self._notAtEnd():
+        	ret = self[self._entityIndex]
             self._entityIndex += 1
-            return self[self._entityIndex - 1]
+            return ret
         else:
             self = self.manager.createListP(self.detail, self._entityIndex,
                     DEFAULT_PAGE_SIZE)

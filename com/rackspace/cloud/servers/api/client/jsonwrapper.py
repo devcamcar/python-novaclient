@@ -3,7 +3,7 @@
 
 
 """
-Wrapper around JSON librarirs.  We start trying the JSON library built into
+Wrapper around JSON libraries.  We start trying the JSON library built into
 Python 2.6, and fall back to using simplejson otherwise.
 
 NOTE: simplejson is installed if we're not on 2.6+ by our setup.py

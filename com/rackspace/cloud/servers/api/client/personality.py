@@ -32,5 +32,4 @@ class Personality:
         Return the personality object converted to JSON suitable for creating a
         server.
         """
-        personalityAsJSON = json.dumps(self.asDict)
-        return personalityAsJSON
+        return json.dumps(self.asDict)
