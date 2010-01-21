@@ -11,9 +11,9 @@ service, retreiving storage system routing information and session tokens.
 import urllib
 from httplib import HTTPSConnection, HTTPConnection, HTTPException
 from com.rackspace.cloud.servers.api.client.shared.utils import parse_url
-from com.rackspace.cloud.servers.api.client.errors import *
-from com.rackspace.cloud.servers.api.client.consts import user_agent, \
-                                                          default_authurl
+import com.rackspace.cloud.servers.api.client.errors as ClientErrors
+from com.rackspace.cloud.servers.api.client.consts import user_agent, default_authurl
+
 
 class BaseAuthentication(object):
     """
@@ -36,7 +36,7 @@ class BaseAuthentication(object):
         This is a dummy method from the base class. It must be overridden by
         sub-classes and will raise MustBeOverriddenByChildClass if called.
         """
-        raise MustBeOverriddenByChildClass
+        raise ClientErrors.MustBeOverriddenByChildClass
 
 class Authentication(BaseAuthentication):
     """
@@ -60,7 +60,7 @@ class Authentication(BaseAuthentication):
             try:
                 conn = self.conn_class(self.host, self.port)
             except HTTPException,e:
-                raise HTTPLibFault(e)
+                raise ClientErrors.HTTPLibFault(e)
 
         conn.request('GET', self.authurl, '', self.headers)
         response = conn.getresponse()
@@ -69,9 +69,9 @@ class Authentication(BaseAuthentication):
         # A status code of 401 indicates that the supplied credentials
         # were not accepted by the authentication service.
         if response.status == 401:
-            raise AuthenticationFailed()
+            raise ClientErrors.AuthenticationFailed()
         elif response.status != 204:
-            raise ResponseError(response.status, response.reason)
+            raise ClientErrors.ResponseError(response.status, response.reason)
 
         # these must be provided or we have an error
         compute_url = auth_token = None
@@ -89,7 +89,7 @@ class Authentication(BaseAuthentication):
         conn.close()
 
         if not (auth_token and compute_url):
-            raise AuthenticationError("Invalid response from the authentication service.")
+            raise ClientErrors.AuthenticationError("Invalid response from the authentication service.")
 
         return (compute_url, auth_token)
 
