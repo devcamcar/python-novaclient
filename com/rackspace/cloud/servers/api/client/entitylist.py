@@ -34,8 +34,7 @@ class EntityList(list):
         if requested, and using manager to perform database operations for it.
          """
         if not isinstance(data, list):
-            raise InvalidInitialization("Attempt to initialize EntityList with\
-                                         non-list 'data'", data)
+            raise InvalidInitialization("Attempt to initialize EntityList with non-list 'data'", data)
 
         list.__init__(self)
         self.extend(data)
@@ -45,19 +44,24 @@ class EntityList(list):
         self._entityIndex = 0
         self._pageIndex = 0
 
+
     def setExtendedBehaviour(self, data):
         """
         Sets up internal variables so that future operations behave as
         expected.
         """
+        pass
+
 
     @property
     def lastModified(self):
         return self._lastModified
 
+
     @property
     def detail(self):
         return self._detail
+
 
     @property
     def manager(self):
@@ -65,6 +69,7 @@ class EntityList(list):
         Get this list's EntityManager.
         """
         return self._manager
+
 
     def __iter__(self):
         """
@@ -74,9 +79,8 @@ class EntityList(list):
         Currently set to do DEFAULT_PAGE_SIZE records at a time as per spec.
         """
         x = 0
-        while 1:
-            theList = self.manager.createListP(self.detail, x,
-                                              DEFAULT_PAGE_SIZE)
+        while True:
+            theList = self.manager.createListP(self.detail, x, DEFAULT_PAGE_SIZE)
             if theList:
                 i = 0
                 while i < len(theList):
@@ -85,18 +89,23 @@ class EntityList(list):
                 x += i
             else:
                 break
-
         raise StopIteration
+
 
     def isEmpty(self):
         return self is None or self == []
 
+
     def delta(self):
         return self.manager.createDeltaList(self.detail, self.lastModified)
 
+
+	def _notAtEnd(self):
+		return self._entityIndex < (len(self) + (self._pageIndex * DEFAULT_PAGE_SIZE))
+
+
     def hasNext(self):
-        if self._entityIndex < (len(self) \
-                + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+        if self._notAtEnd():
             return True
         else:
             self = self.manager.createListP(self.detail, self._entityIndex, \
@@ -107,19 +116,20 @@ class EntityList(list):
             else:
                 return False
         
+
     def next(self):
-        if self._entityIndex < (len(self) \
-                + (self._pageIndex * DEFAULT_PAGE_SIZE)):
+        if self._notAtEnd():
             self._entityIndex += 1
             return self[self._entityIndex - 1]
         else:
-            self = self.manager.createListP(self.detail, self._entityIndex, \
-                                            DEFAULT_PAGE_SIZE)
+            self = self.manager.createListP(self.detail, self._entityIndex,
+                    DEFAULT_PAGE_SIZE)
             if len(self) > 0:
                 self._pageIndex += 1
                 return self[self._entityIndex - 1]
             else:
                 return False
+
 
     def reset(self):
         self = self.manager.createList(self.detail)
