@@ -15,7 +15,7 @@ import copy
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
 
-from com.rackspace.cloud.servers.api.client.errors import *
+import com.rackspace.cloud.servers.api.client.errors as ClientErrors
 from com.rackspace.cloud.servers.api.client.server import Server
 from com.rackspace.cloud.servers.api.client.jsonwrapper import json
 from com.rackspace.cloud.servers.api.client.backupschedule import BackupSchedule
@@ -87,7 +87,7 @@ class ServerManager(EntityManager):
         try:
             retHeaders = [(None, None)]
             detailsDict = self.serverDetails(id, retHeaders=retHeaders)
-        except CloudServersAPIFault, e:
+        except ClientErrors.CloudServersAPIFault, e:
             if e.code == 404:   # not found
                 return None     # just return None
             else:               # some other exception, just re-raise
@@ -153,7 +153,7 @@ class ServerManager(EntityManager):
             self._post_action(id, data)
             self.refresh(server)    # get updated status
         else:
-            raise InvalidArgumentsFault("Bad value %s passed for reboot type,\
+            raise ClientErrors.InvalidArgumentsFault("Bad value %s passed for reboot type,\
                                         must be 'HARD' or 'SOFT'", rebootType)
 
     def rebuild(self, server, imageId=None):
@@ -234,39 +234,21 @@ class ServerManager(EntityManager):
     ## Polling operations
     #
     def _serverInWaitState(self, server):
-        
-        # For Servers, the following are considered end states: 
-        end_states = ['ACTIVE', 'SUSPENDED', 'VERIFY_RESIZE', 'DELETED', \
-                      'ERROR', 'UNKNOWN']
-        
-        # Note that VERIFY_RESIZE can also serve as a start state, 
-        # implementations are responsible for keeping track of whether this 
-        # state should be treated as a start or end condition.
-        try:
-            self._resizedServerIds.index(server)
-            end_states.remove('VERIFY_RESIZE')
-        except ValueError:
-            # server not being resized, so VERIFY_RESIZE is an end state
-            pass
-        
-        try:
-            end_states.index(server.status)
-            inWaitState = False # if we made it this far, it's not waiting
-        except ValueError:
-            inWaitState = True
-        return inWaitState
+        if server in self._resizedServerIds:
+	        end_states = ('ACTIVE', 'SUSPENDED', 'DELETED', 'ERROR', 'UNKNOWN')
+    	else:
+    		end_states = ('ACTIVE', 'SUSPENDED', 'VERIFY_RESIZE', 'DELETED', 'ERROR', 'UNKNOWN')
+        return server.status in end_states
+    
     
     def _wait(self, server):
-        """
-        Wait implementation
-        """
         while self._serverInWaitState(server):
             try:
                 self.refresh(server)
-            except OverLimitFault as olf:
+            except ClientErrors.OverLimitFault, e:
                 # sleep until retry_after to avoid more OverLimitFaults
-                self._sleepUntilRetryAfter_(olf)
-            except CloudServersFault:
+                self._sleepUntilRetryAfter_(e)
+            except ClientErrors.CloudServersFault:
                 pass
 
 

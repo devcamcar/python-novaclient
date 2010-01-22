@@ -212,7 +212,7 @@ class EntityManager(object):
     #
     # Lists
     #
-    def _createList(self, detail=False, offset=0, limit=DEFAULT_PAGE_SIZE, \
+    def _createList(self, detail=False, offset=0, limit=DEFAULT_PAGE_SIZE,
             lastModified=BEGINNING_OF_TIME):
         """
         Master function that can perform all possible combinations.
@@ -240,25 +240,18 @@ class EntityManager(object):
         if conditionalGet:
             params['changes-since'] = lastModified
         
-        retHeaders = list() # we may need "last-modified"
-        if conditionalGet == True:
+        retHeaders = [] # we may need "last-modified"
+        if conditionalGet:
             deltaReturned = False
-            while deltaReturned == False:
+            while not deltaReturned:
                 try:
-                    ret_obj = self._cloudServersService.GET(uri, params, \
-                                                        retHeaders=retHeaders)                    
-                    if len(ret_obj) > 0:
-                        try:
-                            ret_obj['cloudServersFault']
-                        except KeyError:
-                            # we actually have a delta list!
-                            deltaReturned = True
+                    ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
+                    deltaReturned = 'cloudServersFault' in ret_obj
                 except OverLimitFault as olf:
                     # sleep until retry_after to avoid more OverLimitFaults
                     self._sleepUntilRetryAfter_(olf)
         else:
-            ret_obj = self._cloudServersService.GET(uri, params, \
-                                                    retHeaders=retHeaders)
+            ret_obj = self._cloudServersService.GET(uri, params, retHeaders=retHeaders)
         
         # print "ret_obj: " + str(ret_obj)
         

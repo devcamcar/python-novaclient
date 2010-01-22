@@ -10,7 +10,7 @@ from datetime import datetime
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import *
+import com.rackspace.cloud.servers.api.client.errors as ClientErrors
 from com.rackspace.cloud.servers.api.client.flavor import Flavor
 
 """
@@ -19,7 +19,7 @@ BadMethodFault is raised whenever a method is called that is not allowed.
 Because flavors are immutable (provided by the API) and can not be changed
 through the API.
 """
-_bmf = BadMethodFault("FlavorManager")
+_bmf = ClientErrors.BadMethodFault("FlavorManager")
 
 
 class FlavorManager(EntityManager):
@@ -46,7 +46,7 @@ class FlavorManager(EntityManager):
         """
         try:
             detailsDict = self.flavorDetails(id)
-        except CloudServersAPIFault, e:
+        except ClientErrors.CloudServersAPIFault, e:
             if e.code == 404:   # not found
                 return None     # just return None
             else:               # some other exception, just re-raise
@@ -64,12 +64,7 @@ class FlavorManager(EntityManager):
         """
         retDict = None
         ret = self._GET(id, { "now": str(datetime.now()) })
-        try:
-            retDict = ret["flavor"]
-        except KeyError, e:
-            retDict = None
-
-        return retDict
+        return ret.get("flavor")
 
     #
     # Polling Operations
@@ -78,13 +73,14 @@ class FlavorManager(EntityManager):
         """
         Wait implementation
         """
-        while flavor == self._entityCopies[flavor.id]:
+        thisFlavor = self._entityCopies[flavor.id]
+        while flavor == thisFlavor:
             try:
                 self.refresh(flavor)
-            except OverLimitFault as olf:
+            except ClientErrors.OverLimitFault as olf:
                 # sleep until retry_after to avoid more OverLimitFaults
                 self._sleepUntilRetryAfter_(olf)
-            except CloudServersFault:
+            except ClientErrors.CloudServersFault:
                 pass
 
 
@@ -93,11 +89,10 @@ class FlavorManager(EntityManager):
       	timeout is in milliseconds
         """
         self._entityCopies[flavor.id] = copy.copy(flavor)
-        if timeout==None:
+        if timeout is None:
             self._wait(flavor)
         else:
-            result = self._timeout(self._wait, (flavor,), \
-                                   timeout_duration=timeout/1000.0)
+            result = self._timeout(self._wait, (flavor,), timeout_duration=timeout/1000.0)
 
 
     def createEntityListFromResponse(self, response, detail):
@@ -108,8 +103,7 @@ class FlavorManager(EntityManager):
         theList = []
         data = response["flavors"]
         for jsonObj in data:
-            f = Flavor("")
-            f.initFromResultDict(jsonObj)
-            theList.append(f)
-
+            flavor = Flavor("")
+            flavor.initFromResultDict(jsonObj)
+            theList.append(flavor)
         return EntityList(theList, detail, self)
