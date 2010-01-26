@@ -86,6 +86,7 @@ class Connection(object):
         performs an http request.
         """
         path = '/%s/%s' % (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
+        print "connection path: ", path
 
         if isinstance(params, dict) and params:
             query_args = ['%s=%s' \

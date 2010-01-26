@@ -12,7 +12,7 @@ import copy
 
 from com.rackspace.cloud.servers.api.client.entitymanager import EntityManager
 from com.rackspace.cloud.servers.api.client.entitylist import EntityList
-from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, 
+from com.rackspace.cloud.servers.api.client.errors import BadMethodFault, \
         NotImplementedException, CloudServersAPIFault
 from com.rackspace.cloud.servers.api.client.image import Image
 

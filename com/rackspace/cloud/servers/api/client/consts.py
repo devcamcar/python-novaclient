@@ -7,7 +7,7 @@ Constants used across entire Rackspace Cloud Servers Python API.
 import datetime
 import com.rackspace.cloud.servers.api.client as ApiClient
 
-__version__ = ApiClient.version.get_version()
+__version__ = '0.9' #ApiClient.version.get_version()
 
 user_agent = "python-cloudservers/%s" % __version__
 

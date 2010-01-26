@@ -103,6 +103,9 @@ def lister(detail, manager, tag):
     theList = (manager).createList(detail)
     
     print "%s List of %ss" %(detail and "Detailed" or "Quick", tag)
+    
+    print "List length: ", len(theList)
+    
     for item in theList:
         print "id=%s" % (item.id,)
         if detail:

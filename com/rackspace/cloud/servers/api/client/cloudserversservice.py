@@ -122,6 +122,8 @@ class CloudServersService(object):
 
     def make_request(self, method, url, data='', headers=None, params=None,
              retHeaders=None):
+        print "service make_request: ", url
+        print "service params: ", params
         conn = self.get_connection()
         return conn.make_request(method, (url,), data=data, hdrs=headers,
                  params=params, retHeaders=retHeaders)
@@ -143,6 +145,7 @@ class CloudServersService(object):
         # NOTE: ret is NOT an http response object, it's a digested
         #       object from reading the response object
         #       see Connection for implementation
+        print "service GET: ", url, params
         ret = self.make_request("GET", url, params=params, headers=headers,
                 retHeaders=retHeaders)
         return ret

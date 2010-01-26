@@ -186,17 +186,22 @@ class EntityManager(object):
 
 
     def notify (self, entity, changeListener):
+        print "notify"
         notifier = self.Notifier(self, entity, changeListener)
         self._changeListeners[changeListener] = notifier
         notifier.start()
 
 
     def stopNotify (self, entity, changeListener):
+        print "stopNotify"
+        
         self._changeListeners[changeListener].stop()
         del self._changeListeners[changeListener]
 
 
     def _sleepUntilRetryAfter_ (self, overLimitFault):
+        print "_sleepUntilRetryAfter_"
+        
         retryAfter = parse(overLimitFault.retryAfter)
         now = datetime.utcnow()
         retryAfter = retryAfter - retryAfter.tzinfo.utcoffset(retryAfter)
@@ -228,6 +233,9 @@ class EntityManager(object):
         iterator will have to be clever enough not to re-fetch on the first
         access.
         """
+        
+        print "_createList: ", detail, offset, limit
+        
         # Set flags for parameters we have to act on
         conditionalGet = (lastModified != BEGINNING_OF_TIME)
         pagedGet = (offset != 0 or limit != DEFAULT_PAGE_SIZE)

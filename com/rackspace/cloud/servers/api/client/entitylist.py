@@ -80,6 +80,7 @@ class EntityList(list):
         """
         x = 0
         while True:
+            print "__iter__: ", self.detail, x, DEFAULT_PAGE_SIZE
             theList = self.manager.createListP(self.detail, x, DEFAULT_PAGE_SIZE)
             if theList:
                 i = 0
@@ -122,11 +123,11 @@ class EntityList(list):
         
     def next(self):
         if self._notAtEnd():
-        	ret = self[self._entityIndex]
+            ret = self[self._entityIndex]
             self._entityIndex += 1
             return ret
         else:
-            self = self.manager.createListP(self.detail, self._entityIndex,
+            self = self.manager.createListP(self.detail, self._entityIndex, \
                     DEFAULT_PAGE_SIZE)
             if len(self) > 0:
                 self._pageIndex += 1
